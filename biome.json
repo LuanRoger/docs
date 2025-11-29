@@ -7,14 +7,7 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": [
-      "**",
-      "!node_modules",
-      "!.next",
-      "!dist",
-      "!build",
-      "!.source"
-    ]
+    "includes": ["**", "!node_modules", "!.next", "!dist", "!build", "!.source"]
   },
   "formatter": {
     "enabled": true,
@@ -29,6 +22,11 @@
     "domains": {
       "next": "recommended",
       "react": "recommended"
+    }
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
     }
   },
   "assist": {
