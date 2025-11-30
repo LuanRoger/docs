@@ -1,26 +1,27 @@
+import Link from "next/link";
 import Prism from "@/components/prism";
+import Reveal from "@/components/reveal";
 import { Button } from "@/components/ui/button";
 import { AppRoot } from "@/lib/constants/routes";
 import { mountRoute } from "@/lib/utils/route";
-import Link from "next/link";
 
 export default function HomePage() {
   return (
-    <div className="rounded-2xl border border-border flex-1 relative inset-shadow-white">
-      <div className="absolute inset-0 blur-sm">
+    <div className="relative inset-shadow-white flex-1 rounded-2xl border border-border">
+      <Reveal className="absolute inset-0 blur-sm">
         <Prism
           animationType="rotate"
-          timeScale={0.2}
-          height={8}
           baseWidth={8}
-          scale={2}
-          hueShift={0}
           colorFrequency={1}
-          noise={0}
           glow={0.3}
+          height={8}
+          hueShift={0}
+          noise={0}
+          scale={2}
+          timeScale={0.2}
         />
-      </div>
-      <div className="flex flex-col gap-2 items-center justify-center absolute inset-0">
+      </Reveal>
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
         <h1 className="font-bold text-3xl">electron-shadcn</h1>
         <p className="font-medium text-lg">
           Electron Forge with shadcn-ui (Vite + Typescript){" "}
