@@ -1,7 +1,10 @@
-export function baseLayoutProps() {
+import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
+
+export function baseLayoutProps(): BaseLayoutProps {
   return {
     nav: {
-      title: "My App",
+      title: "electron-shadcn",
+      url: "/electron-shadcn",
     },
   };
 }

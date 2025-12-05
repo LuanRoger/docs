@@ -24,7 +24,7 @@ export default function HomePage() {
       description: (
         <>
           Built with{" "}
-          <Link href="https://www.typescriptlang.org">TypeScript 5.9</Link>,{" "}
+          <Link href="https://typescriptlang.org">TypeScript 5.9</Link>,{" "}
           <Link href="https://orpc.dev">oRPC</Link>, and{" "}
           <Link href="https://zod.dev">Zod 4</Link> for end-to-end type-safe IPC
           communication between main and renderer processes.
@@ -37,7 +37,7 @@ export default function HomePage() {
       description: (
         <>
           <Link href="https://vite.dev">Vite 7</Link>,{" "}
-          <Link href="https://www.electronforge.io">Electron Forge</Link>,{" "}
+          <Link href="https://electronforge.io">Electron Forge</Link>,{" "}
           <Link href="https://prettier.io">Prettier</Link>,{" "}
           <Link href="https://eslint.org">ESLint 9</Link>, and React Compiler
           enabled. All configured and ready to go.
@@ -50,8 +50,8 @@ export default function HomePage() {
       description: (
         <>
           Easily add new languages to your app with built-in{" "}
-          <Link href="https://www.i18next.com">i18next</Link> support and
-          organized translation files.
+          <Link href="https://i18next.com">i18next</Link> support and organized
+          translation files.
         </>
       ),
       icon: <LanguagesIcon />,
