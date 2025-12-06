@@ -6,6 +6,7 @@ import {
   RefreshCwIcon,
   ShieldIcon,
 } from "lucide-react";
+import type { Metadata } from "next";
 import FeatureCards from "@/components/feature-cards";
 import ElectronIcon from "@/components/icons/electron";
 import ReactIcon from "@/components/icons/react";
@@ -16,6 +17,12 @@ import Reveal from "@/components/reveal";
 import { Button } from "@/components/ui/button";
 import { AppRoot } from "@/lib/constants/routes";
 import { mountRoute } from "@/lib/utils/route";
+
+export const metadata: Metadata = {
+  title: "electron-shadcn",
+  description:
+    "A starter template for Electron Forge with shadcn-ui (Vite + Typescript)",
+};
 
 export default function HomePage() {
   const features = [
@@ -36,11 +43,22 @@ export default function HomePage() {
       title: "Good tools and defaults",
       description: (
         <>
-          <Link href="https://vite.dev">Vite 7</Link>,{" "}
-          <Link href="https://electronforge.io">Electron Forge</Link>,{" "}
-          <Link href="https://prettier.io">Prettier</Link>,{" "}
-          <Link href="https://eslint.org">ESLint 9</Link>, and React Compiler
-          enabled. All configured and ready to go.
+          <Link href="https://vite.dev" isExternal>
+            Vite 7
+          </Link>
+          ,{" "}
+          <Link href="https://electronforge.io" isExternal>
+            Electron Forge
+          </Link>
+          ,{" "}
+          <Link href="https://prettier.io" isExternal>
+            Prettier
+          </Link>
+          ,{" "}
+          <Link href="https://eslint.org" isExternal>
+            ESLint 9
+          </Link>
+          , and React Compiler enabled. All configured and ready to go.
         </>
       ),
       icon: <HammerIcon />,
@@ -50,8 +68,10 @@ export default function HomePage() {
       description: (
         <>
           Easily add new languages to your app with built-in{" "}
-          <Link href="https://i18next.com">i18next</Link> support and organized
-          translation files.
+          <Link href="https://i18next.com" isExternal>
+            i18next
+          </Link>{" "}
+          support and organized translation files.
         </>
       ),
       icon: <LanguagesIcon />,
@@ -61,9 +81,14 @@ export default function HomePage() {
       description: (
         <>
           Comprehensive testing with{" "}
-          <Link href="https://vitest.dev">Vitest</Link>,{" "}
-          <Link href="https://playwright.dev">Playwright</Link>, and React
-          Testing Library.
+          <Link href="https://vitest.dev" isExternal>
+            Vitest
+          </Link>
+          ,{" "}
+          <Link href="https://playwright.dev" isExternal>
+            Playwright
+          </Link>
+          , and React Testing Library.
         </>
       ),
       icon: <FlaskConicalIcon />,
@@ -72,10 +97,18 @@ export default function HomePage() {
       title: "Beautiful UI",
       description: (
         <>
-          <Link href="https://react.dev">React 19</Link>,{" "}
-          <Link href="https://tailwindcss.com">Tailwind 4</Link>, and{" "}
-          <Link href="https://ui.shadcn.com">shadcn/ui</Link> with Geist font
-          for stunning interfaces.
+          <Link href="https://react.dev" isExternal>
+            React 19
+          </Link>
+          ,{" "}
+          <Link href="https://tailwindcss.com" isExternal>
+            Tailwind 4
+          </Link>
+          , and{" "}
+          <Link href="https://ui.shadcn.com" isExternal>
+            shadcn/ui
+          </Link>{" "}
+          with Geist font for stunning interfaces.
         </>
       ),
       icon: <PaletteIcon />,
