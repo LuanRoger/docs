@@ -1,10 +1,10 @@
-import { docs } from "fumadocs-mdx:collections/server";
+import { electronShadcnDocs } from "fumadocs-mdx:collections/server";
 import { type InferPageType, loader } from "fumadocs-core/source";
 import { lucideIconsPlugin } from "fumadocs-core/source/lucide-icons";
 
 export const source = loader({
   baseUrl: "/electron-shadcn/docs",
-  source: docs.toFumadocsSource(),
+  source: electronShadcnDocs.toFumadocsSource(),
   plugins: [lucideIconsPlugin()],
 });
 
