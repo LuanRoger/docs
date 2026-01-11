@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
+import Squares from "@/app/(home)/components/squares-bg";
 import Link from "@/components/link";
-import ProjectDocCard from "@/components/project-doc-card";
 import Reveal from "@/components/reveal";
-import Squares from "@/components/squares-bg";
+import ProjectDocCard from "./components/project-doc-card";
 import { projects } from "./constants";
 
 export const metadata: Metadata = {

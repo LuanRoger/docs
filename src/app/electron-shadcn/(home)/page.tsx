@@ -4,11 +4,11 @@ import ElectronIcon from "@/components/icons/electron";
 import ReactIcon from "@/components/icons/react";
 import ViteIcon from "@/components/icons/vite";
 import Link from "@/components/link";
-import Prism from "@/components/prism";
 import Reveal from "@/components/reveal";
 import { Button } from "@/components/ui/button";
 import { AppRoot } from "@/lib/constants/routes";
 import { mountRoute } from "@/lib/utils/route";
+import Prism from "./components/prism-bg";
 import { features } from "./constants";
 
 export const metadata: Metadata = {

@@ -1,17 +1,17 @@
 import { BookIcon } from "lucide-react";
 import type { StaticImageData } from "next/image";
 import Image from "next/image";
-import AnimatedBorderCard from "./animated-border-card";
-import Link from "./link";
-import { Button } from "./ui/button";
+import AnimatedBorderCard from "@/app/(home)/components/animated-border-card";
+import Link from "@/components/link";
+import { Button } from "@/components/ui/button";
 
-interface ProjectDocCardProps {
+type ProjectDocCardProps = {
   name: string;
   description: string;
   documentationLink: string;
   repositoryLink: string;
   projectImage: string | StaticImageData;
-}
+};
 
 export default function ProjectDocCard({
   name,
