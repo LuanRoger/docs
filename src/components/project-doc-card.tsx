@@ -1,19 +1,16 @@
 import { BookIcon } from "lucide-react";
-import Link from "next/link";
+import type { StaticImageData } from "next/image";
+import Image from "next/image";
+import AnimatedBorderCard from "./animated-border-card";
+import Link from "./link";
 import { Button } from "./ui/button";
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "./ui/card";
 
 interface ProjectDocCardProps {
   name: string;
   description: string;
   documentationLink: string;
   repositoryLink: string;
+  projectImage: string | StaticImageData;
 }
 
 export default function ProjectDocCard({
@@ -21,23 +18,29 @@ export default function ProjectDocCard({
   description,
   documentationLink,
   repositoryLink,
+  projectImage,
 }: ProjectDocCardProps) {
   return (
-    <Card className="min-w-72">
-      <CardHeader>
-        <CardTitle>{name}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardFooter className="gap-2">
+    <AnimatedBorderCard className="flex flex-col gap-2 bg-transparent">
+      <Image
+        alt={`${name} project image`}
+        className="absolute inset-0 -z-10 size-full rounded-xl object-cover opacity-40"
+        height={200}
+        src={projectImage}
+        width={200}
+      />
+      <h2 className="text-xl">{name}</h2>
+      <p className="text-sm">{description}</p>
+      <div className="flex gap-2">
         <Link href={documentationLink}>
           <Button variant={"secondary"}>Documentation</Button>
         </Link>
-        <Link href={repositoryLink} rel="noopener noreferrer" target="_blank">
+        <Link href={repositoryLink} isExternal>
           <Button size={"icon"} variant={"ghost"}>
             <BookIcon />
           </Button>
         </Link>
-      </CardFooter>
-    </Card>
+      </div>
+    </AnimatedBorderCard>
   );
 }
