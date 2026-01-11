@@ -1,22 +1,15 @@
-import {
-  FlaskConicalIcon,
-  HammerIcon,
-  LanguagesIcon,
-  PaletteIcon,
-  RefreshCwIcon,
-  ShieldIcon,
-} from "lucide-react";
 import type { Metadata } from "next";
 import FeatureCards from "@/components/feature-cards";
 import ElectronIcon from "@/components/icons/electron";
 import ReactIcon from "@/components/icons/react";
 import ViteIcon from "@/components/icons/vite";
 import Link from "@/components/link";
-import Prism from "@/components/prism";
 import Reveal from "@/components/reveal";
 import { Button } from "@/components/ui/button";
 import { AppRoot } from "@/lib/constants/routes";
 import { mountRoute } from "@/lib/utils/route";
+import Prism from "./components/prism-bg";
+import { features } from "./constants";
 
 export const metadata: Metadata = {
   title: "electron-shadcn",
@@ -25,106 +18,6 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
-  const features = [
-    {
-      title: "Type-safe",
-      description: (
-        <>
-          Built with{" "}
-          <Link href="https://typescriptlang.org">TypeScript 5.9</Link>,{" "}
-          <Link href="https://orpc.dev">oRPC</Link>, and{" "}
-          <Link href="https://zod.dev">Zod 4</Link> for end-to-end type-safe IPC
-          communication between main and renderer processes.
-        </>
-      ),
-      icon: <ShieldIcon />,
-    },
-    {
-      title: "Good tools and defaults",
-      description: (
-        <>
-          <Link href="https://vite.dev" isExternal>
-            Vite 7
-          </Link>
-          ,{" "}
-          <Link href="https://electronforge.io" isExternal>
-            Electron Forge
-          </Link>
-          ,{" "}
-          <Link href="https://prettier.io" isExternal>
-            Prettier
-          </Link>
-          ,{" "}
-          <Link href="https://eslint.org" isExternal>
-            ESLint 9
-          </Link>
-          , and React Compiler enabled. All configured and ready to go.
-        </>
-      ),
-      icon: <HammerIcon />,
-    },
-    {
-      title: "Multi-language support",
-      description: (
-        <>
-          Easily add new languages to your app with built-in{" "}
-          <Link href="https://i18next.com" isExternal>
-            i18next
-          </Link>{" "}
-          support and organized translation files.
-        </>
-      ),
-      icon: <LanguagesIcon />,
-    },
-    {
-      title: "Testing Ready",
-      description: (
-        <>
-          Comprehensive testing with{" "}
-          <Link href="https://vitest.dev" isExternal>
-            Vitest
-          </Link>
-          ,{" "}
-          <Link href="https://playwright.dev" isExternal>
-            Playwright
-          </Link>
-          , and React Testing Library.
-        </>
-      ),
-      icon: <FlaskConicalIcon />,
-    },
-    {
-      title: "Beautiful UI",
-      description: (
-        <>
-          <Link href="https://react.dev" isExternal>
-            React 19
-          </Link>
-          ,{" "}
-          <Link href="https://tailwindcss.com" isExternal>
-            Tailwind 4
-          </Link>
-          , and{" "}
-          <Link href="https://ui.shadcn.com" isExternal>
-            shadcn/ui
-          </Link>{" "}
-          with Geist font for stunning interfaces.
-        </>
-      ),
-      icon: <PaletteIcon />,
-    },
-    {
-      title: "Auto Updates",
-      description: (
-        <>
-          Built-in auto update support using GitHub Releases. Keep your users on
-          the latest version.
-        </>
-      ),
-      icon: <RefreshCwIcon />,
-    },
-  ];
-
   return (
     <div className="relative inset-shadow-sm flex-1 overflow-hidden rounded-2xl border border-border p-4">
       <div className="flex flex-col items-center justify-center gap-5">
@@ -157,7 +50,7 @@ export default function HomePage() {
         </div>
         <FeatureCards features={features} />
       </div>
-      <Reveal className="-z-10 absolute inset-0 hidden lg:block">
+      <Reveal className="absolute inset-0 -z-10 hidden lg:block">
         <Prism
           animationType="rotate"
           baseWidth={10}
