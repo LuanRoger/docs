@@ -1,3 +1,7 @@
+packages:
+  - .
+overrides:
+  "@next/env": "npm:@varlock/nextjs-integration"
 allowBuilds:
   core-js: true
   esbuild: true
