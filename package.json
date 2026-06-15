@@ -9,7 +9,7 @@
     "types:check": "fumadocs-mdx && tsc --noEmit",
     "postinstall": "fumadocs-mdx",
     "check": "ultracite check",
-    "fix": "ultracite fix --write",
+    "fix": "ultracite fix",
     "env:load": "varlock load"
   },
   "dependencies": {
