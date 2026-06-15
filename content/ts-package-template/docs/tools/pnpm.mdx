@@ -1,0 +1,403 @@
+---
+title: pnpm
+description: Using pnpm as the package manager
+---
+
+import { Callout } from "fumadocs-ui/components/callout";
+
+# pnpm
+
+[pnpm](https://pnpm.io/) is a fast, disk space efficient package manager that the template uses for dependency management. pnpm stands for "performant npm" and provides several advantages over npm and yarn.
+
+## Overview
+
+pnpm provides:
+
+- **Speed**: Faster installation and dependency resolution
+- **Efficiency**: Saves disk space by using a shared store
+- **Strictness**: Prevents dependency conflicts with strict peer dependencies
+- **Modern**: Designed for modern JavaScript and TypeScript projects
+- **Compatible**: Works with all npm packages and registries
+
+## Why pnpm?
+
+The template uses pnpm because:
+
+1. **Performance**: Faster than npm and yarn in most cases
+2. **Disk Space**: Uses hard links to save disk space
+3. **Security**: More secure dependency resolution
+4. **Strictness**: Better handling of peer dependencies
+5. **Workspaces**: Excellent support for monorepos and workspaces
+6. **Modern**: Actively maintained with regular updates
+
+## Package.json Configuration
+
+The template specifies pnpm as the package manager:
+
+```json
+{
+  "packageManager": "pnpm@11.6.0"
+}
+```
+
+This ensures that all users of the template use the same package manager version.
+
+## Using pnpm
+
+### Installation
+
+Install pnpm globally:
+
+```bash
+# Using npm
+npm install -g pnpm
+
+# Using curl
+curl -fsSL https://get.pnpm.io/install.sh | sh
+
+# Using Homebrew (macOS)
+brew install pnpm
+```
+
+Verify installation:
+
+```bash
+pnpm --version
+```
+
+### Basic Commands
+
+| Command | Description | npm Equivalent |
+|---------|-------------|----------------|
+| `pnpm install` | Install dependencies | `npm install` |
+| `pnpm add <package>` | Add a dependency | `npm install <package>` |
+| `pnpm add -D <package>` | Add a dev dependency | `npm install --save-dev <package>` |
+| `pnpm remove <package>` | Remove a dependency | `npm uninstall <package>` |
+| `pnpm update` | Update dependencies | `npm update` |
+| `pnpm list` | List installed packages | `npm list` |
+| `pnpm run <script>` | Run a script | `npm run <script>` |
+| `pnpm test` | Run the test script | `npm test` |
+
+### Install Dependencies
+
+Install all dependencies from package.json:
+
+```bash
+pnpm install
+```
+
+This will:
+- Install all dependencies listed in package.json
+- Create or update pnpm-lock.yaml
+- Set up the node_modules directory with symlinks to the pnpm store
+
+### Add Dependencies
+
+Add a new dependency:
+
+```bash
+# Add a regular dependency
+pnpm add lodash
+
+# Add a development dependency
+pnpm add -D typescript
+
+# Add a specific version
+pnpm add lodash@4.17.21
+
+# Add a peer dependency
+pnpm add -P react
+
+# Add an optional dependency
+pnpm add -O optional-package
+```
+
+### Remove Dependencies
+
+Remove a dependency:
+
+```bash
+pnpm remove lodash
+```
+
+### Update Dependencies
+
+Update dependencies:
+
+```bash
+# Update all dependencies
+pnpm update
+
+# Update specific packages
+pnpm update lodash typescript
+
+# Update to latest versions
+pnpm up
+
+# Update to latest major versions
+pnpm up --latest
+```
+
+## pnpm Features
+
+### Workspaces
+
+pnpm has excellent support for workspaces (monorepos):
+
+```json
+{
+  "pnpm-workspace.yaml": "packages/*"
+}
+```
+
+The template includes a basic workspace configuration:
+
+```yaml
+# pnpm-workspace.yaml
+packages:
+  - "."
+```
+
+### Shared Store
+
+pnpm uses a shared store to save disk space:
+
+```bash
+# View the pnpm store location
+pnpm store path
+
+# List all packages in the store
+pnpm store list
+```
+
+### Strict Peer Dependencies
+
+pnpm automatically installs peer dependencies:
+
+```bash
+# Install with strict peer dependencies (default)
+pnpm install
+
+# Install without peer dependencies
+pnpm install --shamefully-hoist
+```
+
+### Filtering
+
+Filter dependencies by package name:
+
+```bash
+# List only production dependencies
+pnpm list --prod
+
+# List only development dependencies
+pnpm list --dev
+
+# List dependencies matching a pattern
+pnpm list lodash
+```
+
+## Performance Tips
+
+### Faster Installs
+
+- Use `--frozen-lockfile` for CI/CD to skip lockfile updates
+- Use `--prefer-offline` to prefer offline mode
+- Use `--strict-peer-dependencies` to skip peer dependency checks
+
+```bash
+# Fast install for CI/CD
+pnpm install --frozen-lockfile --prefer-offline
+```
+
+### Disk Space Optimization
+
+- pnpm automatically uses hard links to save space
+- The shared store prevents duplicate installations
+- Use `pnpm store prune` to clean up unused packages
+
+```bash
+# Clean up unused packages from the store
+pnpm store prune
+```
+
+## Advanced Usage
+
+### Scripts
+
+Run scripts with pnpm:
+
+```bash
+# Run a script
+pnpm run build
+
+# Run a script with arguments
+pnpm run test -- --watch
+
+# Run a script in a specific directory
+pnpm -C packages/my-package run build
+```
+
+### Environment Variables
+
+Set environment variables for scripts:
+
+```bash
+# Set environment variable
+NODE_ENV=production pnpm run build
+
+# Set multiple environment variables
+NODE_ENV=production DEBUG=true pnpm run build
+```
+
+### Configuration
+
+Configure pnpm with `.npmrc` or `pnpm-config.json`:
+
+```ini
+# .npmrc
+shamefully-hoist=true
+strict-peer-dependencies=false
+store-dir=/path/to/store
+```
+
+### Global Packages
+
+Install and manage global packages:
+
+```bash
+# Install a global package
+pnpm add -g create-react-app
+
+# List global packages
+pnpm list -g
+
+# Remove a global package
+pnpm remove -g create-react-app
+```
+
+## Migration from npm/yarn
+
+### From npm
+
+1. Remove node_modules and package-lock.json:
+   ```bash
+   rm -rf node_modules package-lock.json
+   ```
+
+2. Install pnpm:
+   ```bash
+   npm install -g pnpm
+   ```
+
+3. Install dependencies with pnpm:
+   ```bash
+   pnpm install
+   ```
+
+### From yarn
+
+1. Remove node_modules and yarn.lock:
+   ```bash
+   rm -rf node_modules yarn.lock
+   ```
+
+2. Install pnpm:
+   ```bash
+   npm install -g pnpm
+   ```
+
+3. Install dependencies with pnpm:
+   ```bash
+   pnpm install
+   ```
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Installation fails**:
+   - Check your Node.js version (pnpm requires Node.js 14.6+)
+   - Try clearing the store: `pnpm store prune`
+   - Try with `--force`: `pnpm install --force`
+
+2. **Peer dependency conflicts**:
+   - Use `--shamefully-hoist` to ignore peer dependencies
+   - Or add the peer dependency explicitly
+
+3. **Slow installation**:
+   - Use `--prefer-offline` to use cached packages
+   - Check your network connection
+   - Try with a different registry
+
+4. **Permission issues**:
+   - Check file permissions in the project directory
+   - Try running with sudo (not recommended)
+   - Fix ownership with `chown`
+
+### Debug Mode
+
+Run pnpm with debug logging:
+
+```bash
+DEBUG=pnpm* pnpm install
+```
+
+## Best Practices
+
+### Use pnpm in CI/CD
+
+Configure your CI/CD to use pnpm:
+
+```yaml
+# GitHub Actions example
+- name: Install pnpm
+  run: npm install -g pnpm
+
+- name: Install dependencies
+  run: pnpm install --frozen-lockfile
+```
+
+### Use pnpm in Docker
+
+```dockerfile
+FROM node:18
+
+# Install pnpm
+RUN npm install -g pnpm
+
+# Copy package files
+COPY package.json pnpm-lock.yaml ./
+
+# Install dependencies
+RUN pnpm install --frozen-lockfile
+
+# Copy source files
+COPY . .
+
+# Build
+RUN pnpm run build
+```
+
+### Use pnpm Workspaces for Monorepos
+
+For monorepo projects:
+
+```yaml
+# pnpm-workspace.yaml
+packages:
+  - "packages/*"
+  - "apps/*"
+```
+
+### Commit pnpm-lock.yaml
+
+Always commit the `pnpm-lock.yaml` file to ensure consistent installations across all environments.
+
+## Resources
+
+- [pnpm Documentation](https://pnpm.io/)
+- [pnpm GitHub Repository](https://github.com/pnpm/pnpm)
+- [pnpm CLI Reference](https://pnpm.io/cli)
+- [pnpm Workspaces](https://pnpm.io/workspaces)
+- [pnpm vs npm vs yarn](https://pnpm.io/installation#comparison-with-npmipnyarn)

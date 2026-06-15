@@ -1,0 +1,513 @@
+---
+title: NPM Scripts
+description: Understanding and using the available npm scripts
+---
+
+import { Callout } from "fumadocs-ui/components/callout";
+
+# NPM Scripts
+
+The ts-package-template includes a comprehensive set of npm scripts to automate common development tasks. These scripts are defined in the `package.json` file and can be run using `pnpm run <script>` or `npm run <script>`.
+
+## Available Scripts
+
+The template includes the following scripts in `package.json`:
+
+```json
+{
+  "scripts": {
+    "dev": "tsdown --watch ./src",
+    "build": "tsc && tsdown",
+    "check": "ultracite check",
+    "fix": "ultracite fix",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "changelog": "git-cliff --config ./scripts/git-cliff.toml --output CHANGELOG.md",
+    "postversion": "pnpm run changelog",
+    "publish": "np --package-manager npm",
+    "publish:all": "pnpm run build && pnpm run publish"
+  }
+}
+```
+
+## Script Categories
+
+### Development Scripts
+
+| Script | Description | Usage |
+|--------|-------------|-------|
+| `dev` | Start development server with hot reload | `pnpm run dev` |
+| `build` | Build the package for production | `pnpm run build` |
+
+### Code Quality Scripts
+
+| Script | Description | Usage |
+|--------|-------------|-------|
+| `check` | Check code quality with Biome | `pnpm run check` |
+| `fix` | Automatically fix code quality issues | `pnpm run fix` |
+
+### Testing Scripts
+
+| Script | Description | Usage |
+|--------|-------------|-------|
+| `test` | Run all tests once | `pnpm run test` |
+| `test:watch` | Run tests in watch mode | `pnpm run test:watch` |
+
+### Documentation Scripts
+
+| Script | Description | Usage |
+|--------|-------------|-------|
+| `changelog` | Generate or update CHANGELOG.md | `pnpm run changelog` |
+
+### Publishing Scripts
+
+| Script | Description | Usage |
+|--------|-------------|-------|
+| `publish` | Publish package to npm | `pnpm run publish` |
+| `publish:all` | Build and publish package | `pnpm run publish:all` |
+
+## Script Details
+
+### Development Script (`dev`)
+
+```json
+"dev": "tsdown --watch ./src"
+```
+
+**Purpose**: Start the development server with hot reload
+
+**What it does**:
+- Runs tsdown in watch mode
+- Watches for changes in the `./src` directory
+- Automatically rebuilds when files change
+- Outputs to the configured directory (usually `dist`)
+
+**Usage**:
+```bash
+pnpm run dev
+```
+
+**Use case**: Use during development to automatically rebuild your package when you make changes to the source code.
+
+<Callout type="info">
+This is useful for testing your package locally or when working on the package code.
+</Callout>
+
+### Build Script (`build`)
+
+```json
+"build": "tsc && tsdown"
+```
+
+**Purpose**: Build the package for production
+
+**What it does**:
+1. Runs TypeScript compiler (`tsc`) for type checking
+2. Runs tsdown for bundling
+3. Outputs files to the `dist` directory
+
+**Usage**:
+```bash
+pnpm run build
+```
+
+**Use case**: Use when you need to create a production-ready build of your package.
+
+### Check Script (`check`)
+
+```json
+"check": "ultracite check"
+```
+
+**Purpose**: Check code quality
+
+**What it does**:
+- Runs Biome to lint and format the code
+- Reports linting and formatting issues
+- Exits with non-zero code if issues are found
+
+**Usage**:
+```bash
+pnpm run check
+```
+
+**Use case**: Use to check code quality before committing or pushing changes.
+
+<Callout type="tip">
+Run this script before committing to ensure your code follows the project's quality standards.
+</Callout>
+
+### Fix Script (`fix`)
+
+```json
+"fix": "ultracite fix"
+```
+
+**Purpose**: Automatically fix code quality issues
+
+**What it does**:
+- Runs Biome to automatically fix linting and formatting issues
+- Formats all files according to the configuration
+- Organizes imports in all files
+
+**Usage**:
+```bash
+pnpm run fix
+```
+
+**Use case**: Use to automatically fix code quality issues. This is also run automatically by the pre-commit hook.
+
+### Test Script (`test`)
+
+```json
+"test": "vitest run"
+```
+
+**Purpose**: Run all tests once
+
+**What it does**:
+- Discovers all test files matching the pattern (`**/*.test.ts`)
+- Runs all tests
+- Displays results and summary
+- Exits with appropriate status code
+
+**Usage**:
+```bash
+pnpm run test
+```
+
+**Use case**: Use to run all tests once, typically in CI/CD environments or when you want to verify all tests pass.
+
+### Test Watch Script (`test:watch`)
+
+```json
+"test:watch": "vitest"
+```
+
+**Purpose**: Run tests in watch mode
+
+**What it does**:
+- Watches for changes in test files and source files
+- Automatically re-runs affected tests when files change
+- Provides interactive UI for running specific tests
+
+**Usage**:
+```bash
+pnpm run test:watch
+```
+
+**Use case**: Use during development to automatically run tests when you make changes.
+
+### Changelog Script (`changelog`)
+
+```json
+"changelog": "git-cliff --config ./scripts/git-cliff.toml --output CHANGELOG.md"
+```
+
+**Purpose**: Generate or update the changelog
+
+**What it does**:
+- Parses all commits since the last tag
+- Generates changelog entries based on conventional commits
+- Updates the `CHANGELOG.md` file
+
+**Usage**:
+```bash
+pnpm run changelog
+```
+
+**Use case**: Use to generate or update the changelog before releasing a new version.
+
+<Callout type="info">
+This script is automatically run by the `postversion` script when you bump the version.
+</Callout>
+
+### Postversion Script (`postversion`)
+
+```json
+"postversion": "pnpm run changelog"
+```
+
+**Purpose**: Automatically update changelog after version bump
+
+**What it does**:
+- Runs the `changelog` script
+- Updates the `CHANGELOG.md` file
+
+**Usage**: This script runs automatically when you use `npm version` or similar commands.
+
+**Use case**: This ensures the changelog is always up to date when you bump the version.
+
+### Publish Script (`publish`)
+
+```json
+"publish": "np --package-manager npm"
+```
+
+**Purpose**: Publish the package to npm
+
+**What it does**:
+- Runs np to publish the package
+- Guides you through the publishing process
+- Handles version bumping and changelog generation
+
+**Usage**:
+```bash
+pnpm run publish
+```
+
+**Use case**: Use to publish your package to the npm registry.
+
+### Publish All Script (`publish:all`)
+
+```json
+"publish:all": "pnpm run build && pnpm run publish"
+```
+
+**Purpose**: Build and publish the package
+
+**What it does**:
+1. Runs `pnpm run build` to build the package
+2. Runs `pnpm run publish` to publish to npm
+
+**Usage**:
+```bash
+pnpm run publish:all
+```
+
+**Use case**: Use to build and publish the package in one command.
+
+## Script Combinations
+
+### Common Workflows
+
+#### Development Workflow
+
+```bash
+# Start development server
+pnpm run dev
+
+# In another terminal, run tests in watch mode
+pnpm run test:watch
+```
+
+#### Build and Test
+
+```bash
+# Build the package
+pnpm run build
+
+# Run tests
+pnpm run test
+```
+
+#### Quality Check
+
+```bash
+# Check code quality
+pnpm run check
+
+# Fix issues automatically
+pnpm run fix
+```
+
+#### Release Workflow
+
+```bash
+# Build the package
+pnpm run build
+
+# Run tests
+pnpm run test
+
+# Check code quality
+pnpm run check
+
+# Publish to npm
+pnpm run publish
+```
+
+Or use the automated script:
+
+```bash
+# Build and publish
+pnpm run publish:all
+```
+
+## Customizing Scripts
+
+### Add New Scripts
+
+Add new scripts to the `scripts` object in `package.json`:
+
+```json
+{
+  "scripts": {
+    "lint": "biome lint",
+    "format": "biome format",
+    "typecheck": "tsc --noEmit"
+  }
+}
+```
+
+### Modify Existing Scripts
+
+Modify existing scripts to change their behavior:
+
+```json
+{
+  "scripts": {
+    "build": "tsc --noEmit && tsdown --minify",
+    "test": "vitest run --coverage"
+  }
+}
+```
+
+### Chain Scripts
+
+Chain multiple scripts together:
+
+```json
+{
+  "scripts": {
+    "ci": "pnpm run check && pnpm run test && pnpm run build"
+  }
+}
+```
+
+## Running Scripts
+
+### Basic Usage
+
+Run a script:
+
+```bash
+pnpm run <script-name>
+```
+
+### With Arguments
+
+Pass arguments to scripts:
+
+```bash
+# Pass arguments to vitest
+pnpm run test -- --watch
+
+# Pass arguments to tsdown
+pnpm run build -- --minify
+```
+
+### Run Multiple Scripts
+
+Run multiple scripts sequentially:
+
+```bash
+pnpm run build && pnpm run test
+```
+
+Run multiple scripts in parallel:
+
+```bash
+pnpm run build & pnpm run test
+```
+
+### Environment Variables
+
+Set environment variables for scripts:
+
+```bash
+NODE_ENV=production pnpm run build
+```
+
+## Best Practices
+
+### Script Naming
+
+- Use descriptive names for scripts
+- Use colons for related scripts (e.g., `test:watch`, `test:coverage`)
+- Keep script names short but meaningful
+
+### Script Organization
+
+- Group related scripts together in package.json
+- Use comments to organize scripts:
+  ```json
+  {
+    "scripts": {
+      // Development
+      "dev": "tsdown --watch ./src",
+      "build": "tsc && tsdown",
+      
+      // Testing
+      "test": "vitest run",
+      "test:watch": "vitest",
+      
+      // Code Quality
+      "check": "ultracite check",
+      "fix": "ultracite fix"
+    }
+  }
+  ```
+
+### Script Documentation
+
+Document your scripts in the README.md:
+
+```markdown
+## Available Scripts
+
+- `pnpm run dev` - Start development server
+- `pnpm run build` - Build for production
+- `pnpm run test` - Run tests
+- `pnpm run check` - Check code quality
+```
+
+### CI/CD Integration
+
+Use scripts in your CI/CD pipeline:
+
+```yaml
+# GitHub Actions example
+- name: Install dependencies
+  run: pnpm install
+
+- name: Run tests
+  run: pnpm run test
+
+- name: Check code quality
+  run: pnpm run check
+
+- name: Build package
+  run: pnpm run build
+```
+
+## Troubleshooting
+
+### Script Not Found
+
+If you get "script not found" error:
+- Check that the script name is spelled correctly
+- Ensure the script is defined in package.json
+- Check that you're in the correct directory
+
+### Script Fails
+
+If a script fails:
+- Check the error message for details
+- Run the script with `--help` to see available options
+- Check that all dependencies are installed
+- Verify that the script has the correct permissions
+
+### Slow Script Execution
+
+If scripts are running slowly:
+- Check for memory issues
+- Limit the scope of the script (e.g., specific files instead of all files)
+- Use caching where possible
+- Check for circular dependencies
+
+## Resources
+
+- [npm Scripts Documentation](https://docs.npmjs.com/cli/v9/commands/npm-run)
+- [pnpm Scripts Documentation](https://pnpm.io/cli/run)
+- [Package.json Scripts Guide](https://docs.npmjs.com/cli/v9/configuring-npm/package-json#scripts)

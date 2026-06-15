@@ -1,0 +1,392 @@
+---
+title: git-cliff Configuration
+description: Configuring git-cliff for automatic changelog generation
+---
+
+import { Callout } from "fumadocs-ui/components/callout";
+
+# git-cliff Configuration
+
+[git-cliff](https://git-cliff.org/) is a changelog generator that creates beautiful, customizable changelogs based on conventional commits. The template uses git-cliff to automatically generate and update the `CHANGELOG.md` file.
+
+## Configuration Files
+
+The template uses two configuration files for git-cliff:
+
+1. **`cliff.toml`** - Main configuration file in the project root
+2. **`scripts/git-cliff.toml`** - Additional configuration referenced in package.json
+
+### Main Configuration (`cliff.toml`)
+
+```toml
+# git-cliff ~ configuration file
+# https://git-cliff.org/docs/configuration
+
+[changelog]
+# A Tera template to be rendered for each release in the changelog.
+# See https://keats.github.io/tera/docs/#introduction
+body = """
+{% if version %}\\n    ## [{{ version | trim_start_matches(pat="v") }}] - {{ timestamp | date(format="%Y-%m-%d") }}
+{% else %}\\n    ## [unreleased]
+{% endif %}\\n{% for group, commits in commits | group_by(attribute="group") %}
+    ### {{ group | striptags | trim | upper_first }}
+    {% for commit in commits %}
+        - {% if commit.scope %}*({{ commit.scope }})* {% endif %}\\n            {% if commit.breaking %}[**breaking**] {% endif %}\\n            {{ commit.message | upper_first }}\\n    {% endfor %}
+{% endfor %}
+"""
+# Remove leading and trailing whitespaces from the changelog's body.
+trim = true
+# Render body even when there are no releases to process.
+render_always = true
+# An array of regex based postprocessors to modify the changelog.
+postprocessors = [
+    # Replace the placeholder <REPO> with a URL.
+    #{ pattern = '<REPO>', replace = "https://github.com/orhun/git-cliff" },
+]
+# render body even when there are no releases to process
+# render_always = true
+# output file path
+# output = "test.md"
+
+[git]
+# Parse commits according to the conventional commits specification.
+# See https://www.conventionalcommits.org
+conventional_commits = true
+# Exclude commits that do not match the conventional commits specification.
+filter_unconventional = true
+# Require all commits to be conventional.
+# Takes precedence over filter_unconventional.
+require_conventional = false
+# Split commits on newlines, treating each line as an individual commit.
+split_commits = false
+# An array of regex based parsers to modify commit messages prior to further processing.
+commit_preprocessors = [
+    # Replace issue numbers with link templates to be updated in `changelog.postprocessors`.
+    #{ pattern = '\((\w+\s)?#([0-9]+)\)', replace = "([#${2}](<REPO>/issues/${2}))"},
+    # Check spelling of the commit message using https://github.com/crate-ci/typos.
+    # If the spelling is incorrect, it will be fixed automatically.
+    #{ pattern = '.*', replace_command = 'typos --write-changes -' },
+]
+# Prevent commits that are breaking from being excluded by commit parsers.
+protect_breaking_commits = false
+# An array of regex based parsers for extracting data from the commit message.
+# Assigns commits to groups.
+# Optionally sets the commit's scope and can decide to exclude commits from further processing.
+commit_parsers = [
+    { message = "^feat", group = "<!-- 0 -->🚀 Features" },
+    { message = "^fix", group = "<!-- 1 -->🐛 Bug Fixes" },
+    { message = "^doc", group = "<!-- 3 -->📚 Documentation" },
+    { message = "^perf", group = "<!-- 4 -->⚡ Performance" },
+    { message = "^refactor", group = "<!-- 2 -->🚜 Refactor" },
+    { message = "^style", group = "<!-- 5 -->🎨 Styling" },
+    { message = "^test", group = "<!-- 6 -->🧪 Testing" },
+    { message = "^chore\(release\): prepare for", skip = true },
+    { message = "^chore\(deps.*\)", skip = true },
+    { message = "^chore\(pr\)", skip = true },
+    { message = "^chore\(pull\)", skip = true },
+    { message = "^chore|^ci", group = "<!-- 7 -->⚙️ Miscellaneous Tasks" },
+    { body = ".*security", group = "<!-- 8 -->🛡️ Security" },
+    { message = "^revert", group = "<!-- 9 -->◀️ Revert" },
+    { message = ".*", group = "<!-- 10 -->💼 Other" },
+]
+# Exclude commits that are not matched by any commit parser.
+filter_commits = false
+# An array of link parsers for extracting external references, and turning them into URLs, using regex.
+link_parsers = []
+# Include only the tags that belong to the current branch.
+use_branch_tags = false
+# Order releases topologically instead of chronologically.
+topo_order = false
+# Order releases topologically instead of chronologically.
+topo_order_commits = true
+# Order of commits in each group/release within the changelog.
+# Allowed values: newest, oldest
+sort_commits = "oldest"
+# Process submodules commits
+recurse_submodules = false
+```
+
+## Configuration Sections Explained
+
+### Changelog Section
+
+The `[changelog]` section defines how the changelog is rendered:
+
+- **`body`**: Tera template for rendering each release
+- **`trim`**: Remove leading/trailing whitespace
+- **`render_always`**: Render even when no releases exist
+- **`postprocessors`**: Regex-based post-processing of the changelog
+
+### Git Section
+
+The `[git]` section defines how commits are parsed and processed:
+
+- **`conventional_commits`**: Parse commits according to conventional commits spec
+- **`filter_unconventional`**: Exclude non-conventional commits
+- **`require_conventional`**: Require all commits to be conventional
+- **`commit_parsers`**: Regex patterns to categorize commits
+- **`commit_preprocessors`**: Pre-process commit messages
+- **`link_parsers`**: Extract and convert external references to URLs
+- **`filter_commits`**: Exclude commits not matched by parsers
+- **`protect_breaking_commits`**: Prevent breaking commits from being excluded
+- **`topo_order`**: Order releases topologically
+- **`topo_order_commits`**: Order commits topologically
+- **`sort_commits`**: Sort commits by newest or oldest
+- **`recurse_submodules`**: Process submodule commits
+
+## Commit Parsers
+
+The template includes comprehensive commit parsers that categorize commits based on their type:
+
+| Pattern | Group | Emoji |
+|---------|-------|-------|
+| `^feat` | Features | 🚀 |
+| `^fix` | Bug Fixes | 🐛 |
+| `^doc` | Documentation | 📚 |
+| `^perf` | Performance | ⚡ |
+| `^refactor` | Refactor | 🚜 |
+| `^style` | Styling | 🎨 |
+| `^test` | Testing | 🧪 |
+| `^chore` or `^ci` | Miscellaneous Tasks | ⚙️ |
+| `.*security` | Security | 🛡️ |
+| `^revert` | Revert | ◀️ |
+| `.*` | Other | 💼 |
+
+### Skipped Commits
+
+The following commit patterns are skipped (not included in changelog):
+
+- `^chore(release): prepare for` - Release preparation commits
+- `^chore(deps.*` - Dependency update commits
+- `^chore(pr)` - Pull request related commits
+- `^chore(pull)` - Pull related commits
+
+## Package.json Configuration
+
+The template configures git-cliff in the `package.json` scripts:
+
+```json
+{
+  "scripts": {
+    "changelog": "git-cliff --config ./scripts/git-cliff.toml --output CHANGELOG.md",
+    "postversion": "pnpm run changelog"
+  }
+}
+```
+
+### Scripts Explained
+
+- **`changelog`**: Generate or update the CHANGELOG.md file
+- **`postversion`**: Automatically run changelog generation after version bump
+
+<Callout type="info">
+The `postversion` script runs automatically when you use `npm version` or similar commands, ensuring the changelog is always up to date.
+</Callout>
+
+## Using git-cliff
+
+### Generate Changelog
+
+Generate or update the changelog:
+
+```bash
+pnpm run changelog
+```
+
+This will:
+- Parse all commits since the last tag
+- Generate changelog entries based on conventional commits
+- Update the `CHANGELOG.md` file
+
+### Generate Changelog for Specific Range
+
+Generate changelog for a specific commit range:
+
+```bash
+# From specific commit to HEAD
+git-cliff HEAD~10..HEAD
+
+# Between two tags
+git-cliff v1.0.0..v2.0.0
+
+# From specific date
+git-cliff --since 2024-01-01
+```
+
+### Preview Changelog
+
+Preview the changelog without writing to file:
+
+```bash
+pnpm run changelog -- --output -
+```
+
+### Generate Changelog with Custom Configuration
+
+Use a different configuration file:
+
+```bash
+git-cliff --config custom-cliff.toml --output CHANGELOG.md
+```
+
+## Conventional Commits
+
+The template follows the [Conventional Commits](https://www.conventionalcommits.org/) specification. Here are the recommended commit message formats:
+
+### Commit Types
+
+| Type | Description | Example |
+|------|-------------|---------|
+| `feat` | New feature | `feat: add new math utility function` |
+| `fix` | Bug fix | `fix: correct division by zero error` |
+| `doc` | Documentation changes | `doc: update README with usage examples` |
+| `perf` | Performance improvements | `perf: optimize build process` |
+| `refactor` | Code refactoring | `refactor: simplify utility functions` |
+| `style` | Code style changes | `style: format code with Biome` |
+| `test` | Test changes | `test: add unit tests for math functions` |
+| `chore` | Maintenance tasks | `chore: update dependencies` |
+| `ci` | CI/CD changes | `ci: add GitHub Actions workflow` |
+| `revert` | Revert changes | `revert: undo previous commit` |
+
+### Commit Format
+
+```plaintext
+<type>(<scope>): <description>
+
+<body>
+
+<footer>
+```
+
+Examples:
+
+```plaintext
+feat(math): add square root function
+
+Added a new sqrt function to the math utilities.
+
+BREAKING CHANGE: The function signature changed from (x) to (x, precision?)
+
+fixes #123
+```
+
+```plaintext
+fix(parser): handle edge case in input validation
+
+Fixed a bug where empty strings were not properly validated.
+```
+
+```plaintext
+chore(deps): update TypeScript to v6.0.3
+
+Updated TypeScript dependency to the latest version.
+```
+
+## Customizing git-cliff Configuration
+
+### Change Changelog Template
+
+Customize the changelog template:
+
+```toml
+[changelog]
+body = """
+{% if version %}
+## {{ version }} ({{ timestamp | date(format="%Y-%m-%d") }})
+{% else %}
+## Unreleased
+{% endif %}
+
+{% for group, commits in commits | group_by(attribute="group") %}
+### {{ group }}
+{% for commit in commits %}
+- {{ commit.message }}
+{% endfor %}
+{% endfor %}
+"""
+```
+
+### Add Custom Commit Parsers
+
+Add custom commit parsers:
+
+```toml
+commit_parsers = [
+    { message = "^feat", group = "Features" },
+    { message = "^fix", group = "Bug Fixes" },
+    { message = "^custom", group = "Custom Changes" },
+]
+```
+
+### Change Commit Sorting
+
+Change how commits are sorted:
+
+```toml
+sort_commits = "newest"  # or "oldest"
+```
+
+### Filter Specific Commits
+
+Filter commits by pattern:
+
+```toml
+commit_parsers = [
+    { message = "^feat", group = "Features" },
+    { message = "^fix", group = "Bug Fixes" },
+    { message = "^chore(deps)", skip = true },  # Skip dependency updates
+]
+```
+
+### Add Link Parsers
+
+Add link parsers to convert issue references:
+
+```toml
+link_parsers = [
+    { pattern = '\(#([0-9]+)\)', href = "https://github.com/your-username/your-repo/issues/$1" },
+]
+```
+
+## Example Changelog Output
+
+Based on the template configuration, the generated changelog will look like:
+
+```markdown
+## [1.1.0] - 2026-06-14
+
+### 🚀 Features
+
+- Install Ultracite
+
+### 🐛 Bug Fixes
+
+- Remove overrides from Biome
+
+### ⚙️ Miscellaneous Tasks
+
+- Update CHANGELOG
+- Update deps
+- Add dependabot
+
+## [1.0.3] - 2025-10-21
+
+### 🐛 Bug Fixes
+
+- Add test and remove unused path from TS config
+
+### ⚙️ Miscellaneous Tasks
+
+- Update deps
+- Use Biome as default formatter
+- Update README with proper informations
+- Update keywords and some scripts
+```
+
+## Resources
+
+- [git-cliff Documentation](https://git-cliff.org/docs/)
+- [git-cliff GitHub Repository](https://github.com/orhun/git-cliff)
+- [Conventional Commits](https://www.conventionalcommits.org/)
+- [Tera Template Documentation](https://keats.github.io/tera/docs/)
+- [git-cliff Configuration Reference](https://git-cliff.org/docs/configuration)

@@ -1,0 +1,309 @@
+---
+title: Rolldown
+description: Understanding Rolldown, the modern JavaScript bundler
+---
+
+import { Callout } from "fumadocs-ui/components/callout";
+
+# Rolldown
+
+[Rolldown](https://rolldown.rs) is a modern JavaScript bundler that focuses on simplicity, performance, and ease of use. It's designed to be a drop-in replacement for tools like Rollup or esbuild, with a focus on modern JavaScript and TypeScript projects.
+
+## Overview
+
+Rolldown is the underlying bundler used by tsdown in the ts-package-template. It provides:
+
+- **Fast builds**: Optimized for modern JavaScript and TypeScript
+- **Simple configuration**: Easy to understand and customize
+- **ESM-first**: Designed for ECMAScript Modules
+- **TypeScript support**: Native TypeScript support through plugins like tsdown
+- **Modern features**: Support for the latest JavaScript features
+
+## Why Rolldown?
+
+The template uses Rolldown because:
+
+1. **Performance**: Rolldown is optimized for fast builds
+2. **Modern**: Designed for modern JavaScript and TypeScript
+3. **Simple**: Easy to configure and use
+4. **Extensible**: Supports plugins for additional functionality
+5. **Active Development**: Actively maintained with regular updates
+
+## Integration with tsdown
+
+In the ts-package-template, Rolldown is used through [tsdown](https://tsdown.dev/), which is a TypeScript plugin for Rolldown. This provides seamless TypeScript integration without requiring complex configuration.
+
+The `tsdown.config.ts` file configures both tsdown and Rolldown:
+
+```typescript
+import { defineConfig } from "tsdown";
+
+export default defineConfig({
+  entry: {
+    index: "src/index.ts",
+  },
+  dts: true,
+  tsconfig: "tsconfig.build.json",
+  format: "esm",
+  sourcemap: false,
+});
+```
+
+## Rolldown Features Used in the Template
+
+### Entry Points
+
+Rolldown supports multiple entry points for your package:
+
+```typescript
+entry: {
+  index: "src/index.ts",
+  utils: "src/utils/index.ts",
+}
+```
+
+### Output Formats
+
+Generate different module formats:
+
+```typescript
+format: "esm",      // ECMAScript Modules
+format: "cjs",      // CommonJS
+format: ["esm", "cjs"], // Multiple formats
+```
+
+### Code Splitting
+
+Rolldown supports code splitting for better performance:
+
+```typescript
+// Automatic code splitting based on imports
+```
+
+### Minification
+
+Minify the output for production:
+
+```typescript
+minify: true,
+```
+
+### Source Maps
+
+Generate source maps for debugging:
+
+```typescript
+sourcemap: true,
+```
+
+## Using Rolldown Directly
+
+While the template uses tsdown (which uses Rolldown internally), you can also use Rolldown directly for more control.
+
+### Install Rolldown
+
+```bash
+pnpm add -D rolldown
+```
+
+### Basic Rolldown Configuration
+
+Create a `rolldown.config.ts` file:
+
+```typescript
+import { defineConfig } from "rolldown";
+
+export default defineConfig({
+  input: "src/index.ts",
+  output: {
+    dir: "dist",
+    format: "esm",
+  },
+  plugins: [
+    // Add plugins as needed
+  ],
+});
+```
+
+### Using Rolldown with TypeScript
+
+To use Rolldown directly with TypeScript, you need to:
+
+1. Install the TypeScript plugin:
+   ```bash
+   pnpm add -D @rolldown/plugin-typescript
+   ```
+
+2. Configure Rolldown:
+   ```typescript
+   import { defineConfig } from "rolldown";
+   import typescript from "@rolldown/plugin-typescript";
+
+   export default defineConfig({
+     input: "src/index.ts",
+     output: {
+       dir: "dist",
+       format: "esm",
+     },
+     plugins: [
+       typescript({
+         tsconfig: "tsconfig.build.json",
+       }),
+     ],
+   });
+   ```
+
+## Rolldown vs Other Bundlers
+
+### Rolldown vs Rollup
+
+| Feature | Rolldown | Rollup |
+|---------|----------|--------|
+| Performance | ⚡ Faster | 🏃‍♂️ Good |
+| Configuration | 🎯 Simple | 📚 Complex |
+| ESM Support | ✅ Native | ✅ Good |
+| TypeScript | 🔌 Plugin | 🔌 Plugin |
+| Modern Features | ✅ Yes | ✅ Yes |
+
+### Rolldown vs esbuild
+
+| Feature | Rolldown | esbuild |
+|---------|----------|---------|
+| Performance | ⚡ Very Fast | ⚡ Very Fast |
+| Configuration | 🎯 Simple | 🎯 Simple |
+| ESM Support | ✅ Native | ✅ Native |
+| TypeScript | 🔌 Plugin | ✅ Built-in |
+| Plugins | ✅ Yes | ❌ Limited |
+
+### Rolldown vs Vite
+
+| Feature | Rolldown | Vite |
+|---------|----------|------|
+| Primary Use | 📦 Library | 🌐 App |
+| Performance | ⚡ Fast | ⚡ Fast |
+| HMR | ❌ No | ✅ Yes |
+| Dev Server | ❌ No | ✅ Yes |
+| TypeScript | 🔌 Plugin | ✅ Built-in |
+
+<Callout type="info">
+Rolldown is primarily designed for building libraries and packages, while Vite is optimized for building applications with features like HMR and dev server.
+</Callout>
+
+## Advanced Rolldown Features
+
+### Custom Plugins
+
+Create custom plugins for Rolldown:
+
+```typescript
+import { defineConfig } from "rolldown";
+
+const myPlugin = () => ({
+  name: "my-plugin",
+  // Plugin hooks
+  buildStart() {
+    console.log("Build started");
+  },
+  buildEnd() {
+    console.log("Build finished");
+  },
+});
+
+export default defineConfig({
+  input: "src/index.ts",
+  plugins: [myPlugin()],
+});
+```
+
+### Environment Variables
+
+Access environment variables in your configuration:
+
+```typescript
+import { defineConfig } from "rolldown";
+
+export default defineConfig({
+  input: "src/index.ts",
+  define: {
+    "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+  },
+});
+```
+
+### External Dependencies
+
+Mark dependencies as external (not bundled):
+
+```typescript
+export default defineConfig({
+  input: "src/index.ts",
+  external: ["react", "react-dom", "lodash"],
+});
+```
+
+### Aliases
+
+Configure path aliases:
+
+```typescript
+export default defineConfig({
+  input: "src/index.ts",
+  resolve: {
+    alias: {
+      "@": "./src",
+      "~": ".",
+    },
+  },
+});
+```
+
+## Performance Optimization
+
+### Cache
+
+Rolldown automatically caches builds for better performance on subsequent runs.
+
+### Parallel Processing
+
+Rolldown uses parallel processing to speed up builds on multi-core systems.
+
+### Tree Shaking
+
+Rolldown automatically removes unused code (tree shaking) for smaller bundles.
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Build fails with TypeScript errors**:
+   - Run `pnpm run check` to identify and fix type errors
+   - Ensure your TypeScript configuration is correct
+
+2. **Missing output files**:
+   - Check that the entry point paths are correct
+   - Verify that the source files exist
+
+3. **Slow builds**:
+   - Limit the number of entry points
+   - Use `minify: false` during development
+   - Check for circular dependencies
+
+4. **Module resolution issues**:
+   - Ensure `moduleResolution: "bundler"` in tsconfig.json
+   - Check that all dependencies are installed
+
+### Debug Mode
+
+Run Rolldown with debug logging:
+
+```bash
+DEBUG=rolldown pnpm run build
+```
+
+## Resources
+
+- [Rolldown Documentation](https://rolldown.rs)
+- [Rolldown GitHub Repository](https://github.com/rolldown/rolldown)
+- [Rolldown Configuration Reference](https://rolldown.rs/docs/configuration)
+- [Rolldown Plugins](https://rolldown.rs/docs/plugins)
+- [tsdown Documentation](https://tsdown.dev/) - TypeScript plugin for Rolldown

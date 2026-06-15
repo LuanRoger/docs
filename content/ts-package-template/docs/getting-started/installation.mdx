@@ -1,0 +1,150 @@
+---
+title: Installation
+description: How to install and set up the ts-package-template
+---
+
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { Step, Steps } from "fumadocs-ui/components/steps";
+import { Callout } from "fumadocs-ui/components/callout";
+
+# Installation
+
+Get started with the ts-package-template in just a few minutes.
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed on your system:
+
+- [Node.js](https://nodejs.org) (version 18 LTS or higher recommended)
+- [pnpm](https://pnpm.io) (recommended package manager)
+- [Git](https://git-scm.com) for version control
+
+<Callout type="info">
+While pnpm is recommended, you can also use npm or yarn if you prefer.
+</Callout>
+
+## Quick Start
+
+<Steps>
+<Step>
+### Get the Template
+
+You have two options to get started with the template:
+
+<Tabs items={["Clone Repository", "GitHub Template"]}>
+<Tab value="Clone Repository">
+
+Clone the repository directly:
+
+```bash
+git clone https://github.com/LuanRoger/ts-package-template.git
+cd ts-package-template
+```
+
+</Tab>
+<Tab value="GitHub Template">
+
+1. Go to [ts-package-template on GitHub](https://github.com/LuanRoger/ts-package-template)
+2. Click the **"Use this template"** button
+3. Choose **"Create a new repository"**
+4. Fill in your repository details
+5. Clone your new repository:
+
+```bash
+git clone https://github.com/your-username/your-repo-name.git
+cd your-repo-name
+```
+
+</Tab>
+</Tabs>
+</Step>
+
+<Step>
+### Install Dependencies
+
+Install all required dependencies using pnpm:
+
+```bash
+pnpm install
+```
+
+This will install all the tools including:
+- TypeScript
+- Rolldown and tsdown
+- Biome
+- Vitest
+- git-cliff
+- np
+- lefthook
+- ultracite
+
+</Step>
+
+<Step>
+### Customize Package Information
+
+Update the `package.json` file with your package information:
+
+```json
+{
+  "name": "@your-scope/your-package-name",
+  "version": "0.0.0",
+  "description": "Your package description",
+  "author": "Your Name <your.email@example.com> (https://github.com/your-username)",
+  "license": "MIT",
+  "homepage": "https://github.com/your-username/your-repo-name",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/your-repo-name.git"
+  }
+}
+```
+
+<Callout type="warning">
+Make sure to update the package name, version, description, author, and repository URL to match your project.
+</Callout>
+
+</Step>
+
+<Step>
+### Initialize Git (if not using template)
+
+If you cloned the repository directly, initialize git hooks:
+
+```bash
+pnpm install
+```
+
+This will automatically set up the lefthook git hooks.
+
+</Step>
+</Steps>
+
+## Verify Installation
+
+To ensure everything is working correctly, run the following commands:
+
+```bash
+# Check if all dependencies are installed
+pnpm list
+
+# Run the build process
+pnpm run build
+
+# Run tests
+pnpm run test
+
+# Check code quality
+pnpm run check
+```
+
+If all commands execute successfully, your template is ready to use!
+
+## Next Steps
+
+After installation, you can:
+
+- Start developing your package by modifying files in the `src/` directory
+- Run `pnpm run dev` to start the development server with hot reload
+- Customize the configuration files to suit your needs
+- Write tests for your package

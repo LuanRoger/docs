@@ -1,0 +1,630 @@
+---
+title: Publishing
+description: Complete guide to publishing your package to npm
+---
+
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { Step, Steps } from "fumadocs-ui/components/steps";
+import { Callout } from "fumadocs-ui/components/callout";
+
+# Publishing Your Package
+
+This guide provides a complete walkthrough of publishing your TypeScript package to the npm registry using the ts-package-template.
+
+## Prerequisites
+
+Before publishing, ensure you have:
+
+1. **npm Account**: A registered account on [npmjs.com](https://www.npmjs.com)
+2. **Package Name**: A unique package name (or use a scoped package)
+3. **Clean Git History**: A clean git history with proper commit messages
+4. **All Checks Passing**: All tests passing and code quality checks passing
+
+## Preparing for Publication
+
+### Package Information
+
+Update the package information in `package.json`:
+
+```json
+{
+  "name": "@your-scope/your-package-name",
+  "version": "1.0.0",
+  "description": "A clear and concise description of your package",
+  "author": "Your Name <your.email@example.com> (https://github.com/your-username)",
+  "license": "MIT",
+  "homepage": "https://github.com/your-username/your-repo-name#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/your-repo-name.git"
+  },
+  "keywords": [
+    "typescript",
+    "package",
+    "your",
+    "keywords",
+    "here"
+  ]
+}
+```
+
+<Callout type="warning">
+The package name must be unique. Consider using a scoped package name (e.g., `@your-username/package-name`) to ensure uniqueness and avoid naming conflicts.
+</Callout>
+
+### Package Access
+
+Configure package access in `package.json`:
+
+```json
+{
+  "publishConfig": {
+    "access": "public" // or "restricted" for private packages
+  }
+}
+```
+
+- **`public`**: Anyone can view and use your package
+- **`restricted`**: Only you and your collaborators can view and use your package
+
+## Pre-Publish Checklist
+
+<Steps>
+<Step>
+### Code Quality
+
+Ensure your code passes all quality checks:
+
+```bash
+# Check code quality
+pnpm run check
+
+# Fix any issues
+pnpm run fix
+```
+
+</Step>
+
+<Step>
+### Type Checking
+
+Ensure there are no TypeScript errors:
+
+```bash
+# Run type checking
+pnpm run build
+```
+
+</Step>
+
+<Step>
+### Tests
+
+Ensure all tests pass:
+
+```bash
+# Run all tests
+pnpm run test
+```
+
+</Step>
+
+<Step>
+### Build
+
+Create a production build:
+
+```bash
+# Build the package
+pnpm run build
+```
+
+</Step>
+
+<Step>
+### Verify Build Output
+
+Check that the build output is correct:
+
+```bash
+# List build output files
+ls -la dist/
+
+# Check the main output file
+cat dist/index.mjs
+
+# Check type declarations
+cat dist/index.d.mts
+```
+
+</Step>
+
+<Step>
+### Documentation
+
+Ensure your documentation is complete:
+
+- Update `README.md` with usage instructions
+- Ensure `CHANGELOG.md` is up to date
+- Add any necessary documentation files
+
+</Step>
+
+<Step>
+### Git Status
+
+Ensure your git status is clean:
+
+```bash
+# Check git status
+git status
+
+# All changes should be committed
+git add .
+git commit -m "chore: prepare for release"
+```
+
+</Step>
+
+<Step>
+### Version
+
+Ensure the version in `package.json` is correct and follows semantic versioning.
+
+</Step>
+</Steps>
+
+## Publishing Methods
+
+<Tabs items={["First Time", "Update", "CI/CD", "Manual"]}>
+<Tab value="First Time">
+
+### First Time Publishing
+
+<Steps>
+<Step>
+#### Log in to npm
+
+```bash
+npm login
+```
+
+This will prompt you for your npm username, password, and email.
+
+<Callout type="info">
+If you have two-factor authentication (2FA) enabled, you'll need to provide an OTP when publishing.
+</Callout>
+
+</Step>
+
+<Step>
+#### Publish
+
+```bash
+pnpm run publish
+```
+
+This runs np which will guide you through the publishing process:
+
+1. Check if the working directory is clean
+2. Check if you're on the correct branch
+3. Check if you're logged in to npm
+4. Ask if you want to bump the version
+5. Ask for confirmation before publishing
+6. Publish to npm
+
+</Step>
+
+<Step>
+#### Verify Publication
+
+Check that your package is published:
+
+```bash
+# View your package on npm
+npm view @your-scope/your-package-name
+
+# Or visit the npm website
+# https://www.npmjs.com/package/@your-scope/your-package-name
+```
+
+</Step>
+</Steps>
+
+</Tab>
+
+<Tab value="Update">
+
+### Updating an Existing Package
+
+<Steps>
+<Step>
+#### Make Changes
+
+Make your changes to the source code and tests.
+
+</Step>
+
+<Step>
+#### Update Version
+
+Update the version in `package.json`:
+
+```bash
+# Bump version (patch, minor, or major)
+npm version patch
+# or
+npm version minor
+# or
+npm version major
+```
+
+This automatically:
+1. Updates the version in package.json
+2. Creates a git tag
+3. Runs the `postversion` script (which updates the changelog)
+
+</Step>
+
+<Step>
+#### Build and Test
+
+```bash
+# Run all checks
+pnpm run check
+pnpm run test
+pnpm run build
+```
+
+</Step>
+
+<Step>
+#### Publish
+
+```bash
+pnpm run publish
+```
+
+</Step>
+</Steps>
+
+</Tab>
+
+<Tab value="CI/CD">
+
+### CI/CD Publishing
+
+For automated publishing in CI/CD environments:
+
+<Steps>
+<Step>
+#### Set Up npm Token
+
+Create an npm token with publish permissions:
+
+1. Go to [npm Access Tokens](https://www.npmjs.com/settings/tokens)
+2. Create a new token with "Automation" access
+3. Add the token to your CI/CD secrets as `NPM_TOKEN`
+
+</Step>
+
+<Step>
+#### Configure CI/CD
+
+Add a publishing step to your CI/CD workflow:
+
+```yaml
+# GitHub Actions example
+- name: Publish to npm
+  run: |
+    npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
+    pnpm run build
+    pnpm run publish -- --yes
+  env:
+    NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+```
+
+</Step>
+
+<Step>
+#### Conditional Publishing
+
+Only publish from the main branch:
+
+```yaml
+- name: Publish to npm
+  if: github.ref == 'refs/heads/main'
+  run: |
+    npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
+    pnpm run publish:all
+  env:
+    NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+```
+
+</Step>
+</Steps>
+
+</Tab>
+
+<Tab value="Manual">
+
+### Manual Publishing
+
+For complete control over the publishing process:
+
+<Steps>
+<Step>
+#### Build
+
+```bash
+pnpm run build
+```
+
+</Step>
+
+<Step>
+#### Test Locally
+
+Test your package locally before publishing:
+
+```bash
+# Link the package locally
+pnpm link
+
+# Test in another project
+cd /path/to/other/project
+pnpm link @your-scope/your-package-name
+
+# Test the package
+node -e "const pkg = require('@your-scope/your-package-name'); console.log(pkg);"
+
+# Unlink when done
+cd /path/to/other/project
+pnpm unlink @your-scope/your-package-name
+cd /path/to/your/package
+pnpm unlink
+```
+
+</Step>
+
+<Step>
+#### Publish
+
+```bash
+# Set npm token if needed
+npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
+
+# Publish
+pnpm run publish
+```
+
+</Step>
+</Steps>
+
+</Tab>
+</Tabs>
+
+## Version Management
+
+### Semantic Versioning
+
+Follow [Semantic Versioning](https://semver.org/) for your package:
+
+| Version | When to Use | Description |
+|---------|-------------|-------------|
+| `1.0.0` | Initial release | First stable release |
+| `1.0.1` | Patch | Backward-compatible bug fixes |
+| `1.1.0` | Minor | Backward-compatible new features |
+| `2.0.0` | Major | Breaking changes |
+
+### Version Bumping
+
+Use npm to bump versions:
+
+```bash
+# Patch version (x.x.1)
+npm version patch
+
+# Minor version (x.1.x)
+npm version minor
+
+# Major version (1.x.x)
+npm version major
+
+# Pre-release version (x.x.x-alpha.1)
+npm version prepatch --preid=alpha
+npm version preminor --preid=beta
+npm version premajor --preid=rc
+
+# Specific version
+npm version 2.0.0
+```
+
+### Pre-release Versions
+
+For testing new features without affecting stable releases:
+
+```bash
+# Alpha release
+npm version prepatch --preid=alpha
+
+# Beta release
+npm version preminor --preid=beta
+
+# Release candidate
+npm version premajor --preid=rc
+```
+
+## Package Tags
+
+### Using Tags
+
+Publish with different tags:
+
+```bash
+# Publish as latest (default)
+pnpm run publish
+
+# Publish as beta
+pnpm run publish -- --tag beta
+
+# Publish as alpha
+pnpm run publish -- --tag alpha
+
+# Publish as next
+pnpm run publish -- --tag next
+```
+
+### Managing Tags
+
+View and manage package tags:
+
+```bash
+# View package info including tags
+npm view @your-scope/your-package-name
+
+# Add a tag to an existing version
+npm dist-tag add @your-scope/your-package-name@1.0.0 beta
+
+# Remove a tag
+npm dist-tag rm @your-scope/your-package-name beta
+
+# List all tags
+npm dist-tag ls @your-scope/your-package-name
+```
+
+## Post-Publishing
+
+### Verify Publication
+
+After publishing, verify that everything is correct:
+
+```bash
+# View package info
+npm view @your-scope/your-package-name
+
+# View package contents
+npm pack @your-scope/your-package-name
+
+# Install and test the package
+mkdir test-package
+cd test-package
+npm init -y
+npm install @your-scope/your-package-name
+node -e "const pkg = require('@your-scope/your-package-name'); console.log(pkg);"
+```
+
+### Announce Release
+
+Announce your release:
+
+1. **GitHub Release**: Create a GitHub release with the changelog
+2. **Social Media**: Share the release on Twitter, LinkedIn, etc.
+3. **Documentation**: Update any external documentation
+4. **Blog Post**: Write a blog post about major releases
+
+### Monitor Usage
+
+Monitor your package usage:
+
+1. **npm Downloads**: Check download statistics on npm
+2. **GitHub Stars**: Monitor GitHub stars and forks
+3. **Issue Tracker**: Monitor issues and feature requests
+4. **Dependencies**: Monitor for dependency updates
+
+## Troubleshooting
+
+### Common Publishing Issues
+
+| Issue | Solution |
+|-------|----------|
+| **Not logged in** | Run `npm login` |
+| **Invalid version** | Use a valid semantic version |
+| **Dirty working directory** | Commit or stash all changes |
+| **Wrong branch** | Switch to the correct branch or use `--any-branch` |
+| **Permission denied** | Ensure you have publish permissions |
+| **2FA required** | Provide OTP or set NPM_OTP environment variable |
+| **Package name taken** | Use a different name or scope |
+| **Build failing** | Fix build errors before publishing |
+
+### Debugging
+
+Enable debug mode for np:
+
+```bash
+DEBUG=np pnpm run publish
+```
+
+### Publishing to Different Registries
+
+Publish to a custom registry:
+
+```bash
+# Set custom registry
+npm config set registry https://registry.your-company.com/
+
+# Publish
+pnpm run publish
+```
+
+### Unpublishing
+
+If you need to unpublish a package:
+
+```bash
+# Unpublish a specific version
+npm unpublish @your-scope/your-package-name@1.0.0
+
+# Unpublish all versions (use with caution!)
+npm unpublish @your-scope/your-package-name --force
+```
+
+<Callout type="warning">
+Unpublishing is generally discouraged as it can break other projects that depend on your package. Consider using version tags or deprecation warnings instead.
+</Callout>
+
+## Best Practices
+
+### Package Naming
+
+- Use descriptive names
+- Use scoped packages for uniqueness
+- Keep names short but meaningful
+- Avoid generic names
+
+### Version Management
+
+- Follow semantic versioning
+- Use conventional commits for automatic changelog generation
+- Keep changelog up to date
+- Use pre-release versions for testing
+
+### Publishing
+
+- Always test locally before publishing
+- Run all checks before publishing
+- Use CI/CD for automated publishing
+- Monitor package usage after publishing
+
+### Security
+
+- Use npm tokens instead of passwords
+- Limit token permissions
+- Rotate tokens regularly
+- Use 2FA for your npm account
+
+### Documentation
+
+- Keep README.md up to date
+- Document all public APIs
+- Include usage examples
+- Document breaking changes
+
+## Resources
+
+- [npm Documentation](https://docs.npmjs.com/)
+- [npm CLI Reference](https://docs.npmjs.com/cli)
+- [Semantic Versioning](https://semver.org/)
+- [Conventional Commits](https://www.conventionalcommits.org/)
+- [np Documentation](https://github.com/sindresorhus/np)
+- [npm Publishing Guide](https://docs.npmjs.com/packages-and-modules/publishing-packages)

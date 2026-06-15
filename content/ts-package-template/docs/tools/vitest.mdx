@@ -1,0 +1,525 @@
+---
+title: Vitest
+description: Configuring and using Vitest for unit testing
+---
+
+import { Callout } from "fumadocs-ui/components/callout";
+
+# Vitest
+
+[Vitest](https://vitest.dev/) is a blazing fast unit test framework powered by Vite. The template uses Vitest for running unit tests on your TypeScript code.
+
+## Overview
+
+Vitest provides:
+
+- **Speed**: Extremely fast test execution using Vite's native ES modules
+- **Modern**: Designed for modern JavaScript and TypeScript
+- **Simple**: Easy to configure and use
+- **Feature-rich**: Includes watch mode, coverage, mocking, and more
+- **Compatible**: Works with Jest-like API for easy migration
+
+## Configuration File (`vitest.config.js`)
+
+The main configuration file for Vitest is located at the project root:
+
+```javascript
+import { defineConfig } from "vitest/config";
+
+export default defineConfig({
+  test: {
+    include: ["**/*.test.ts"],
+    globals: true,
+  },
+});
+```
+
+## Configuration Options Explained
+
+### Test Files
+
+```javascript
+include: ["**/*.test.ts"]
+```
+
+This tells Vitest to look for test files matching the pattern `**/*.test.ts`:
+- `**/*` - Matches files in all directories recursively
+- `*.test.ts` - Matches files ending with `.test.ts`
+
+<Callout type="info">
+The template follows the convention of using `.test.ts` suffix for test files. You can change this to `.spec.ts` or any other pattern if preferred.
+</Callout>
+
+### Global Test Environment
+
+```javascript
+globals: true
+```
+
+This enables global test utilities like `describe`, `test`, `expect`, etc. without needing to import them:
+
+```typescript
+// With globals: true
+describe("my test", () => {
+  test("should work", () => {
+    expect(true).toBe(true);
+  });
+});
+
+// Without globals (requires imports)
+import { describe, test, expect } from "vitest";
+
+describe("my test", () => {
+  test("should work", () => {
+    expect(true).toBe(true);
+  });
+});
+```
+
+## Package.json Scripts
+
+The template configures Vitest in the `package.json` scripts:
+
+```json
+{
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  }
+}
+```
+
+### Scripts Explained
+
+- **`test`**: Run all tests once (`vitest run`)
+- **`test:watch`**: Run tests in watch mode (`vitest`)
+
+## Using Vitest
+
+### Run Tests Once
+
+Run all tests once and exit:
+
+```bash
+pnpm run test
+```
+
+This will:
+- Discover all test files matching the pattern
+- Run all tests
+- Display results and summary
+- Exit with appropriate status code
+
+### Run Tests in Watch Mode
+
+Run tests in watch mode for continuous testing during development:
+
+```bash
+pnpm run test:watch
+```
+
+This will:
+- Watch for changes in test files and source files
+- Automatically re-run affected tests when files change
+- Provide interactive UI for running specific tests
+
+### Run Specific Tests
+
+Run specific test files:
+
+```bash
+# Run a specific test file
+pnpm run test src/utils.test.ts
+
+# Run tests matching a pattern
+pnpm run test -- --testNamePattern="math"
+```
+
+### Test UI Mode
+
+Run tests with the interactive UI:
+
+```bash
+pnpm run test:watch -- --ui
+```
+
+This provides a visual interface for:
+- Viewing test results
+- Filtering tests
+- Running specific tests
+- Viewing test coverage
+
+## Writing Tests
+
+### Basic Test Structure
+
+The template includes a sample test file at `test/index.test.ts`:
+
+```typescript
+import { describe, expect, test } from "vitest";
+
+import { divide, multiply, subtract, sum } from "../src";
+
+describe("math utilities", () => {
+  test("sum adds two numbers", () => {
+    expect(sum(2, 3)).toBe(5);
+    expect(sum(-4, 7)).toBe(3);
+  });
+
+  test("subtract computes difference", () => {
+    expect(subtract(10, 4)).toBe(6);
+    expect(subtract(-2, -8)).toBe(6);
+  });
+
+  test("multiply returns product", () => {
+    expect(multiply(4, 5)).toBe(20);
+    expect(multiply(-3, 6)).toBe(-18);
+  });
+
+  test("divide handles division", () => {
+    expect(divide(20, 4)).toBe(5);
+    expect(divide(-9, 3)).toBe(-3);
+  });
+
+  test("divide throws on zero divisor", () => {
+    expect(() => divide(10, 0)).toThrow("Cannot divide by zero");
+  });
+});
+```
+
+### Test Organization
+
+Organize tests using `describe` blocks:
+
+```typescript
+import { describe, test, expect } from "vitest";
+
+describe("Math Utilities", () => {
+  describe("Arithmetic Operations", () => {
+    test("addition", () => {
+      expect(sum(2, 3)).toBe(5);
+    });
+
+    test("subtraction", () => {
+      expect(subtract(5, 3)).toBe(2);
+    });
+  });
+
+  describe("Error Handling", () => {
+    test("division by zero", () => {
+      expect(() => divide(10, 0)).toThrow();
+    });
+  });
+});
+```
+
+### Assertions
+
+Vitest provides a comprehensive set of assertions:
+
+```typescript
+// Basic assertions
+expect(value).toBe(expected);
+expect(value).toEqual(expected);
+expect(value).toBeTruthy();
+expect(value).toBeFalsy();
+
+// Number assertions
+expect(value).toBeGreaterThan(min);
+expect(value).toBeLessThan(max);
+expect(value).toBeCloseTo(expected, precision);
+
+// String assertions
+expect(string).toContain(substring);
+expect(string).toMatch(regex);
+
+// Array assertions
+expect(array).toContain(item);
+expect(array).toHaveLength(length);
+
+// Object assertions
+expect(object).toHaveProperty(key);
+expect(object).toHaveProperty(key, value);
+
+// Error assertions
+expect(() => function()).toThrow();
+expect(() => function()).toThrow(Error);
+expect(() => function()).toThrow("error message");
+
+// Async assertions
+await expect(asyncFunction()).resolves.toBe(value);
+await expect(asyncFunction()).rejects.toThrow();
+```
+
+### Mocking
+
+Vitest provides powerful mocking capabilities:
+
+```typescript
+import { vi, test, expect } from "vitest";
+
+// Mock a function
+const mockFn = vi.fn(() => "mocked value");
+
+// Mock a module
+vi.mock("../src/utils", () => ({
+  utilityFunction: vi.fn(() => "mocked"),
+}));
+
+// Mock with implementation
+const mockFn = vi.fn((x) => x * 2);
+
+// Check mock calls
+expect(mockFn).toHaveBeenCalled();
+expect(mockFn).toHaveBeenCalledWith(arg1, arg2);
+expect(mockFn).toHaveBeenCalledTimes(3);
+
+// Mock return values
+mockFn.mockReturnValue("custom value");
+mockFn.mockResolvedValue("async value");
+mockFn.mockRejectedValue(new Error("error"));
+```
+
+### Async Testing
+
+Test async functions:
+
+```typescript
+import { test, expect } from "vitest";
+
+test("async function", async () => {
+  const result = await asyncFunction();
+  expect(result).toBe("expected");
+});
+
+// Test promises
+test("promise resolution", () => {
+  return expect(Promise.resolve("value")).resolves.toBe("value");
+});
+
+test("promise rejection", () => {
+  return expect(Promise.reject("error")).rejects.toBe("error");
+});
+```
+
+### Setup and Teardown
+
+Use hooks for setup and teardown:
+
+```typescript
+import { beforeEach, afterEach, beforeAll, afterAll, test, expect } from "vitest";
+
+let sharedValue: number;
+
+beforeAll(() => {
+  // Runs once before all tests
+  sharedValue = 42;
+});
+
+afterAll(() => {
+  // Runs once after all tests
+  sharedValue = 0;
+});
+
+beforeEach(() => {
+  // Runs before each test
+  sharedValue = 10;
+});
+
+afterEach(() => {
+  // Runs after each test
+  sharedValue = 0;
+});
+
+test("test with shared value", () => {
+  expect(sharedValue).toBe(10);
+});
+```
+
+### Parameterized Tests
+
+Run the same test with different inputs:
+
+```typescript
+import { test, expect } from "vitest";
+
+test.each([
+  [1, 1, 2],
+  [2, 3, 5],
+  [-1, 1, 0],
+])("sum(%i, %i) -> %i", (a, b, expected) => {
+  expect(sum(a, b)).toBe(expected);
+});
+```
+
+## Advanced Configuration
+
+### Custom Test Environment
+
+Configure a custom test environment:
+
+```javascript
+import { defineConfig } from "vitest/config";
+
+export default defineConfig({
+  test: {
+    include: ["**/*.test.ts"],
+    globals: true,
+    environment: "jsdom", // or "node", "happy-dom", etc.
+  },
+});
+```
+
+### Coverage
+
+Enable test coverage:
+
+```javascript
+import { defineConfig } from "vitest/config";
+
+export default defineConfig({
+  test: {
+    include: ["**/*.test.ts"],
+    globals: true,
+    coverage: {
+      provider: "v8", // or "istanbul"
+      reporter: ["text", "json", "html"],
+      include: ["src/**/*.ts"],
+      exclude: ["**/*.test.ts"],
+    },
+  },
+});
+```
+
+Run tests with coverage:
+
+```bash
+pnpm run test -- --coverage
+```
+
+### Custom Matchers
+
+Add custom matchers:
+
+```typescript
+import { expect } from "vitest";
+
+expect.extend({
+  toBeEven(received) {
+    const pass = received % 2 === 0;
+    return {
+      pass,
+      message: () => `Expected ${received} to be even`,
+    };
+  },
+});
+
+// Usage
+test("custom matcher", () => {
+  expect(4).toBeEven();
+});
+```
+
+### Snapshot Testing
+
+Use snapshot testing:
+
+```typescript
+import { test, expect } from "vitest";
+
+test("snapshot test", () => {
+  const data = { name: "test", value: 42 };
+  expect(data).toMatchSnapshot();
+});
+```
+
+Update snapshots:
+
+```bash
+pnpm run test:watch -- --update
+```
+
+## Performance Tips
+
+### Parallel Test Execution
+
+Vitest automatically runs tests in parallel. You can control this:
+
+```javascript
+export default defineConfig({
+  test: {
+    include: ["**/*.test.ts"],
+    globals: true,
+    threads: true, // Enable parallel execution
+    maxThreads: 4, // Limit number of threads
+    minThreads: 2, // Minimum number of threads
+  },
+});
+```
+
+### Test Isolation
+
+Isolate tests to prevent interference:
+
+```javascript
+export default defineConfig({
+  test: {
+    include: ["**/*.test.ts"],
+    globals: true,
+    isolate: true, // Run each test file in isolation
+  },
+});
+```
+
+### Cache
+
+Enable caching for faster test runs:
+
+```javascript
+export default defineConfig({
+  test: {
+    include: ["**/*.test.ts"],
+    globals: true,
+    cache: {
+      dir: "./node_modules/.vitest",
+    },
+  },
+});
+```
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Tests not discovered**:
+   - Check that test files match the `include` pattern
+   - Ensure test files have the correct extension (`.test.ts`)
+
+2. **TypeScript errors**:
+   - Ensure `tsconfig.json` is properly configured
+   - Check that all type dependencies are installed
+
+3. **Slow test execution**:
+   - Limit the number of threads with `maxThreads`
+   - Use `isolate: false` for faster execution (but less isolation)
+   - Check for slow operations in tests
+
+4. **Module resolution issues**:
+   - Ensure `moduleResolution: "bundler"` in tsconfig.json
+   - Check that all imports are correct
+
+### Debug Mode
+
+Run Vitest with debug logging:
+
+```bash
+DEBUG=vitest pnpm run test
+```
+
+## Resources
+
+- [Vitest Documentation](https://vitest.dev/)
+- [Vitest GitHub Repository](https://github.com/vitest-dev/vitest)
+- [Vitest Configuration Reference](https://vitest.dev/config/)
+- [Vitest API Reference](https://vitest.dev/api/)
+- [Jest Compatibility](https://vitest.dev/guide/comparisons.html#jest)
