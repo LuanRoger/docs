@@ -1,5 +1,10 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": [
+    "ultracite/biome/core",
+    "ultracite/biome/next",
+    "ultracite/biome/react"
+  ],
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -7,17 +12,10 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": ["!node_modules", "!.next", "!dist", "!build", "!.source"]
-  },
-  "formatter": {
-    "enabled": true,
-    "indentStyle": "space",
-    "indentWidth": 2
+    "includes": ["!**/node_modules", "!**/*.d.ts", "!**/ui"]
   },
   "linter": {
-    "enabled": true,
     "rules": {
-      "recommended": true,
       "style": {
         "useConsistentTypeDefinitions": {
           "level": "error",
@@ -26,15 +24,6 @@
           }
         }
       }
-    },
-    "domains": {
-      "next": "recommended",
-      "react": "recommended"
-    }
-  },
-  "css": {
-    "parser": {
-      "tailwindDirectives": true
     }
   },
   "assist": {
@@ -43,6 +32,5 @@
         "organizeImports": "on"
       }
     }
-  },
-  "extends": ["ultracite/core", "ultracite/next"]
+  }
 }

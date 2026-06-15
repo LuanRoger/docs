@@ -1,4 +1,3 @@
-/** biome-ignore-all lint/nursery/noLeakedRender: When undefined, it's considered false */
 import { default as NextLink } from "next/link";
 import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils/styles";

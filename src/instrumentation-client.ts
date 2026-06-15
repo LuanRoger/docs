@@ -1,11 +1,12 @@
 import posthog from "posthog-js";
+import { ENV } from "varlock/env";
 
-const posthogKey = process.env.NEXT_PUBLIC_POSTHOG_KEY;
-const posthogHost = process.env.NEXT_PUBLIC_POSTHOG_HOST;
+const posthogHost = ENV.NEXT_PUBLIC_POSTHOG_HOST;
+const posthogKey = ENV.NEXT_PUBLIC_POSTHOG_KEY;
 
 if (posthogKey && posthogHost) {
   posthog.init(posthogKey, {
     api_host: posthogHost,
-    defaults: "2025-11-30",
+    defaults: "2026-05-30",
   });
 }
