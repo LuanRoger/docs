@@ -1,5 +1,5 @@
+import { varlockNextConfigPlugin } from "@varlock/nextjs-integration/plugin";
 import { createMDX } from "fumadocs-mdx/next";
-import { varlockNextConfigPlugin } from '@varlock/nextjs-integration/plugin';
 
 const withMDX = createMDX();
 const withVarlock = varlockNextConfigPlugin();
