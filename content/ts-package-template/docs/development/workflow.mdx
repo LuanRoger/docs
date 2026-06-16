@@ -1,0 +1,702 @@
+---
+title: Development Workflow
+description: Recommended development workflow for the ts-package-template
+---
+
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { Step, Steps } from "fumadocs-ui/components/steps";
+import { Callout } from "fumadocs-ui/components/callout";
+
+This guide outlines the recommended development workflow for using the ts-package-template. Following these workflows will help you maintain code quality, ensure proper testing, and streamline the publishing process.
+
+## Getting Started Workflow
+
+<Steps>
+<Step>
+### Set Up the Project
+
+1. Clone the repository or use it as a GitHub template
+2. Install dependencies:
+   ```bash
+   pnpm install
+   ```
+3. Customize package information in `package.json`
+
+</Step>
+
+<Step>
+### Initialize Git Hooks
+
+The pre-commit hooks are automatically set up when you install dependencies:
+
+```bash
+pnpm install
+```
+
+This installs lefthook which sets up the Git hooks.
+
+</Step>
+
+<Step>
+### Verify Setup
+
+Run the following commands to ensure everything is working:
+
+```bash
+# Check code quality
+pnpm run check
+
+# Run tests
+pnpm run test
+
+# Build the package
+pnpm run build
+```
+
+</Step>
+</Steps>
+
+## Daily Development Workflow
+
+### Making Changes
+
+<Tabs items={["New Feature", "Bug Fix", "Refactor"]}>
+<Tab value="New Feature">
+
+1. **Create a feature branch**:
+   ```bash
+   git checkout -b feat/your-feature-name
+   ```
+
+2. **Make your changes** in the `src/` directory
+
+3. **Add corresponding tests** in the `test/` directory
+
+4. **Run tests in watch mode**:
+   ```bash
+   pnpm run test:watch
+   ```
+
+5. **Start development server** (optional):
+   ```bash
+   pnpm run dev
+   ```
+
+</Tab>
+
+<Tab value="Bug Fix">
+
+1. **Create a bug fix branch**:
+   ```bash
+   git checkout -b fix/your-bug-fix
+   ```
+
+2. **Reproduce the bug** by adding a failing test
+
+3. **Fix the bug** in the source code
+
+4. **Verify the fix** by running the tests:
+   ```bash
+   pnpm run test
+   ```
+
+</Tab>
+
+<Tab value="Refactor">
+
+1. **Create a refactor branch**:
+   ```bash
+   git checkout -b refactor/your-refactor
+   ```
+
+2. **Make refactoring changes** in the source code
+
+3. **Update tests** if the refactoring affects the API
+
+4. **Run all checks**:
+   ```bash
+   pnpm run check
+   pnpm run test
+   pnpm run build
+   ```
+
+</Tab>
+</Tabs>
+
+### Committing Changes
+
+<Steps>
+<Step>
+#### Stage Your Changes
+
+```bash
+git add .
+```
+
+Or add specific files:
+```bash
+git add src/index.ts test/index.test.ts
+```
+
+</Step>
+
+<Step>
+#### Pre-commit Hooks
+
+When you run `git commit`, the pre-commit hook automatically:
+
+1. Runs `ultracite fix` to format and lint your code
+2. Automatically stages any files that were fixed
+
+<Callout type="info">
+The pre-commit hook runs automatically. If it fails, fix the issues and try committing again.
+</Callout>
+
+</Step>
+
+<Step>
+#### Write Commit Message
+
+Use [Conventional Commits](https://www.conventionalcommits.org/) format:
+
+```bash
+# For a new feature
+git commit -m "feat: add new math utility function"
+
+# For a bug fix
+git commit -m "fix: correct division by zero error"
+
+# For a refactor
+git commit -m "refactor: simplify utility functions"
+
+# For documentation
+git commit -m "doc: update README with usage examples"
+
+# For chore/maintenance
+git commit -m "chore: update dependencies"
+```
+
+</Step>
+
+<Step>
+#### Push Changes
+
+```bash
+git push origin your-branch-name
+```
+
+</Step>
+</Steps>
+
+## Code Quality Workflow
+
+### Checking Code Quality
+
+<Steps>
+<Step>
+#### Run Linting
+
+Check for linting and formatting issues:
+
+```bash
+pnpm run check
+```
+
+This runs Biome to check for code quality issues.
+
+</Step>
+
+<Step>
+#### Fix Issues Automatically
+
+Fix all auto-fixable issues:
+
+```bash
+pnpm run fix
+```
+
+This runs Biome to automatically fix linting and formatting issues.
+
+</Step>
+
+<Step>
+#### Manual Fixes
+
+For issues that can't be fixed automatically, manually fix them and run `pnpm run check` again.
+
+</Step>
+</Steps>
+
+### Type Checking
+
+Run TypeScript type checking:
+
+```bash
+pnpm run build
+```
+
+This runs `tsc` (TypeScript compiler) to check for type errors.
+
+<Callout type="tip">
+The `build` script runs type checking as part of the build process. You can also run `tsc --noEmit` for just type checking without emitting files.
+</Callout>
+
+## Testing Workflow
+
+### Running Tests
+
+<Tabs items={["All Tests", "Specific Test", "Watch Mode", "Coverage"]}>
+<Tab value="All Tests">
+
+Run all tests once:
+
+```bash
+pnpm run test
+```
+
+</Tab>
+
+<Tab value="Specific Test">
+
+Run a specific test file:
+
+```bash
+pnpm run test src/utils.test.ts
+```
+
+Run tests matching a pattern:
+
+```bash
+pnpm run test -- --testNamePattern="math"
+```
+
+</Tab>
+
+<Tab value="Watch Mode">
+
+Run tests in watch mode:
+
+```bash
+pnpm run test:watch
+```
+
+This automatically re-runs tests when files change.
+
+</Tab>
+
+<Tab value="Coverage">
+
+Run tests with coverage:
+
+```bash
+pnpm run test -- --coverage
+```
+
+This generates a coverage report showing which parts of your code are tested.
+
+</Tab>
+</Tabs>
+
+### Test-Driven Development (TDD)
+
+<Steps>
+<Step>
+#### Write Failing Test
+
+Write a test for the feature you want to implement:
+
+```typescript
+// test/new-feature.test.ts
+import { describe, test, expect } from "vitest";
+
+describe("new feature", () => {
+  test("should do something", () => {
+    expect(newFeature()).toBe("expected result");
+  });
+});
+```
+
+</Step>
+
+<Step>
+#### Run Test (Should Fail)
+
+```bash
+pnpm run test
+```
+
+The test should fail because the feature isn't implemented yet.
+
+</Step>
+
+<Step>
+#### Implement Feature
+
+Implement the feature in the source code:
+
+```typescript
+// src/new-feature.ts
+export function newFeature(): string {
+  return "expected result";
+}
+```
+
+</Step>
+
+<Step>
+#### Run Test (Should Pass)
+
+```bash
+pnpm run test
+```
+
+The test should now pass.
+
+</Step>
+
+<Step>
+#### Refactor
+
+Refactor the code while keeping the tests passing.
+
+</Step>
+</Steps>
+
+## Build Workflow
+
+### Building the Package
+
+<Steps>
+<Step>
+#### Development Build
+
+For development with hot reload:
+
+```bash
+pnpm run dev
+```
+
+This watches for changes and rebuilds automatically.
+
+</Step>
+
+<Step>
+#### Production Build
+
+For production-ready build:
+
+```bash
+pnpm run build
+```
+
+This runs type checking and bundling to create optimized output in the `dist` directory.
+
+</Step>
+
+<Step>
+#### Verify Build Output
+
+Check the `dist` directory to ensure the build output is correct:
+
+```bash
+ls -la dist/
+```
+
+</Step>
+</Steps>
+
+## Release Workflow
+
+### Preparing a Release
+
+<Steps>
+<Step>
+#### Update Version
+
+Update the version in `package.json`:
+
+```bash
+# Patch version (x.x.1)
+npm version patch
+
+# Minor version (x.1.x)
+npm version minor
+
+# Major version (1.x.x)
+npm version major
+```
+
+This automatically:
+1. Updates the version in package.json
+2. Creates a git tag
+3. Runs the `postversion` script (which updates the changelog)
+
+</Step>
+
+<Step>
+#### Update Changelog Manually (Optional)
+
+If you want to manually update the changelog:
+
+```bash
+pnpm run changelog
+```
+
+<Callout type="info">
+The changelog is automatically updated by the `postversion` script when you use `npm version`.
+</Callout>
+
+</Step>
+
+<Step>
+#### Build the Package
+
+```bash
+pnpm run build
+```
+
+</Step>
+
+<Step>
+#### Run Final Checks
+
+```bash
+# Run tests
+pnpm run test
+
+# Check code quality
+pnpm run check
+
+# Build again to ensure everything is correct
+pnpm run build
+```
+
+</Step>
+</Steps>
+
+### Publishing the Package
+
+<Tabs items={["Manual Publish", "Automated Publish", "CI/CD Publish"]}>
+<Tab value="Manual Publish">
+
+Publish manually:
+
+```bash
+pnpm run publish
+```
+
+This runs np which guides you through the publishing process.
+
+</Tab>
+
+<Tab value="Automated Publish">
+
+Build and publish in one command:
+
+```bash
+pnpm run publish:all
+```
+
+This runs the build and then publishes the package.
+
+</Tab>
+
+<Tab value="CI/CD Publish">
+
+For CI/CD environments:
+
+```bash
+# Set npm token
+npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
+
+# Build and publish
+pnpm run build
+pnpm run publish -- --yes
+```
+
+</Tab>
+</Tabs>
+
+## Continuous Integration Workflow
+
+### GitHub Actions Example
+
+Here's an example GitHub Actions workflow for the template:
+
+```yaml
+# .github/workflows/ci.yml
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      
+      - name: Install pnpm
+        run: npm install -g pnpm
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Check code quality
+        run: pnpm run check
+      
+      - name: Run tests
+        run: pnpm run test
+      
+      - name: Build package
+        run: pnpm run build
+
+  publish:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      
+      - name: Install pnpm
+        run: npm install -g pnpm
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Build package
+        run: pnpm run build
+      
+      - name: Publish to npm
+        run: pnpm run publish -- --yes
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+```
+
+## Troubleshooting Workflow
+
+### Common Issues
+
+| Issue | Solution |
+|-------|----------|
+| Tests failing | Run `pnpm run test` to identify failing tests |
+| Linting errors | Run `pnpm run fix` to fix issues automatically |
+| Type errors | Run `pnpm run build` to identify type errors |
+| Build failing | Check the error message and fix the issue |
+| Hooks not running | Ensure lefthook is installed and hooks are set up |
+
+### Debugging
+
+Enable debug mode for various tools:
+
+```bash
+# Debug pnpm
+DEBUG=pnpm* pnpm install
+
+# Debug tsdown/Rolldown
+DEBUG=tsdown pnpm run build
+
+# Debug Vitest
+DEBUG=vitest pnpm run test
+
+# Debug Biome
+DEBUG=biome pnpm run check
+```
+
+## Best Practices
+
+### Commit Messages
+
+- Use [Conventional Commits](https://www.conventionalcommits.org/) format
+- Keep commit messages clear and descriptive
+- Use the imperative mood ("add" not "added")
+- Reference issues when applicable
+
+### Branch Naming
+
+- Use descriptive branch names
+- Use the commit type as a prefix (feat/, fix/, refactor/, etc.)
+- Keep branch names short but meaningful
+
+### Code Quality
+
+- Run `pnpm run check` before committing
+- Run `pnpm run fix` to automatically fix issues
+- Keep your code formatted consistently
+- Follow the project's linting rules
+
+### Testing
+
+- Write tests for all new features
+- Write tests for bug fixes
+- Keep tests fast and reliable
+- Run tests before pushing changes
+
+### Documentation
+
+- Update documentation when adding new features
+- Keep the README.md up to date
+- Document breaking changes in the CHANGELOG.md
+
+### Dependencies
+
+- Keep dependencies up to date
+- Use `pnpm up` to update dependencies
+- Check for security vulnerabilities regularly
+- Remove unused dependencies
+
+## Project Structure Maintenance
+
+### Adding New Files
+
+When adding new files:
+
+1. **Source files**: Add to `/src/` directory
+2. **Test files**: Add to `/test/` directory with `.test.ts` suffix
+3. **Configuration files**: Add to root or appropriate subdirectories
+4. **Update tsconfig.json**: Ensure new TypeScript files are included
+
+### Organizing Code
+
+- Keep related code together
+- Use clear and consistent naming
+- Follow the existing project structure
+- Use path aliases for cleaner imports
+
+### Cleaning Up
+
+Regularly clean up your project:
+
+```bash
+# Remove node_modules and reinstall
+rm -rf node_modules pnpm-lock.yaml
+pnpm install
+
+# Clean up build output
+rm -rf dist
+
+# Clean up pnpm store (optional)
+pnpm store prune
+```
+
+## Resources
+
+- [Conventional Commits](https://www.conventionalcommits.org/)
+- [Semantic Versioning](https://semver.org/)
+- [Git Best Practices](https://git-scm.com/book/en/v2/Distributed-Git-Best-Practices)
+- [TDD with Vitest](https://vitest.dev/guide/testing-tdd.html)

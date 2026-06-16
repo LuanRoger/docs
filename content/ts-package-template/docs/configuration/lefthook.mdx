@@ -1,0 +1,395 @@
+---
+title: lefthook Configuration
+description: Configuring lefthook for Git hooks management
+---
+
+import { Callout } from "fumadocs-ui/components/callout";
+
+[lefthook](https://github.com/evilmartians/lefthook) is a fast and powerful Git hooks manager that replaces tools like Husky. The template uses lefthook to run code quality checks automatically before commits.
+
+## Configuration File (`lefthook.yml`)
+
+The main configuration file for lefthook is located at the project root:
+
+```yaml
+pre-commit:
+  jobs:
+    - run: npx ultracite fix
+      glob:
+        - "**/*.js"
+        - "**/*.jsx"
+        - "**/*.ts"
+        - "**/*.tsx"
+        - "**/*.json"
+        - "**/*.jsonc"
+        - "**/*.css"
+      stage_fixed: true
+```
+
+## Configuration Explained
+
+### Pre-commit Hook
+
+The template configures a `pre-commit` hook that runs before each commit:
+
+```yaml
+pre-commit:
+  jobs:
+    - run: npx ultracite fix
+```
+
+- **`pre-commit`**: The Git hook that runs before `git commit`
+- **`jobs`**: List of jobs to execute
+- **`run`**: The command to execute
+
+### Command
+
+```yaml
+run: npx ultracite fix
+```
+
+This command:
+- Uses `npx` to run the locally installed ultracite
+- Executes the `fix` command, which runs Biome to automatically fix linting and formatting issues
+
+<Callout type="info">
+The template uses `ultracite` as a wrapper around Biome, providing a unified interface for code quality checks.
+</Callout>
+
+### File Patterns
+
+The `glob` section specifies which files the hook should process:
+
+```yaml
+glob:
+  - "**/*.js"
+  - "**/*.jsx"
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.json"
+  - "**/*.jsonc"
+  - "**/*.css"
+```
+
+This includes:
+- JavaScript files (`.js`, `.jsx`)
+- TypeScript files (`.ts`, `.tsx`)
+- JSON files (`.json`, `.jsonc`)
+- CSS files (`.css`)
+
+The `**/*` pattern matches files in all directories recursively.
+
+### Stage Fixed Files
+
+```yaml
+stage_fixed: true
+```
+
+This option:
+- Automatically stages files that were modified by the hook
+- Ensures that formatting and linting fixes are included in the commit
+- Prevents the need to manually stage fixed files
+
+## How lefthook Works
+
+### Installation
+
+lefthook is automatically installed as a dev dependency:
+
+```json
+{
+  "devDependencies": {
+    "lefthook": "^2.1.9"
+  }
+}
+```
+
+When you run `pnpm install`, lefthook automatically sets up the Git hooks in the `.git/hooks` directory.
+
+### Hook Execution Flow
+
+1. **Before Commit**: When you run `git commit`, Git triggers the pre-commit hook
+2. **lefthook Execution**: lefthook runs the configured jobs
+3. **Code Quality Check**: ultracite (Biome) checks and fixes all staged files matching the glob patterns
+4. **File Staging**: Any files modified by the fixes are automatically staged
+5. **Commit Completion**: If all checks pass, the commit is completed
+
+### Error Handling
+
+If the hook fails:
+- The commit is aborted
+- You'll see error messages indicating what went wrong
+- Fix the issues and try committing again
+
+## Using lefthook
+
+### Manual Hook Execution
+
+You can manually run the pre-commit hook:
+
+```bash
+# Run the pre-commit hook manually
+pnpm exec lefthook run pre-commit
+
+# Run all hooks
+pnpm exec lefthook run
+```
+
+### Skip Hooks
+
+To skip hooks for a specific commit:
+
+```bash
+# Skip pre-commit hooks
+git commit --no-verify -m "Your commit message"
+
+# Skip all hooks
+git commit --no-verify --no-pre-commit -m "Your commit message"
+```
+
+<Callout type="warning">
+Skipping hooks should be done sparingly, as it bypasses important quality checks.
+</Callout>
+
+### Check Hook Status
+
+Check which hooks are configured and their status:
+
+```bash
+pnpm exec lefthook status
+```
+
+### List Available Hooks
+
+List all configured hooks:
+
+```bash
+pnpm exec lefthook list
+```
+
+## Customizing lefthook Configuration
+
+### Add Multiple Jobs
+
+Add multiple jobs to run in sequence:
+
+```yaml
+pre-commit:
+  jobs:
+    - run: npx ultracite fix
+      glob:
+        - "**/*.ts"
+        - "**/*.tsx"
+    - run: pnpm run test
+      glob:
+        - "**/*.test.ts"
+```
+
+### Add Different Hook Types
+
+Add hooks for different Git events:
+
+```yaml
+pre-commit:
+  jobs:
+    - run: npx ultracite fix
+      glob:
+        - "**/*.ts"
+
+pre-push:
+  jobs:
+    - run: pnpm run test
+
+post-merge:
+  jobs:
+    - run: pnpm install
+```
+
+### Customize File Patterns
+
+Customize which files are processed:
+
+```yaml
+pre-commit:
+  jobs:
+    - run: npx ultracite fix
+      glob:
+        - "src/**/*.ts"
+        - "test/**/*.ts"
+        - "*.config.ts"
+```
+
+### Add Custom Commands
+
+Add custom commands to run:
+
+```yaml
+pre-commit:
+  jobs:
+    - run: npx ultracite fix
+      glob:
+        - "**/*.ts"
+    - run: echo "Running custom check..."
+      glob:
+        - "**/*.ts"
+```
+
+### Configure Parallel Execution
+
+Run jobs in parallel:
+
+```yaml
+pre-commit:
+  parallel: true
+  jobs:
+    - run: npx ultracite fix
+      glob:
+        - "**/*.ts"
+    - run: pnpm run lint
+      glob:
+        - "**/*.ts"
+```
+
+### Add Environment Variables
+
+Set environment variables for hook execution:
+
+```yaml
+pre-commit:
+  jobs:
+    - run: npx ultracite fix
+      glob:
+        - "**/*.ts"
+      env:
+        - "NODE_ENV=development"
+        - "DEBUG=true"
+```
+
+## Common Use Cases
+
+### Run Tests Before Commit
+
+```yaml
+pre-commit:
+  jobs:
+    - run: npx ultracite fix
+      glob:
+        - "**/*.ts"
+    - run: pnpm run test
+```
+
+### Run Build Before Push
+
+```yaml
+pre-push:
+  jobs:
+    - run: pnpm run build
+```
+
+### Check Dependencies After Merge
+
+```yaml
+post-merge:
+  jobs:
+    - run: pnpm install
+```
+
+### Custom Quality Checks
+
+```yaml
+pre-commit:
+  jobs:
+    - run: npx ultracite fix
+      glob:
+        - "**/*.ts"
+    - run: npx tsc --noEmit
+      glob:
+        - "**/*.ts"
+```
+
+## Troubleshooting
+
+### Hooks Not Running
+
+If hooks are not running:
+
+1. Check if lefthook is installed:
+   ```bash
+   pnpm list lefthook
+   ```
+
+2. Check if hooks are configured:
+   ```bash
+   pnpm exec lefthook list
+   ```
+
+3. Check if Git hooks are installed:
+   ```bash
+   ls -la .git/hooks/
+   ```
+
+4. Reinstall hooks:
+   ```bash
+   pnpm exec lefthook install
+   ```
+
+### Hooks Failing
+
+If hooks are failing:
+
+1. Run the hook manually to see the error:
+   ```bash
+   pnpm exec lefthook run pre-commit
+   ```
+
+2. Check the error message and fix the issues
+
+3. Ensure all required dependencies are installed
+
+### Permission Issues
+
+If you get permission errors:
+
+1. Remove the hooks directory:
+   ```bash
+   rm -rf .git/hooks/
+   ```
+
+2. Reinstall hooks:
+   ```bash
+   pnpm exec lefthook install
+   ```
+
+### Slow Hook Execution
+
+If hooks are running slowly:
+
+1. Limit the file patterns to only necessary files
+2. Consider running heavy checks (like tests) in pre-push instead of pre-commit
+3. Use `stage_fixed: true` to avoid re-running on fixed files
+
+## Migration from Husky
+
+If you're migrating from Husky to lefthook:
+
+1. Remove Husky:
+   ```bash
+   pnpm remove husky
+   rm -rf .husky/
+   ```
+
+2. Install lefthook:
+   ```bash
+   pnpm add -D lefthook
+   ```
+
+3. Create `lefthook.yml` with your hook configurations
+
+4. lefthook will automatically set up the Git hooks
+
+## Resources
+
+- [lefthook Documentation](https://github.com/evilmartians/lefthook)
+- [lefthook GitHub Repository](https://github.com/evilmartians/lefthook)
+- [lefthook Configuration Reference](https://github.com/evilmartians/lefthook/blob/master/docs/configuration.md)
+- [Git Hooks Documentation](https://git-scm.com/docs/githooks)

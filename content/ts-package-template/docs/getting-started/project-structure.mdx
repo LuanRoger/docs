@@ -1,0 +1,194 @@
+---
+title: Project Structure
+description: Understanding the ts-package-template directory structure
+---
+
+import { Callout } from "fumadocs-ui/components/callout";
+
+The ts-package-template follows a well-organized directory structure designed for TypeScript package development. Here's a comprehensive overview of the project layout:
+
+## Directory Overview
+
+```plaintext
+./
+├── ./.vscode/
+│   └── settings.json
+├── ./src/
+│   └── index.ts
+├── ./test/
+│   └── index.test.ts
+├── ./scripts/
+│   └── git-cliff.toml
+├── biome.json
+├── CHANGELOG.md
+├── cliff.toml
+├── lefthook.yml
+├── LICENSE
+├── package.json
+├── pnpm-lock.yaml
+├── pnpm-workspace.yaml
+├── tsconfig.json
+├── tsconfig.build.json
+├── tsdown.config.ts
+└── vitest.config.js
+```
+
+## Root Directory Files
+
+### Configuration Files
+
+| File | Purpose | Description |
+|------|---------|-------------|
+| `package.json` | Project metadata | Contains package information, dependencies, and npm scripts |
+| `pnpm-lock.yaml` | Dependency lock file | Ensures consistent dependency versions |
+| `pnpm-workspace.yaml` | Workspace configuration | Configures pnpm workspace settings |
+| `tsconfig.json` | TypeScript configuration | Main TypeScript compiler options |
+| `tsconfig.build.json` | Build configuration | TypeScript configuration specifically for build process |
+| `tsdown.config.ts` | Bundler configuration | Configuration for tsdown/Rolldown bundler |
+| `vitest.config.js` | Test configuration | Configuration for Vitest testing framework |
+| `biome.json` | Code quality configuration | Configuration for Biome linter and formatter |
+| `cliff.toml` | Changelog configuration | Configuration for git-cliff changelog generator |
+| `lefthook.yml` | Git hooks configuration | Configuration for lefthook git hooks |
+
+### Documentation Files
+
+| File | Purpose |
+|------|---------|
+| `README.md` | Project documentation | Comprehensive guide for the template |
+| `CHANGELOG.md` | Change history | Automatically generated changelog |
+| `LICENSE` | License | MIT License file |
+
+### IDE Configuration
+
+| File | Purpose |
+|------|---------|
+| `.vscode/settings.json` | VSCode settings | Project-specific VSCode settings |
+
+## Source Code Structure
+
+### `/src/` Directory
+
+The main source code directory where your TypeScript package code resides.
+
+```plaintext
+src/
+└── index.ts
+```
+
+- **`index.ts`**: The main entry point of your package. This is where you export your public API.
+- Add additional TypeScript files as needed for your package functionality.
+
+<Callout type="info">
+The template includes sample math utility functions (sum, subtract, multiply, divide) in the index.ts file as examples. You can replace these with your own code.
+</Callout>
+
+### `/test/` Directory
+
+The test directory containing your unit tests.
+
+```plaintext
+test/
+└── index.test.ts
+```
+
+- **`index.test.ts`**: Test file for the main index.ts module.
+- Add additional test files as needed for your package.
+
+### `/scripts/` Directory
+
+Additional configuration files and scripts.
+
+```plaintext
+scripts/
+└── git-cliff.toml
+```
+
+- **`git-cliff.toml`**: Additional git-cliff configuration (referenced in package.json scripts).
+
+## Key Configuration Files Explained
+
+### TypeScript Configuration
+
+The template uses two TypeScript configuration files:
+
+1. **`tsconfig.json`**: Main configuration with development settings
+   - Target: ESNext
+   - Module: ESNext
+   - Strict mode enabled
+   - Bundler mode settings
+   - Path aliases configured
+
+2. **`tsconfig.build.json`**: Build-specific configuration
+   - Extends main tsconfig.json
+   - Sets output directory to `dist`
+   - Additional strict null checks
+
+### Bundler Configuration
+
+**`tsdown.config.ts`**: Configuration for the Rolldown bundler with tsdown plugin
+- Entry point: `src/index.ts`
+- Output format: ESM (ECMAScript Modules)
+- TypeScript declaration files: Enabled
+- Source maps: Disabled (for production)
+
+### Testing Configuration
+
+**`vitest.config.js`**: Configuration for Vitest
+- Test file pattern: `**/*.test.ts`
+- Global test environment variables enabled
+
+### Code Quality Configuration
+
+**`biome.json`**: Configuration for Biome
+- Extends ultracite/biome/core configuration
+- VCS integration enabled
+- File includes: `src/**/*.ts`
+- Assist features enabled
+
+### Git Hooks Configuration
+
+**`lefthook.yml`**: Configuration for lefthook
+- Pre-commit hooks configured
+- Runs ultracite fix on staged files
+- Supports various file types (JS, TS, JSON, CSS)
+
+## File Patterns and Conventions
+
+### Naming Conventions
+
+- **TypeScript files**: Use `.ts` extension
+- **Test files**: Use `.test.ts` suffix
+- **Configuration files**: Use appropriate extensions (`.json`, `.toml`, `.yml`)
+
+### Import Paths
+
+The template configures path aliases for easier imports:
+
+```typescript
+// Instead of relative paths
+import { sum } from '../../src/index';
+
+// You can use path aliases
+import { sum } from '~/src/index';
+// or
+import { sum } from '@/index';
+```
+
+### Module Resolution
+
+- Uses TypeScript's `moduleResolution: "bundler"`
+- Supports ES modules with `"type": "module"` in package.json
+- Uses `verbatimModuleSyntax` for accurate module syntax
+
+## Adding New Files
+
+When adding new files to your project:
+
+1. **Source files**: Add to `/src/` directory
+2. **Test files**: Add to `/test/` directory with `.test.ts` suffix
+3. **Configuration files**: Add to root or appropriate subdirectories
+4. **TypeScript files**: Ensure they're included in tsconfig.json
+
+<Callout type="tip">
+Remember to update the tsconfig.json `include` array if you add TypeScript files outside the standard directories.
+</Callout>

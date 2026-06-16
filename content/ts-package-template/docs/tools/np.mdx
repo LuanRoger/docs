@@ -1,0 +1,301 @@
+---
+title: np
+description: Using np for package publishing
+---
+
+import { Callout } from "fumadocs-ui/components/callout";
+
+[np](https://github.com/sindresorhus/np) is a better `npm publish` command that provides a safer and more user-friendly way to publish packages to the npm registry. The template uses np to simplify the package publishing process.
+
+## Overview
+
+np provides several advantages over the standard `npm publish`:
+
+- **Safety**: Prevents accidental publishes and version bumps
+- **Interactive**: Guides you through the publishing process
+- **Automatic**: Handles common tasks like version bumping and changelog generation
+- **Smart**: Only publishes what's necessary
+- **Cross-platform**: Works on all platforms
+
+## Package.json Configuration
+
+The template configures np in the `package.json` scripts:
+
+```json
+{
+  "scripts": {
+    "publish": "np --package-manager npm",
+    "publish:all": "pnpm run build && pnpm run publish"
+  }
+}
+```
+
+### Scripts Explained
+
+- **`publish`**: Run np to publish the package
+- **`publish:all`**: Build the package first, then publish it
+
+## Using np
+
+### Basic Publishing
+
+Run the publish command:
+
+```bash
+pnpm run publish
+```
+
+This will:
+1. Check if the working directory is clean
+2. Check if you're on the correct branch (usually main/master)
+3. Check if you're logged in to npm
+4. Guide you through the publishing process
+
+### Interactive Publishing
+
+np provides an interactive interface that guides you through:
+
+1. **Version Selection**: Choose to bump the version (patch, minor, major) or keep current
+2. **Publish Confirmation**: Confirm before publishing
+3. **OTP Input**: Enter one-time password if 2FA is enabled
+4. **Success Message**: Show success message with published version
+
+### Command Line Options
+
+np supports various command line options:
+
+```bash
+# Publish with specific version
+pnpm run publish -- --major
+pnpm run publish -- --minor
+pnpm run publish -- --patch
+
+# Publish with specific version number
+pnpm run publish -- --version 2.0.0
+
+# Publish without version bump
+pnpm run publish -- --no-version
+
+# Publish with specific tag
+pnpm run publish -- --tag beta
+
+# Publish with dry run (test without actually publishing)
+pnpm run publish -- --dry-run
+
+# Publish with yes to all prompts
+pnpm run publish -- --yes
+
+# Publish with custom package manager
+pnpm run publish -- --package-manager npm
+pnpm run publish -- --package-manager yarn
+```
+
+## Configuration
+
+### Package.json Configuration
+
+np reads configuration from your `package.json`:
+
+```json
+{
+  "name": "@luanroger/ts-package-template",
+  "version": "1.1.0",
+  "publishConfig": {
+    "access": "public",
+    "tag": "latest"
+  }
+}
+```
+
+### .npmrc Configuration
+
+np respects your `.npmrc` configuration for npm registry settings:
+
+```ini
+# .npmrc
+registry=https://registry.npmjs.org/
+//registry.npmjs.org/:_authToken=${NPM_TOKEN}
+```
+
+## Publishing Workflow
+
+### Standard Publishing Process
+
+1. **Make Changes**: Commit your changes with conventional commit messages
+2. **Update Version**: Bump the version in package.json (or let np do it)
+3. **Update Changelog**: Run `pnpm run changelog` to update CHANGELOG.md
+4. **Build Package**: Run `pnpm run build` to create the dist files
+5. **Publish**: Run `pnpm run publish` to publish to npm
+
+### Automated Publishing
+
+The template includes a `publish:all` script that automates the process:
+
+```bash
+pnpm run publish:all
+```
+
+This will:
+1. Run `pnpm run build` to build the package
+2. Run `pnpm run publish` to publish to npm
+
+<Callout type="info">
+The `postversion` script in package.json automatically runs `pnpm run changelog` after version bump, ensuring the changelog is always up to date.
+</Callout>
+
+### CI/CD Publishing
+
+For CI/CD environments, you can use:
+
+```bash
+# Set npm token
+npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
+
+# Publish (non-interactive)
+pnpm run publish -- --yes
+```
+
+## Safety Features
+
+### Clean Working Directory Check
+
+np checks that your working directory is clean before publishing, preventing accidental publishes of uncommitted changes.
+
+### Branch Check
+
+np checks that you're on the correct branch (usually main or master) before publishing.
+
+### Version Check
+
+np checks that the version in package.json is valid and follows semantic versioning.
+
+### Login Check
+
+np checks that you're logged in to npm before attempting to publish.
+
+### Dry Run
+
+Use `--dry-run` to test the publishing process without actually publishing:
+
+```bash
+pnpm run publish -- --dry-run
+```
+
+## Advanced Usage
+
+### Publishing with Custom Registry
+
+Publish to a custom npm registry:
+
+```bash
+# Set custom registry
+npm config set registry https://registry.your-company.com/
+
+# Publish
+pnpm run publish
+```
+
+### Publishing with Scoped Packages
+
+The template uses a scoped package (`@luanroger/ts-package-template`). np handles scoped packages automatically.
+
+### Publishing with 2FA
+
+If you have two-factor authentication enabled on npm:
+
+1. np will prompt you for the OTP when needed
+2. You can also set the OTP in the environment variable:
+   ```bash
+   export NPM_OTP=123456
+   pnpm run publish -- --yes
+   ```
+
+### Publishing with Access Level
+
+Control package access level:
+
+```json
+{
+  "publishConfig": {
+    "access": "public"  // or "restricted"
+  }
+}
+```
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Not logged in**:
+   ```bash
+   npm login
+   ```
+
+2. **Invalid version**:
+   - Ensure version follows semantic versioning (major.minor.patch)
+   - Check that version is a valid string
+
+3. **Dirty working directory**:
+   - Commit or stash all changes before publishing
+   - Check with `git status`
+
+4. **Wrong branch**:
+   - Switch to the correct branch (usually main/master)
+   - Or use `--any-branch` flag
+
+5. **Permission denied**:
+   - Ensure you have publish permissions for the package
+   - Check npm access settings
+
+6. **2FA required**:
+   - Enter OTP when prompted
+   - Or set NPM_OTP environment variable
+
+### Debug Mode
+
+Run np with debug logging:
+
+```bash
+DEBUG=np pnpm run publish
+```
+
+## Best Practices
+
+### Semantic Versioning
+
+Follow [Semantic Versioning](https://semver.org/) for your package:
+
+- **Patch** (x.x.1): Backward-compatible bug fixes
+- **Minor** (x.1.x): Backward-compatible new features
+- **Major** (1.x.x): Breaking changes
+
+### Conventional Commits
+
+Use [Conventional Commits](https://www.conventionalcommits.org/) for commit messages to enable automatic changelog generation.
+
+### Pre-publish Checks
+
+Before publishing:
+
+1. Run all tests: `pnpm run test`
+2. Check code quality: `pnpm run check`
+3. Build the package: `pnpm run build`
+4. Verify the build output: Check the `dist` directory
+5. Test the built package locally
+
+### Testing Locally
+
+Test your package locally before publishing:
+
+1. Build the package: `pnpm run build`
+2. Link the package locally: `pnpm link`
+3. Test in another project: `pnpm link @luanroger/ts-package-template`
+4. Unlink when done: `pnpm unlink`
+
+## Resources
+
+- [np Documentation](https://github.com/sindresorhus/np)
+- [np GitHub Repository](https://github.com/sindresorhus/np)
+- [npm Documentation](https://docs.npmjs.com/)
+- [Semantic Versioning](https://semver.org/)
+- [Conventional Commits](https://www.conventionalcommits.org/)

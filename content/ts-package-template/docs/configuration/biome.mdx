@@ -1,0 +1,363 @@
+---
+title: Biome Configuration
+description: Configuring Biome for code linting and formatting
+---
+
+import { Callout } from "fumadocs-ui/components/callout";
+
+[Biome](https://biomejs.dev/) is an all-in-one code linter and formatter that replaces tools like ESLint, Prettier, and more. The template uses Biome for code quality checks and automatic formatting.
+
+## Configuration File (`biome.json`)
+
+The main configuration file for Biome is located at the project root:
+
+```json
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "root": true,
+  "extends": ["ultracite/biome/core"],
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true,
+    "defaultBranch": "main"
+  },
+  "files": {
+    "ignoreUnknown": true,
+    "includes": ["src/**/*.ts"]
+  },
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  }
+}
+```
+
+## Configuration Options Explained
+
+### Schema
+
+```json
+"$schema": "./node_modules/@biomejs/biome/configuration_schema.json"
+```
+
+This specifies the JSON schema for configuration validation and autocompletion in IDEs.
+
+### Root Configuration
+
+```json
+"root": true
+```
+
+This marks the configuration as the root configuration, stopping Biome from looking for configuration files in parent directories.
+
+### Extends
+
+```json
+"extends": ["ultracite/biome/core"]
+```
+
+The template extends the [ultracite/biome/core](https://github.com/biomejs/ultracite) configuration, which provides a pre-configured set of rules optimized for TypeScript projects.
+
+<Callout type="info">
+[ultracite](https://github.com/biomejs/ultracite) is a wrapper around Biome that provides additional functionality and pre-configured rule sets.
+</Callout>
+
+### Version Control System (VCS) Integration
+
+```json
+"vcs": {
+  "enabled": true,
+  "clientKind": "git",
+  "useIgnoreFile": true,
+  "defaultBranch": "main"
+}
+```
+
+- **`enabled`**: Enable VCS integration for better file tracking
+- **`clientKind`**: Specify the version control system (git)
+- **`useIgnoreFile`**: Use `.gitignore` to determine which files to ignore
+- **`defaultBranch`**: Set the default branch name
+
+### File Configuration
+
+```json
+"files": {
+  "ignoreUnknown": true,
+  "includes": ["src/**/*.ts"]
+}
+```
+
+- **`ignoreUnknown`**: Ignore unknown file types instead of throwing errors
+- **`includes`**: Specify which files Biome should process (TypeScript files in src directory)
+
+### Assist Configuration
+
+```json
+"assist": {
+  "enabled": true,
+  "actions": {
+    "source": {
+      "organizeImports": "on"
+    }
+  }
+}
+```
+
+- **`enabled`**: Enable assist features for code actions
+- **`organizeImports`**: Enable automatic import organization
+
+## Package.json Scripts
+
+The template configures Biome in the `package.json` scripts:
+
+```json
+{
+  "scripts": {
+    "check": "ultracite check",
+    "fix": "ultracite fix"
+  }
+}
+```
+
+### Scripts Explained
+
+- **`check`**: Run Biome to lint and format the code, reporting issues
+- **`fix`**: Run Biome to automatically fix linting and formatting issues
+
+<Callout type="info">
+The template uses `ultracite` as a wrapper around Biome, which provides additional functionality and a unified interface.
+</Callout>
+
+## Using Biome
+
+### Check Code Quality
+
+Run Biome to check for linting and formatting issues:
+
+```bash
+pnpm run check
+```
+
+This will:
+- Analyze all files matching the `includes` pattern
+- Report linting issues
+- Report formatting issues
+- Exit with a non-zero code if issues are found
+
+### Fix Issues Automatically
+
+Run Biome to automatically fix issues:
+
+```bash
+pnpm run fix
+```
+
+This will:
+- Fix all auto-fixable linting issues
+- Format all files according to the configuration
+- Organize imports in all files
+
+### Check Specific Files
+
+Check specific files or directories:
+
+```bash
+pnpm run check src/index.ts
+```
+
+### Fix Specific Files
+
+Fix specific files or directories:
+
+```bash
+pnpm run fix src/index.ts
+```
+
+## Customizing Biome Configuration
+
+### Adding Rules
+
+You can add specific rules to the configuration:
+
+```json
+{
+  "extends": ["ultracite/biome/core"],
+  "linter": {
+    "rules": {
+      "recommended": true,
+      "correctness": {
+        "noUnusedVariables": "error"
+      }
+    }
+  }
+}
+```
+
+### Custom Formatting
+
+Configure formatting options:
+
+```json
+{
+  "formatter": {
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineEnding": "lf",
+    "lineWidth": 80,
+    "attributePosition": "auto"
+  }
+}
+```
+
+### File Patterns
+
+Extend the file patterns to include more files:
+
+```json
+"files": {
+  "ignoreUnknown": true,
+  "includes": [
+    "src/**/*.ts",
+    "test/**/*.ts",
+    "*.config.ts",
+    "*.config.js"
+  ]
+}
+```
+
+### Organize Imports
+
+Configure import organization:
+
+```json
+"assist": {
+  "enabled": true,
+  "actions": {
+    "source": {
+      "organizeImports": "on",
+      "groupOrder": [
+        "type",
+        "external",
+        "internal",
+        "parent",
+        "sibling",
+        "index"
+      ]
+    }
+  }
+}
+```
+
+## Biome Rules
+
+The ultracite/biome/core configuration includes a comprehensive set of rules. Here are some key categories:
+
+### Correctness Rules
+
+- `noUnusedVariables`: Report unused variables
+- `noUnusedImports`: Report unused imports
+- `noUnusedPrivateClassMembers`: Report unused private class members
+- `useNamingConvention`: Enforce naming conventions
+
+### Style Rules
+
+- `useShorthandArrayType`: Prefer `number[]` over `Array<number>`
+- `useShorthandObjectType`: Prefer `{}` over `object`
+- `useOptionalChain`: Prefer optional chaining (`?.`) over logical AND (`&&`)
+- `useNullishCoalescing`: Prefer nullish coalescing (`??`) over logical OR (`||`)
+
+### Formatting Rules
+
+- `indent`: Consistent indentation
+- `quotes`: Consistent quote style
+- `semicolons`: Consistent semicolon usage
+- `trailingCommas`: Consistent trailing comma usage
+
+## Git Hooks Integration
+
+The template integrates Biome with Git hooks using lefthook. The configuration in `lefthook.yml`:
+
+```yaml
+pre-commit:
+  jobs:
+    - run: npx ultracite fix
+      glob:
+        - "**/*.js"
+        - "**/*.jsx"
+        - "**/*.ts"
+        - "**/*.tsx"
+        - "**/*.json"
+        - "**/*.jsonc"
+        - "**/*.css"
+      stage_fixed: true
+```
+
+This ensures that:
+- Biome runs automatically on pre-commit
+- All staged files are checked and fixed
+- Only files that match the patterns are processed
+
+## Customizing Rules
+
+### Disable Specific Rules
+
+To disable specific rules:
+
+```json
+{
+  "linter": {
+    "rules": {
+      "correctness": {
+        "noUnusedVariables": "off"
+      }
+    }
+  }
+}
+```
+
+### Configure Rule Severity
+
+Set rule severity levels:
+
+```json
+{
+  "linter": {
+    "rules": {
+      "correctness": {
+        "noUnusedVariables": "error",
+        "noUnusedImports": "warn"
+      }
+    }
+  }
+}
+```
+
+### Add Custom Rules
+
+Add custom rules for your project:
+
+```json
+{
+  "linter": {
+    "rules": {
+      "custom": {
+        "myCustomRule": "error"
+      }
+    }
+  }
+}
+```
+
+## Resources
+
+- [Biome Documentation](https://biomejs.dev/)
+- [Biome GitHub Repository](https://github.com/biomejs/biome)
+- [Biome Configuration Schema](https://biomejs.dev/reference/configuration)
+- [ultracite GitHub Repository](https://github.com/biomejs/ultracite)
+- [Biome Rules](https://biomejs.dev/linter/rules)
+- [Biome Formatter](https://biomejs.dev/formatter)

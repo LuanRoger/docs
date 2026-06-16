@@ -1,0 +1,250 @@
+---
+title: TypeScript Configuration
+description: Understanding and customizing TypeScript settings
+---
+
+import { Callout } from "fumadocs-ui/components/callout";
+
+The ts-package-template uses a modern TypeScript setup with two configuration files: `tsconfig.json` (main) and `tsconfig.build.json` (build-specific).
+
+## Main Configuration (`tsconfig.json`)
+
+The main TypeScript configuration file contains settings for development and type checking:
+
+```json
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "useDefineForClassFields": true,
+    "module": "esnext",
+    "lib": ["ESNext"],
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "resolveJsonModule": true,
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+    "paths": {
+      "~/*": ["./*"],
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": [
+    "*.json",
+    "./src/**/*",
+    "./tests/**/*",
+    "./tsdown.config.ts",
+    "./eslint.config.ts"
+  ],
+  "exclude": ["node_modules", "dist"]
+}
+```
+
+## Compiler Options Explained
+
+### Basic Settings
+
+| Option | Value | Description |
+|--------|-------|-------------|
+| `target` | `esnext` | Compile to the latest ECMAScript version |
+| `module` | `esnext` | Use ES modules syntax |
+| `lib` | `["ESNext"]` | Include ESNext library definitions |
+| `esModuleInterop` | `true` | Enable interoperability between CommonJS and ES modules |
+
+### Bundler Mode Settings
+
+These settings optimize TypeScript for modern bundlers like Rolldown:
+
+| Option | Value | Description |
+|--------|-------|-------------|
+| `moduleResolution` | `bundler` | Use bundler-specific module resolution |
+| `allowImportingTsExtensions` | `true` | Allow importing `.ts` files directly |
+| `verbatimModuleSyntax` | `true` | Preserve module syntax as written |
+| `moduleDetection` | `force` | Force module detection for all files |
+| `noEmit` | `true` | Don't emit output files (handled by bundler) |
+| `resolveJsonModule` | `true` | Allow importing JSON files |
+
+<Callout type="info">
+The `bundler` module resolution mode is designed to work with modern bundlers like Rolldown, Vite, or esbuild. It provides better compatibility and performance for ESM projects.
+</Callout>
+
+### Linting Settings
+
+Strict type checking options:
+
+| Option | Value | Description |
+|--------|-------|-------------|
+| `strict` | `true` | Enable all strict type-checking options |
+| `noUnusedLocals` | `true` | Report errors on unused local variables |
+| `noUnusedParameters` | `true` | Report errors on unused function parameters |
+| `erasableSyntaxOnly` | `true` | Only allow syntax that can be erased during compilation |
+| `noFallthroughCasesInSwitch` | `true` | Report errors for fallthrough cases in switch statements |
+| `noUncheckedSideEffectImports` | `true` | Check for side effects in imports |
+
+### Path Aliases
+
+The template configures convenient path aliases:
+
+```json
+"paths": {
+  "~/*": ["./*"],
+  "@/*": ["./src/*"]
+}
+```
+
+This allows you to use shorter import paths:
+
+```typescript
+// Instead of relative paths
+import { myFunction } from '../../../src/utils/myFunction';
+
+// You can use aliases
+import { myFunction } from '@/utils/myFunction';
+// or
+import { myFunction } from '~/src/utils/myFunction';
+```
+
+### File Inclusion
+
+The `include` array specifies which files TypeScript should process:
+
+- `*.json` - All JSON files in the project root
+- `./src/**/*` - All files in the src directory
+- `./tests/**/*` - All files in the tests directory
+- `./tsdown.config.ts` - The bundler configuration file
+- `./eslint.config.ts` - The ESLint configuration file
+
+Files in `node_modules` and `dist` directories are excluded.
+
+## Build Configuration (`tsconfig.build.json`)
+
+The build-specific configuration extends the main configuration and adds build-specific settings:
+
+```json
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "strictNullChecks": true
+  }
+}
+```
+
+### Build-Specific Options
+
+| Option | Value | Description |
+|--------|-------|-------------|
+| `extends` | `./tsconfig.json` | Inherit all settings from main config |
+| `outDir` | `dist` | Output compiled files to the dist directory |
+| `strictNullChecks` | `true` | Enable strict null checks for build process |
+
+## Customizing TypeScript Configuration
+
+### Adding New Path Aliases
+
+To add new path aliases, update the `paths` object in `tsconfig.json`:
+
+```json
+"paths": {
+  "~/*": ["./*"],
+  "@/*": ["./src/*"],
+  "@utils/*": ["./src/utils/*"],
+  "@types/*": ["./src/types/*"]
+}
+```
+
+### Adjusting Strictness
+
+You can adjust the strictness level by modifying the `strict` option and its sub-options:
+
+```json
+"strict": true,
+"noImplicitAny": true,
+"strictNullChecks": true,
+"strictFunctionTypes": true,
+"strictBindCallApply": true,
+"strictPropertyInitialization": true,
+"noImplicitThis": true,
+"useUnknownInCatchVariables": true,
+"alwaysStrict": true
+```
+
+### Changing Target Environment
+
+If you need to target a specific ECMAScript version:
+
+```json
+"target": "ES2022",
+"module": "ES2022"
+```
+
+### Adding Library Support
+
+To include additional type definitions:
+
+```json
+"lib": ["ESNext", "DOM", "DOM.Iterable"]
+```
+
+## Common Configuration Patterns
+
+### For Node.js Packages
+
+If you're building a Node.js package:
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "lib": ["ES2022"],
+    "moduleResolution": "NodeNext"
+  }
+}
+```
+
+### For Browser Packages
+
+If you're building a browser package:
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"]
+  }
+}
+```
+
+## TypeScript Version
+
+The template uses TypeScript 6.0.3. You can check the current version in `package.json`:
+
+```json
+"devDependencies": {
+  "typescript": "^6.0.3"
+}
+```
+
+To update TypeScript:
+
+```bash
+pnpm up typescript@latest
+```
+
+<Callout type="warning">
+When updating TypeScript, check for breaking changes in the release notes and update your configuration accordingly.
+</Callout>

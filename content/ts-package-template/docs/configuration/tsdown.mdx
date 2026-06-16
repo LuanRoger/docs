@@ -1,0 +1,344 @@
+---
+title: tsdown Configuration
+description: Configuring the tsdown bundler for TypeScript packages
+---
+
+import { Callout } from "fumadocs-ui/components/callout";
+
+[tsdown](https://tsdown.dev/) is a TypeScript plugin for [Rolldown](https://rolldown.rs) that provides seamless TypeScript integration. The template uses tsdown as the primary bundler for compiling TypeScript code into distributable JavaScript packages.
+
+## Configuration File (`tsdown.config.ts`)
+
+The main configuration file for tsdown is located at the project root:
+
+```typescript
+import { defineConfig } from "tsdown";
+
+export default defineConfig({
+  entry: {
+    index: "src/index.ts",
+  },
+  dts: true,
+  tsconfig: "tsconfig.build.json",
+  format: "esm",
+  sourcemap: false,
+});
+```
+
+## Configuration Options Explained
+
+### Entry Points
+
+The `entry` option defines the entry points for your package:
+
+```typescript
+entry: {
+  index: "src/index.ts",
+}
+```
+
+- **Key**: The name of the entry point (used in output filenames)
+- **Value**: The path to the source file
+
+You can add multiple entry points:
+
+```typescript
+entry: {
+  index: "src/index.ts",
+  utils: "src/utils/index.ts",
+  types: "src/types/index.ts",
+}
+```
+
+### TypeScript Declaration Files
+
+The `dts` option controls whether TypeScript declaration files (`.d.ts`) are generated:
+
+```typescript
+dts: true,
+```
+
+- `true`: Generate `.d.ts` files for type information
+- `false`: Skip type declaration generation
+
+<Callout type="info">
+For TypeScript packages, it's recommended to keep `dts: true` to provide type information to consumers of your package.
+</Callout>
+
+### TypeScript Configuration
+
+The `tsconfig` option specifies which TypeScript configuration file to use:
+
+```typescript
+tsconfig: "tsconfig.build.json",
+```
+
+This tells tsdown to use the build-specific TypeScript configuration rather than the main one.
+
+### Output Format
+
+The `format` option defines the module format for the output:
+
+```typescript
+format: "esm",
+```
+
+- `"esm"`: ECMAScript Modules (recommended for modern packages)
+- `"cjs"`: CommonJS modules (for Node.js compatibility)
+
+You can also output multiple formats:
+
+```typescript
+format: ["esm", "cjs"],
+```
+
+### Source Maps
+
+The `sourcemap` option controls whether source maps are generated:
+
+```typescript
+sourcemap: false,
+```
+
+- `true`: Generate source maps for debugging
+- `false`: Skip source map generation (recommended for production)
+
+## Advanced Configuration
+
+### Multiple Entry Points with Different Configs
+
+```typescript
+import { defineConfig } from "tsdown";
+
+export default defineConfig({
+  entry: {
+    index: "src/index.ts",
+    utils: "src/utils/index.ts",
+  },
+  dts: true,
+  tsconfig: "tsconfig.build.json",
+  format: "esm",
+  sourcemap: false,
+  // Override specific entry point configuration
+  entryOptions: {
+    index: {
+      // Custom configuration for index entry
+      banner: "// Main entry point",
+    },
+    utils: {
+      // Custom configuration for utils entry
+      footer: "// Utility functions",
+    },
+  },
+});
+```
+
+### Custom Output Directory
+
+```typescript
+import { defineConfig } from "tsdown";
+
+export default defineConfig({
+  entry: {
+    index: "src/index.ts",
+  },
+  dts: true,
+  tsconfig: "tsconfig.build.json",
+  format: "esm",
+  sourcemap: false,
+  outDir: "dist", // Custom output directory
+});
+```
+
+### Minification
+
+```typescript
+import { defineConfig } from "tsdown";
+
+export default defineConfig({
+  entry: {
+    index: "src/index.ts",
+  },
+  dts: true,
+  tsconfig: "tsconfig.build.json",
+  format: "esm",
+  sourcemap: false,
+  minify: true, // Enable minification
+});
+```
+
+### External Dependencies
+
+```typescript
+import { defineConfig } from "tsdown";
+
+export default defineConfig({
+  entry: {
+    index: "src/index.ts",
+  },
+  dts: true,
+  tsconfig: "tsconfig.build.json",
+  format: "esm",
+  sourcemap: false,
+  external: ["react", "react-dom"], // Mark as external dependencies
+});
+```
+
+## Package.json Configuration
+
+The template configures tsdown in the `package.json` scripts:
+
+```json
+{
+  "scripts": {
+    "dev": "tsdown --watch ./src",
+    "build": "tsc && tsdown"
+  }
+}
+```
+
+### Scripts Explained
+
+- **`dev`**: Runs tsdown in watch mode, rebuilding on file changes
+- **`build`**: Runs TypeScript compiler first (`tsc`), then tsdown for bundling
+
+## Using tsdown
+
+### Development Mode
+
+Start the development server with hot reload:
+
+```bash
+pnpm run dev
+```
+
+This will:
+- Watch for changes in the `./src` directory
+- Automatically rebuild when files change
+- Output to the configured directory
+
+### Production Build
+
+Create a production build:
+
+```bash
+pnpm run build
+```
+
+This will:
+1. Run TypeScript compiler (`tsc`) for type checking
+2. Run tsdown for bundling
+3. Output files to the `dist` directory
+
+### Build Output
+
+The build process generates the following files in the `dist` directory:
+
+```plaintext
+dist/
+├── index.mjs          # ESM bundle
+├── index.d.mts       # ESM type declarations
+├── index.d.ts        # Type declarations (alternative)
+└── index.mjs.map     # Source map (if enabled)
+```
+
+## Package.json Exports
+
+The template configures package exports in `package.json`:
+
+```json
+{
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.mts"
+    }
+  },
+  "types": "dist/index.d.ts",
+  "files": ["dist", "LICENSE", "README.md", "CHANGELOG.md"]
+}
+```
+
+This configuration:
+- Sets the package as an ES module (`"type": "module"`)
+- Defines the main import path
+- Specifies type declaration files
+- Includes only necessary files in the published package
+
+## Customizing tsdown Configuration
+
+### Adding Plugins
+
+```typescript
+import { defineConfig } from "tsdown";
+import myPlugin from "my-tsdown-plugin";
+
+export default defineConfig({
+  entry: {
+    index: "src/index.ts",
+  },
+  dts: true,
+  tsconfig: "tsconfig.build.json",
+  format: "esm",
+  sourcemap: false,
+  plugins: [myPlugin()],
+});
+```
+
+### Custom Rollup Configuration
+
+Since tsdown is built on Rolldown, you can use Rolldown configuration options:
+
+```typescript
+import { defineConfig } from "tsdown";
+
+export default defineConfig({
+  entry: {
+    index: "src/index.ts",
+  },
+  dts: true,
+  tsconfig: "tsconfig.build.json",
+  format: "esm",
+  sourcemap: false,
+  // Rolldown-specific options
+  resolve: {
+    extensions: [".ts", ".js", ".json"],
+  },
+});
+```
+
+## Troubleshooting
+
+### Common Issues
+
+1. **TypeScript errors during build**:
+   - Run `pnpm run check` to identify and fix type errors
+   - Ensure `tsconfig.build.json` is properly configured
+
+2. **Missing output files**:
+   - Check that the entry point paths are correct
+   - Verify that the source files exist
+
+3. **Type declaration issues**:
+   - Ensure `dts: true` is set
+   - Check that TypeScript can properly analyze your code
+
+4. **Watch mode not working**:
+   - Verify that the watch paths are correct
+   - Check for file system permission issues
+
+### Debug Mode
+
+Run tsdown with debug logging:
+
+```bash
+DEBUG=tsdown pnpm run build
+```
+
+## Resources
+
+- [tsdown Documentation](https://tsdown.dev/)
+- [tsdown GitHub Repository](https://github.com/volarjs/tsdown)
+- [Rolldown Documentation](https://rolldown.rs)
+- [Rolldown GitHub Repository](https://github.com/rolldown/rolldown)
