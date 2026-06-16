@@ -78,6 +78,9 @@ importers:
       '@types/react-dom':
         specifier: ^19.2.3
         version: 19.2.3(@types/react@19.2.17)
+      '@varlock/infisical-plugin':
+        specifier: ^1.2.0
+        version: 1.2.0(varlock@1.6.1)
       postcss:
         specifier: ^8.5.15
         version: 8.5.15
@@ -1130,6 +1133,12 @@ packages:
   '@ungap/structured-clone@1.3.0':
     resolution: {integrity: sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g==}
     deprecated: Potential CWE-502 - Update to 1.3.1 or higher
+
+  '@varlock/infisical-plugin@1.2.0':
+    resolution: {integrity: sha512-axPc2/WmG9WK1gP20KgvXS6f3/5HT9Gil/2PAr+P314x0ci2C2Gfn8PNFwBoYyHB2pKUq3A0uWgFXghbzVKpkQ==}
+    engines: {node: '>=22'}
+    peerDependencies:
+      varlock: ^1.6.0
 
   '@varlock/nextjs-integration@1.1.3':
     resolution: {integrity: sha512-IVhIy1Dub7NHrQRjJLQCZy2J5MZsFRCuRElE10jYNYhv8tPOMQMu18OXPMZna4x3zJmwPe02dPjO2BN/m5oMqw==}
@@ -3047,6 +3056,10 @@ snapshots:
   '@types/unist@3.0.3': {}
 
   '@ungap/structured-clone@1.3.0': {}
+
+  '@varlock/infisical-plugin@1.2.0(varlock@1.6.1)':
+    dependencies:
+      varlock: 1.6.1
 
   '@varlock/nextjs-integration@1.1.3(next@16.2.9(@opentelemetry/api@1.9.1)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(varlock@1.6.1))(varlock@1.6.1)':
     dependencies:
