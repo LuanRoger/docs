@@ -4,7 +4,7 @@ export function baseLayoutProps(): BaseLayoutProps {
   return {
     nav: {
       title: "electron-shadcn",
-      url: "/electron-shadcn",
+      url: "/electron-shadcn/docs",
     },
   };
 }
