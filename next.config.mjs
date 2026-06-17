@@ -13,6 +13,11 @@ const config = {
       destination: "/electron-shadcn/docs/getting-started/installation",
       permanent: true,
     },
+    {
+      source: "/ts-package-template/docs",
+      destination: "/ts-package-template/docs/getting-started/installation",
+      permanent: true,
+    },
   ],
 };
 
