@@ -6,11 +6,16 @@ import { Button } from "./ui/button";
 type EditOnGitHubProps = {
   path: string;
   app: AppRoot;
+  className?: string;
 };
 
-export default function EditOnGitHub({ path, app }: EditOnGitHubProps) {
+export default function EditOnGitHub({
+  path,
+  app,
+  className,
+}: EditOnGitHubProps) {
   return (
-    <Button asChild variant="secondary">
+    <Button asChild className={className} variant="secondary">
       <Link
         href={`https://github.com/LuanRoger/docs/blob/main/content${app}/docs/${path}`}
         target="_blank"
