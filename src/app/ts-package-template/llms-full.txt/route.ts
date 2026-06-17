@@ -1,4 +1,4 @@
-import { getLLMText, source } from "@/lib/sources/electron-shadcn";
+import { getLLMText, source } from "@/lib/sources/ts-package-template";
 
 export const revalidate = false;
 
