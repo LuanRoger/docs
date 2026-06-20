@@ -17,8 +17,8 @@ export default function HomePage() {
       <div className="flex flex-col items-center gap-4">
         <HeaderText />
         <div className="grid w-full grid-cols-4 gap-2">
-          {projects.map((project) => (
-            <ProjectDocCard key={project.name} {...project} />
+          {projects.map((project, index) => (
+            <ProjectDocCard index={index} key={project.name} {...project} />
           ))}
         </div>
       </div>

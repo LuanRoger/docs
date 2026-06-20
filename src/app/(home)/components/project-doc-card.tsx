@@ -14,6 +14,7 @@ type ProjectDocCardProps = {
   documentationLink: string;
   repositoryLink: string;
   accentColor: string;
+  index: number;
 };
 
 export default function ProjectDocCard({
@@ -23,6 +24,7 @@ export default function ProjectDocCard({
   documentationLink,
   repositoryLink,
   accentColor,
+  index,
 }: ProjectDocCardProps) {
   const bgVariantsLayer2 = {
     hover: {
@@ -44,7 +46,7 @@ export default function ProjectDocCard({
       )}
       initial={{ opacity: 0, y: 25 }}
       transition={{
-        delay: 1.7,
+        delay: 1.7 + index * 0.1,
       }}
       whileHover="hover"
     >
