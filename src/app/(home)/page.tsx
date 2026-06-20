@@ -27,14 +27,12 @@ export default function HomePage() {
         <PixelBlast
           colors={["--electron", "--ts-package-template"]}
           edgeFade={0}
+          enableRipples={false}
           liquid={false}
           patternDensity={1}
           patternScale={2}
           pixelSize={6}
-          pixelSizeJitter={2}
-          rippleIntensityScale={1.5}
-          rippleSpeed={0.4}
-          rippleThickness={0.12}
+          pixelSizeJitter={0}
           speed={0.3}
           variant="square"
         />
