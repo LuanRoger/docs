@@ -1,14 +1,29 @@
 "use client";
 
 import { motion } from "motion/react";
-import type { ReactNode } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 
 type RevealProps = {
   children: ReactNode;
+  delayMs?: number;
   className?: string;
 };
 
-export default function Reveal({ children, className }: RevealProps) {
+export default function Reveal({ children, delayMs, className }: RevealProps) {
+  const [render, setRender] = useState(false);
+
+  function startDelayCounter() {
+    setTimeout(() => {
+      setRender(true);
+    }, delayMs);
+  }
+
+  useEffect(startDelayCounter, [delayMs]);
+
+  if (!render) {
+    return null;
+  }
+
   return (
     <motion.div
       animate={{

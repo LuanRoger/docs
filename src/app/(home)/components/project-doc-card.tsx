@@ -1,3 +1,6 @@
+"use client";
+
+import { motion } from "motion/react";
 import GitHubIcon from "@/components/icons/github";
 import Link from "@/components/link";
 import { Button } from "@/components/ui/button";
@@ -20,22 +23,43 @@ export default function ProjectDocCard({
   repositoryLink,
   accentColor,
 }: ProjectDocCardProps) {
+  const bgVariantsLayer2 = {
+    hover: {
+      opacity: 0,
+    },
+  };
+  const abreviationVariants = {
+    hover: {
+      color: `var(--${accentColor})`,
+      opacity: 1,
+    },
+  };
+
   return (
-    <div
+    <motion.div
+      animate={{ opacity: 1, y: 0 }}
       className={cn(
-        "relative flex size-72 flex-col gap-2 border border-border",
-        `bg-${accentColor}`
+        "relative flex size-72 flex-col gap-2 overflow-clip border border-border"
       )}
+      initial={{ opacity: 0, y: 10 }}
+      whileHover="hover"
     >
-      <h3
+      <motion.h3
         className={cn(
-          "absolute right-0 bottom-0 select-none font-pixel text-9xl opacity-30"
+          "absolute right-0 bottom-0 z-30 select-none font-pixel text-9xl"
         )}
+        variants={abreviationVariants}
       >
         {abreviatedName}
-      </h3>
-      <div className="z-20 flex flex-col gap-2 p-4">
-        <h2 className="text-2xl">{name}</h2>
+      </motion.h3>
+      <motion.div
+        className="absolute inset-0 z-20 size-full"
+        style={{ backgroundColor: `var(--${accentColor})` }}
+        variants={bgVariantsLayer2}
+      />
+      <div className="absolute inset-0 z-10 size-full bg-card" />
+      <div className="z-40 flex flex-col gap-2 p-4">
+        <h2 className="font-bold text-2xl">{name}</h2>
         <p className="text-sm">{description}</p>
         <div className="flex gap-2">
           <Link href={documentationLink}>
@@ -48,6 +72,6 @@ export default function ProjectDocCard({
           </Link>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

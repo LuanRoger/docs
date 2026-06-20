@@ -30,24 +30,19 @@ export default function HomePage() {
           ))}
         </div>
       </div>
-      <Reveal className="absolute inset-0 -z-10 size-full">
+      <Reveal className="absolute inset-0 -z-10 size-full" delayMs={5000}>
         <PixelBlast
-          color="#B497CF"
+          colors={["--electron", "--ts-package-template"]}
           edgeFade={0}
-          enableRipples
           liquid={false}
-          liquidRadius={1.2}
-          liquidStrength={0.12}
-          liquidWobbleSpeed={5}
           patternDensity={1}
           patternScale={2}
-          pixelSize={4}
-          pixelSizeJitter={0}
+          pixelSize={6}
+          pixelSizeJitter={2}
           rippleIntensityScale={1.5}
           rippleSpeed={0.4}
           rippleThickness={0.12}
-          speed={0.5}
-          transparent
+          speed={0.3}
           variant="square"
         />
       </Reveal>
