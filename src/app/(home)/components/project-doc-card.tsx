@@ -42,7 +42,7 @@ export default function ProjectDocCard({
     <motion.div
       animate={{ opacity: 1, y: 0 }}
       className={cn(
-        "relative flex size-72 flex-col gap-2 overflow-clip border border-border"
+        "relative flex h-72 w-full flex-col gap-2 overflow-clip border border-border lg:size-72"
       )}
       initial={{ opacity: 0, y: 25 }}
       transition={{

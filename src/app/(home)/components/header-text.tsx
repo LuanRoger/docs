@@ -3,7 +3,7 @@ import { SlideUpText } from "@/components/slide-up-text";
 
 export function HeaderText() {
   return (
-    <div className="flex flex-col items-center gap-2">
+    <div className="flex flex-col items-center justify-center gap-2">
       <HighlightedText className="text-5xl" delay={0.5}>
         docs.
       </HighlightedText>

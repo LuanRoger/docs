@@ -113,7 +113,6 @@ export function Banner({
           aria-label={t("Close Banner", { note: "aria-label" })}
           className={cn(
             buttonVariants({
-              color: "ghost",
               className:
                 "absolute inset-e-2 top-1/2 -translate-y-1/2 text-fd-muted-foreground/50",
               size: "icon-sm",
