@@ -9,7 +9,7 @@ export function LinksSection() {
       animate={{
         y: 0,
       }}
-      className="absolute right-0 bottom-0 border border-border bg-card p-2 font-mono text-card-foreground text-sm"
+      className="absolute right-0 bottom-0 flex gap-2 border border-border bg-card p-2 font-mono text-card-foreground text-sm"
       initial={{
         y: 40,
       }}
@@ -18,7 +18,11 @@ export function LinksSection() {
       }}
     >
       <Link href="https://github.com/LuanRoger" isExternal>
-        GitHub
+        [ GitHub ]
+      </Link>
+      /
+      <Link href="https://luanroger.dev/" isExternal>
+        [ Portfolio ]
       </Link>
     </motion.div>
   );
