@@ -1,35 +1,41 @@
-import type { StaticImageData } from "next/image";
-import Image from "next/image";
 import GitHubIcon from "@/components/icons/github";
 import Link from "@/components/link";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/cn";
 
 type ProjectDocCardProps = {
   name: string;
+  abreviatedName: string;
   description: string;
   documentationLink: string;
   repositoryLink: string;
-  projectImage: string | StaticImageData;
+  accentColor: string;
 };
 
 export default function ProjectDocCard({
   name,
+  abreviatedName,
   description,
   documentationLink,
   repositoryLink,
-  projectImage,
+  accentColor,
 }: ProjectDocCardProps) {
   return (
-    <div className="relative inset-shadow-secondary inset-shadow-xs flex flex-col gap-2 overflow-clip rounded-xl bg-transparent p-4">
-      <Image
-        alt={`${name} project image`}
-        className="absolute inset-0 -z-10 size-full object-cover opacity-40"
-        height={200}
-        src={projectImage}
-        width={200}
-      />
-      <div className="z-20 flex flex-col gap-2">
-        <h2 className="text-xl">{name}</h2>
+    <div
+      className={cn(
+        "relative flex size-72 flex-col gap-2 border border-border",
+        `bg-${accentColor}`
+      )}
+    >
+      <h3
+        className={cn(
+          "absolute right-0 bottom-0 select-none font-pixel text-9xl opacity-30"
+        )}
+      >
+        {abreviatedName}
+      </h3>
+      <div className="z-20 flex flex-col gap-2 p-4">
+        <h2 className="text-2xl">{name}</h2>
         <p className="text-sm">{description}</p>
         <div className="flex gap-2">
           <Link href={documentationLink}>

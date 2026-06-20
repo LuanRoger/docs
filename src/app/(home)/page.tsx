@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Squares from "@/app/(home)/components/squares-bg";
 import Link from "@/components/link";
+import PixelBlast from "@/components/pixel-blast";
 import Reveal from "@/components/reveal";
 import ProjectDocCard from "./components/project-doc-card";
 import { projects } from "./constants";
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <div className="relative size-full flex-1 overflow-clip rounded-md border border-border p-4">
+    <div className="relative size-full flex-1 overflow-clip border border-border p-4">
       <div className="flex flex-col items-center gap-4">
         <div className="flex flex-col items-center gap-2">
           <h1 className="text-5xl">docs.</h1>
@@ -24,14 +24,32 @@ export default function HomePage() {
             open-source projects.
           </p>
         </div>
-        <div className="flex w-2/3 flex-col gap-2">
+        <div className="grid w-full grid-cols-4 gap-2">
           {projects.map((project) => (
             <ProjectDocCard key={project.name} {...project} />
           ))}
         </div>
       </div>
-      <Reveal className="absolute inset-x-0 -z-10 size-full">
-        <Squares direction="diagonal" speed={0.3} squareSize={30} />
+      <Reveal className="absolute inset-0 -z-10 size-full">
+        <PixelBlast
+          color="#B497CF"
+          edgeFade={0}
+          enableRipples
+          liquid={false}
+          liquidRadius={1.2}
+          liquidStrength={0.12}
+          liquidWobbleSpeed={5}
+          patternDensity={1}
+          patternScale={2}
+          pixelSize={4}
+          pixelSizeJitter={0}
+          rippleIntensityScale={1.5}
+          rippleSpeed={0.4}
+          rippleThickness={0.12}
+          speed={0.5}
+          transparent
+          variant="square"
+        />
       </Reveal>
     </div>
   );
