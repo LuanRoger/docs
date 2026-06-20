@@ -5,7 +5,13 @@ import { DocLayoutTitle } from "@/components/doc-layout-title";
 export function baseLayoutProps(): BaseLayoutProps {
   return {
     nav: {
-      title: <DocLayoutTitle description="electron-shadcn" title="ES" />,
+      title: (
+        <DocLayoutTitle
+          className="text-electron"
+          description="electron-shadcn"
+          title="ES"
+        />
+      ),
       url: "/electron-shadcn/docs",
     },
     themeSwitch: {
