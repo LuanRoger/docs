@@ -12,17 +12,19 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <div className="relative size-full flex-1 rounded-md border border-border">
-      <div className="absolute inset-x-0 top-1/2 flex -translate-y-1/2 flex-col items-center justify-center gap-4 p-4">
-        <h1 className="text-5xl">docs.</h1>
-        <p className="text-muted-foreground text-sm">
-          Documentation of{" "}
-          <Link href="https://github.com/LuanRoger" isExternal>
-            Luan Roger's
-          </Link>{" "}
-          open-source projects
-        </p>
-        <div className="grid grid-cols-1 items-center justify-center gap-5 md:grid-cols-2 lg:grid-cols-3">
+    <div className="relative size-full flex-1 overflow-clip rounded-md border border-border p-4">
+      <div className="flex flex-col items-center gap-4">
+        <div className="flex flex-col items-center gap-2">
+          <h1 className="text-5xl">docs.</h1>
+          <p className="text-muted-foreground text-sm">
+            Documentation of{" "}
+            <Link href="https://github.com/LuanRoger" isExternal>
+              Luan Roger's
+            </Link>{" "}
+            open-source projects.
+          </p>
+        </div>
+        <div className="flex w-2/3 flex-col gap-2">
           {projects.map((project) => (
             <ProjectDocCard key={project.name} {...project} />
           ))}
