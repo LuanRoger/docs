@@ -3,6 +3,7 @@
 import { motion } from "motion/react";
 import GitHubIcon from "@/components/icons/github";
 import Link from "@/components/link";
+import { SlideUpText } from "@/components/slide-up-text";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 
@@ -41,7 +42,10 @@ export default function ProjectDocCard({
       className={cn(
         "relative flex size-72 flex-col gap-2 overflow-clip border border-border"
       )}
-      initial={{ opacity: 0, y: 10 }}
+      initial={{ opacity: 0, y: 25 }}
+      transition={{
+        delay: 1.7,
+      }}
       whileHover="hover"
     >
       <motion.h3
@@ -50,7 +54,9 @@ export default function ProjectDocCard({
         )}
         variants={abreviationVariants}
       >
-        {abreviatedName}
+        <SlideUpText delay={1.6} split="characters">
+          {abreviatedName}
+        </SlideUpText>
       </motion.h3>
       <motion.div
         className="absolute inset-0 z-20 size-full"

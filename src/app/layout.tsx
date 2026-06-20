@@ -1,9 +1,14 @@
 import { cn } from "@/lib/cn";
 import "./global.css";
-import { Geist, Pixelify_Sans } from "next/font/google";
+import { Geist, Geist_Mono, Pixelify_Sans } from "next/font/google";
 
 const geist = Geist({
   subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-geist-mono",
 });
 
 const pixelify = Pixelify_Sans({
@@ -15,7 +20,7 @@ const pixelify = Pixelify_Sans({
 export default function Layout({ children }: LayoutProps<"/">) {
   return (
     <html
-      className={cn(geist.className, pixelify.variable)}
+      className={cn(geist.className, geistMono.variable, pixelify.variable)}
       lang="en"
       suppressHydrationWarning
     >

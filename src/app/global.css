@@ -45,7 +45,8 @@
     --color-electron: var(--electron);
     --color-ts-package-template: var(--ts-package-template);
 
-    --font-pixel: var(--font-pixelify)
+    --font-pixel: var(--font-pixelify);
+    --font-mono: var(--font-geist-mono);
 }
 
 :root {
