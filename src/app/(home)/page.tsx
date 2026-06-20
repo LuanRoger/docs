@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import PixelBlast from "@/components/pixel-blast";
 import Reveal from "@/components/reveal";
+import { projects } from "@/constants";
 import { HeaderText } from "./components/header-text";
 import { LinksSection } from "./components/links-section";
 import ProjectDocCard from "./components/project-doc-card";
-import { projects } from "./constants";
 
 export const metadata: Metadata = {
   title: "docs.",

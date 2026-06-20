@@ -6,7 +6,17 @@ export default function Layout({
   children,
 }: LayoutProps<"/electron-shadcn/docs">) {
   return (
-    <DocsLayout tree={source.pageTree} {...baseLayoutProps()}>
+    <DocsLayout
+      tabs={[
+        {
+          title: "Components",
+          description: "Hello World!",
+          url: "/electron-shadcn/docs",
+        },
+      ]}
+      tree={source.pageTree}
+      {...baseLayoutProps()}
+    >
       {children}
     </DocsLayout>
   );

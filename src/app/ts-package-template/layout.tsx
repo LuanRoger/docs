@@ -11,6 +11,10 @@ export default function Layout({
           api: mountRoute("/ts-package-template", "/api/search"),
         },
       }}
+      theme={{
+        enabled: false,
+        defaultTheme: "dark",
+      }}
     >
       {children}
     </RootProvider>
