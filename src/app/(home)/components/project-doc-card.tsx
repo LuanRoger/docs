@@ -5,7 +5,7 @@ import GitHubIcon from "@/components/icons/github";
 import Link from "@/components/link";
 import { SlideUpText } from "@/components/slide-up-text";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/cn";
+import { cn } from "@/lib/utils/styles";;
 
 type ProjectDocCardProps = {
   name: string;

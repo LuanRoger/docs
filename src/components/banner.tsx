@@ -8,7 +8,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { cn } from "../lib/cn";
+import { cn } from "@/lib/utils/styles";
 import { buttonVariants } from "./ui/button";
 
 type BannerVariant = "rainbow" | "normal";
