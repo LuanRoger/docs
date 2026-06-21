@@ -1,3 +1,5 @@
+/** biome-ignore-all lint/suspicious/noBitwiseOperators: Need to encode base32 */
+/** biome-ignore-all lint/security/noDangerouslySetInnerHtml: Way the component works */
 "use client";
 
 import { useTranslations } from "@fuma-translate/react";

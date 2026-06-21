@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { cn } from "@/lib/utils/styles";;
+import { cn } from "@/lib/utils/styles";
 
 type From = "left" | "right" | "top" | "bottom";
 

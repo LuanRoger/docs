@@ -1,4 +1,5 @@
-import { cn } from "@/lib/utils/styles";;
+import { cn } from "@/lib/utils/styles";
+
 import "./global.css";
 import { Geist, Geist_Mono, Pixelify_Sans } from "next/font/google";
 
