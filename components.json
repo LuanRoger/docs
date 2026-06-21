@@ -15,10 +15,11 @@
     "components": "@/components",
     "utils": "@/lib/styles",
     "ui": "@/components/ui",
-    "lib": "@/lib",
+    "lib": "@/lib/cn",
     "hooks": "@/hooks"
   },
   "registries": {
-    "@react-bits": "https://reactbits.dev/r/{name}.json"
+    "@react-bits": "https://reactbits.dev/r/{name}.json",
+    "@spell": "https://spell.sh/r/{name}.json"
   }
 }

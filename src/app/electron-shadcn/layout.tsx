@@ -9,6 +9,11 @@ export default function Layout({ children }: LayoutProps<"/electron-shadcn">) {
           api: mountRoute("/electron-shadcn", "/api/search"),
         },
       }}
+      theme={{
+        enabled: true,
+        forcedTheme: "dark",
+        defaultTheme: "dark",
+      }}
     >
       {children}
     </RootProvider>

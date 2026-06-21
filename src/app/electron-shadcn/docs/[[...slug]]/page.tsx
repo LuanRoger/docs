@@ -3,12 +3,14 @@ import {
   DocsDescription,
   DocsPage,
   DocsTitle,
+  ViewOptionsPopover,
 } from "fumadocs-ui/layouts/docs/page";
 import { createRelativeLink } from "fumadocs-ui/mdx";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import EditOnGitHub from "@/components/edit-on-github";
+import AiContentWarning from "@/components/ai-content-warning";
 import { getPageImage, source } from "@/lib/sources/electron-shadcn";
+import { mountGitHubEditUrl } from "@/lib/utils/url";
 import { getMDXComponents } from "@/mdx-components";
 
 export default async function Page(
@@ -25,9 +27,13 @@ export default async function Page(
   return (
     <DocsPage full={page.data.full} toc={page.data.toc}>
       <DocsTitle>{page.data.title}</DocsTitle>
-      <DocsDescription>{page.data.description}</DocsDescription>
+      <DocsDescription className="m-0">{page.data.description}</DocsDescription>
+      <AiContentWarning />
+      <ViewOptionsPopover
+        className="self-start"
+        githubUrl={mountGitHubEditUrl("/electron-shadcn", page.path)}
+      />
       <DocsBody>
-        <EditOnGitHub app="/electron-shadcn" path={page.path} />
         <MDX
           components={getMDXComponents({
             a: createRelativeLink(source, page),
