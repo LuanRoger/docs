@@ -1,0 +1,453 @@
+# Technical Overview: electron-shadcn
+
+This document provides a comprehensive technical overview of the **electron-shadcn** template project. It details the architecture, core technologies, intended use cases, and key implementation details that make this template production-ready for desktop application development.
+
+---
+
+## Overview
+
+electron-shadcn is a production-ready Electron application template that combines the power of Electron with modern React development practices, specifically integrating the shadcn/ui component system. It's designed to help developers quickly bootstrap beautiful, functional desktop applications with minimal setup.
+
+---
+
+## Architecture
+
+The template follows a **modular, type-safe architecture** with clear separation of concerns between Electron's main process, preload script, and renderer process:
+
+```
+src/
+├── main.ts              # Electron main process entry point
+├── preload.ts           # Preload script for context bridge
+├── renderer.ts          # Renderer process entry
+├── app.tsx              # Root React application
+├── ipc/                 # Inter-process communication layer
+│   ├── router.ts        # oRPC router aggregation
+│   ├── handler.ts       # oRPC server handler
+│   ├── manager.ts       # Client-side IPC manager
+│   ├── context.ts       # Main window context
+│   └── [domain]/        # Domain-specific IPC modules (app, shell, theme, window)
+│       ├── index.ts     # Public API exports
+│       ├── handlers.ts  # oRPC handlers with Zod validation
+│       └── schemas.ts   # Zod input/output schemas
+├── actions/             # Client-side state/actions
+├── components/          # React components (shadcn/ui + custom)
+├── routes/              # TanStack Router file-based routes
+├── styles/              # Global styles and Tailwind configuration
+├── localization/        # i18n configuration
+└── utils/               # Utility functions
+```
+
+### Process Architecture
+
+1. **Main Process** (`main.ts`): Manages Electron app lifecycle, creates BrowserWindow instances, and sets up IPC handlers
+2. **Preload Process** (`preload.ts`): Bridge between main and renderer, exposes limited Electron APIs to renderer
+3. **Renderer Process** (`app.tsx`, `renderer.ts`): React application running in the browser context
+
+---
+
+## Core Technologies
+
+### Runtime & Build
+- **Electron 42**: Cross-platform desktop application framework
+- **Vite 8**: Modern build tool with Hot Module Replacement (HMR) support
+- **Electron Forge**: Packaging and distribution toolchain with support for multiple platforms
+- **TypeScript 6**: Type safety with latest features and improvements
+
+### UI Layer
+- **React 19.2**: Modern React with React Compiler enabled by default
+- **Tailwind CSS 4.3**: Latest utility-first CSS framework with improved performance
+- **shadcn/ui**: Radix-based component library with accessible, customizable components
+- **TanStack Router**: File-based routing with full type safety
+- **React Query (TanStack)**: Server state management and data fetching
+- **i18next**: Internationalization support with react-i18next
+- **Lucide**: Beautiful, consistent icon library
+- **Geist**: Default font family for modern typography
+
+### IPC & Communication
+- **oRPC**: Type-safe inter-process communication using MessagePort API
+- **Zod 4**: Runtime validation for IPC messages with type inference
+- **Context Isolation**: Enabled by default for security (prevents direct Node.js API access from renderer)
+
+### Testing
+- **Vitest**: Fast unit testing framework
+- **Playwright**: End-to-end testing with electron-playwright-helpers for Electron-specific testing
+- **React Testing Library**: Component testing utilities for React
+
+### Code Quality
+- **Ultracite with Biome**: Code formatting and linting wrapper
+- **Prettier**: Additional formatting support
+
+---
+
+## Key Implementation Details
+
+### Type-Safe IPC with oRPC
+
+The template implements a sophisticated IPC system using [oRPC](https://orpc.unnoq.com) that addresses Electron's traditional IPC challenges:
+
+1. **MessagePort-based communication**: Uses browser MessagePort API for secure, isolated communication between processes
+2. **Router pattern**: Domain-specific routers are aggregated in a central router for modular organization
+3. **Zod validation**: All IPC inputs and outputs are validated using Zod schemas, providing runtime type safety
+4. **Context injection**: Main window context is injected into handlers via oRPC middleware
+
+#### IPC Domain Modules
+
+The IPC layer is organized into domain-specific modules:
+
+- **app**: Application metadata (version, platform)
+- **shell**: External link opening and shell operations
+- **theme**: Native theme management (dark/light/system)
+- **window**: Window control operations (minimize, maximize, close)
+
+Each domain follows the same pattern:
+
+```typescript
+// Example: Theme handler with Zod validation
+// src/ipc/theme/schemas.ts
+import { z } from "zod";
+
+export const setThemeModeInputSchema = z.enum(["light", "dark", "system"]);
+
+// src/ipc/theme/handlers.ts
+import { os } from "@orpc/server";
+import { nativeTheme } from "electron";
+import { setThemeModeInputSchema } from "./schemas";
+
+export const getCurrentThemeMode = os.handler(() => nativeTheme.themeSource);
+
+export const setThemeMode = os
+  .input(setThemeModeInputSchema)
+  .handler(({ input: mode }) => {
+    nativeTheme.themeSource = mode;
+    return nativeTheme.themeSource;
+  });
+
+// src/ipc/theme/index.ts
+export const theme = {
+  getCurrentThemeMode,
+  setThemeMode,
+  toggleThemeMode,
+};
+```
+
+#### IPC Initialization Flow
+
+```
+1. Main process creates BrowserWindow with preload script
+2. Preload script listens for START_ORPC_SERVER message
+3. Renderer creates MessageChannel with two ports
+4. Client port stays in renderer, server port sent to main via window.postMessage
+5. Main process receives port, starts oRPC server with router
+6. Renderer creates oRPC client with client port
+7. Type-safe IPC communication established
+```
+
+### Window Management
+
+- **Custom title bar**: Native title bar is hidden (`titleBarStyle: "hidden"`) with custom implementation
+- **Platform-specific styling**: Different title bar styles for macOS (`hiddenInset`) vs other platforms
+- **Traffic light position**: Custom positioning for macOS window controls
+- **Window controls**: Minimize, maximize, close operations exposed via type-safe IPC
+
+```typescript
+// src/main.ts - Window creation
+const mainWindow = new BrowserWindow({
+  width: 800,
+  height: 600,
+  webPreferences: {
+    devTools: inDevelopment,
+    contextIsolation: true,
+    nodeIntegration: true,
+    nodeIntegrationInSubFrames: false,
+    preload,
+  },
+  titleBarStyle: process.platform === "darwin" ? "hiddenInset" : "hidden",
+  trafficLightPosition: process.platform === "darwin" ? { x: 5, y: 5 } : undefined,
+});
+```
+
+### Auto-Update System
+
+The template includes a complete auto-update solution:
+
+- **update-electron-app**: Library for checking and applying updates
+- **GitHub Releases**: Uses GitHub as the update source (works for public repositories)
+- **Electron Forge Publisher**: Automated release creation and publishing via GitHub Actions
+- **CI/CD Integration**: Pre-configured GitHub Actions workflow for automated publishing
+
+```typescript
+// src/main.ts - Update checking
+import { UpdateSourceType, updateElectronApp } from "update-electron-app";
+
+function checkForUpdates() {
+  updateElectronApp({
+    updateSource: {
+      type: UpdateSourceType.ElectronPublicUpdateService,
+      repo: "LuanRoger/electron-shadcn",
+    },
+  });
+}
+```
+
+> **Note**: Auto-update only works for public GitHub repositories. For private repositories, a custom update server is required.
+
+### Styling Architecture
+
+- **Tailwind CSS 4.3**: Latest version with @tailwindcss/vite plugin
+- **Custom styles**: Pre-configured global styles in `/src/styles` directory
+- **Theme system**: Dark/light/system theme support with native Electron theme integration
+- **Geist font**: Default font family with Geist Mono for monospace
+
+### React Compiler
+
+The template has **React Compiler** enabled by default, which automatically memoizes React components for better performance without manual `useMemo`, `useCallback`, or `React.memo` usage.
+
+---
+
+## Intended Use Case
+
+This template is ideal for:
+
+1. **Desktop application development**: Build cross-platform applications (Windows, macOS, Linux) with native feel
+2. **Rapid prototyping**: Quick setup with modern tooling and pre-configured patterns
+3. **Production-ready applications**: Includes testing, CI/CD, and packaging for all major platforms
+4. **Type-safe development**: Full TypeScript support across all layers (main, preload, renderer, IPC)
+5. **International applications**: Built-in i18n support with i18next and react-i18next
+6. **Accessible applications**: shadcn/ui components follow WAI-ARIA standards
+
+---
+
+## Development Workflow
+
+### Getting Started
+
+```bash
+# Clone the repository
+git clone https://github.com/LuanRoger/electron-shadcn.git
+cd electron-shadcn
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run start
+```
+
+The development server starts with:
+- Vite dev server for renderer process with HMR
+- Electron main process running
+- React DevTools installed automatically
+
+### Development Commands
+
+```bash
+# Start the application
+npm run start
+
+# Run all tests (unit + e2e)
+npm run test:all
+
+# Run unit tests only
+npm run test:unit
+npm run test
+
+# Run e2e tests with Playwright
+npm run test:e2e
+
+# Run tests in watch mode
+npm run test:watch
+```
+
+### Building & Packaging
+
+```bash
+# Package for current platform
+npm run package
+
+# Build distributables for all platforms
+npm run make
+```
+
+Platforms supported:
+- **Windows**: Squirrel.Windows (MSI, EXE)
+- **macOS**: ZIP, DMG
+- **Linux**: Deb, RPM, ZIP
+
+### Publishing
+
+```bash
+# Create GitHub release and publish
+npm run publish
+```
+
+> **Requirements**: 
+> - `GITHUB_TOKEN` environment variable with repo permissions
+> - GitHub Actions workflow can be triggered manually for automated publishing
+
+---
+
+## Project Structure Details
+
+### Routes
+
+Uses **TanStack Router** with file-based routing:
+
+```
+src/routes/
+├── index.tsx          # Home/landing page
+├── second.tsx         # Example second page
+└── ...                # Additional routes
+```
+
+Routes are automatically discovered and the route tree is generated at `src/routeTree.gen.ts`.
+
+### Components
+
+```
+src/components/
+├── ui/                # shadcn/ui components
+│   ├── button.tsx
+│   ├── navigation-menu.tsx
+│   └── ...
+├── drag-window-region.tsx  # Custom draggable window region
+├── toggle-theme.tsx        # Theme toggle component
+├── external-link.tsx       # External link with security
+└── navigation-menu.tsx     # Custom navigation menu
+```
+
+### Localization
+
+Internationalization is set up with i18next:
+
+```
+src/localization/
+├── i18n.ts            # i18next configuration
+└── [lang]/           # Translation files
+    ├── en.json
+    └── ...
+```
+
+Supported languages can be added by creating new JSON files in the localization directory.
+
+### Actions
+
+Client-side state management and actions:
+
+```
+src/actions/
+├── shell.ts           # Shell-related actions
+├── window.ts          # Window control actions
+├── theme.ts           # Theme management actions
+└── app.ts             # Application actions
+```
+
+---
+
+## Real-World Usage
+
+The template is used in production by several projects:
+
+- **[yaste](https://github.com/LuanRoger/yaste)**: "Yet another super simple text editor" - A text editor alternative to native SO text editors
+- **[electric-drizzle](https://github.com/LuanRoger/electric-drizzle)**: Combines shadcn-ui with Drizzle ORM for Electron applications
+- **[Wordle Game](https://github.com/masonyekta/wordle-game)**: Cross-platform Wordle game with interactive gameplay and custom Wordle API integration
+- **[Mehr 🌟](https://github.com/xmannii/MehrLocalChat)**: Modern, elegant local AI chatbot application using Electron, React, shadcn/ui, and Ollama
+
+---
+
+## Configuration Files
+
+| File | Purpose |
+|------|---------|
+| `forge.config.ts` | Electron Forge configuration (makers, publishers, plugins) |
+| `vite.main.config.mts` | Vite configuration for main process |
+| `vite.preload.config.mts` | Vite configuration for preload script |
+| `vite.renderer.config.mts` | Vite configuration for renderer process |
+| `vitest.config.ts` | Vitest testing configuration |
+| `playwright.config.ts` | Playwright E2E testing configuration |
+| `tsconfig.json` | TypeScript configuration |
+| `biome.jsonc` | Biome linting and formatting configuration |
+| `components.json` | shadcn/ui configuration |
+
+---
+
+## Best Practices
+
+### Adding New IPC Methods
+
+1. Create a new domain folder in `src/ipc/` or use existing one
+2. Define Zod schemas in `schemas.ts`
+3. Implement handlers in `handlers.ts` using oRPC
+4. Export from `index.ts`
+5. Add to main router in `src/ipc/router.ts`
+
+### Adding New Components
+
+Use shadcn/ui CLI to add new components:
+
+```bash
+npx shadcn@latest add [component-name]
+```
+
+This automatically:
+- Adds the component to `src/components/ui/`
+- Updates `components.json`
+- Installs required dependencies
+
+### Adding New Pages
+
+1. Create a new file in `src/routes/` with `.tsx` extension
+2. The route will be automatically discovered by TanStack Router
+3. Run `npx @tanstack/router-plugin` to regenerate route tree (if needed)
+
+---
+
+## Security Considerations
+
+- **Context Isolation**: Enabled by default to prevent direct Node.js API access from renderer
+- **Preload Script**: Only exposes necessary Electron APIs to renderer
+- **Zod Validation**: All IPC inputs are validated before processing
+- **Type Safety**: TypeScript ensures type correctness across all layers
+
+---
+
+## Performance Optimizations
+
+- **React Compiler**: Automatic memoization of React components
+- **Vite**: Fast HMR and optimized builds
+- **Tailwind CSS 4.3**: Improved performance over v3
+- **oRPC**: Efficient MessagePort-based IPC with minimal overhead
+
+---
+
+## Troubleshooting
+
+### Common Issues
+
+1. **DevTools not opening**: Ensure `inDevelopment` is true and devTools is enabled in BrowserWindow config
+2. **IPC not working**: Verify MessageChannel ports are properly started and passed between processes
+3. **Auto-update not working**: Check GITHUB_TOKEN permissions and repository visibility
+4. **Build failures**: Run `npm install` to ensure all dependencies are installed
+
+### Debugging
+
+- Use `console.log` in main process (visible in terminal)
+- Use `console.log` in renderer (visible in DevTools console)
+- Use Electron DevTools for renderer debugging
+- Use `--inspect` flag for main process debugging
+
+---
+
+## Additional Resources
+
+- [Electron Documentation](https://www.electronjs.org/docs)
+- [oRPC Documentation](https://orpc.unnoq.com)
+- [TanStack Router Documentation](https://tanstack.com/router)
+- [shadcn/ui Documentation](https://ui.shadcn.com)
+- [Vite Documentation](https://vitejs.dev)
+- [Electron Forge Documentation](https://www.electronforge.io)
+
+---
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/LuanRoger/electron-shadcn/blob/main/LICENSE) file for details.
