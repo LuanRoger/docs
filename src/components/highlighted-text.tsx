@@ -64,7 +64,7 @@ export function HighlightedText({
         }}
         variants={variants}
       />
-      <span className="relative z-10 pr-[0.18em] pl-[0.15em] text-black">
+      <span className="relative z-10 pr-[0.18em] pl-[0.15em] text-background">
         {children}
       </span>
     </motion.span>
