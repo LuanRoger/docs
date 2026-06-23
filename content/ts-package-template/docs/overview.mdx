@@ -1,15 +1,18 @@
 ---
-title: "Overview"
-description: "Overview of the ts-package-template project"
+title: Overview
+description: Comprehensive technical overview of the ts-package-template architecture, build system, and publishing workflow
 ---
 
-This document provides a comprehensive technical overview of the **ts-package-template** project. It details the architecture, core technologies, intended use cases, and key implementation details that make this template ideal for modern TypeScript package development.
+import { Callout, Tab, Tabs, Step, Steps, File, Folder, Files, TypeTable, CodeBlock, Pre } from "fumadocs-ui/components";
 
----
-
-## Overview
+# Overview
 
 ts-package-template is a future-proof TypeScript package template designed for library authors. It focuses on modern tooling, developer experience, and production-ready configuration for publishing npm packages. The template provides everything needed to quickly start developing TypeScript libraries with minimal setup.
+
+<Callout type="info" title="Perfect For Library Authors">
+  Zero-configuration modern tooling for TypeScript packages.
+  Includes Rolldown bundler, Biome linting, Vitest testing, and np publishing.
+</Callout>
 
 ---
 
@@ -17,55 +20,173 @@ ts-package-template is a future-proof TypeScript package template designed for l
 
 The template follows a **minimal but complete** structure that balances simplicity with production readiness:
 
-```
-.
-├── src/                    # Source code directory
-│   └── index.ts            # Main entry point (export your package API here)
-├── test/                   # Test files directory
-│   └── index.test.ts       # Example test file
-├── dist/                   # Build output (generated during build)
-│   ├── index.mjs           # ESM bundle
-│   ├── index.d.mts         # ESM TypeScript declarations
-│   └── index.d.ts          # CommonJS TypeScript declarations
-├── biome.json              # Biome configuration for linting and formatting
-├── cliff.toml              # git-cliff configuration for changelog generation
-├── tsconfig.json           # TypeScript configuration (development)
-├── tsconfig.build.json     # TypeScript configuration (build-specific)
-├── tsdown.config.ts        # tsdown bundler configuration
-└── package.json            # Package metadata, dependencies, and scripts
-```
+<Files>
+  <Folder name="src" defaultOpen>
+    <File name="index.ts" />
+  </Folder>
+  <Folder name="test" defaultOpen>
+    <File name="index.test.ts" />
+  </Folder>
+  <Folder name="dist" disabled>
+    <File name="index.mjs" />
+    <File name="index.d.mts" />
+    <File name="index.d.ts" />
+  </Folder>
+  <File name="biome.json" />
+  <File name="cliff.toml" />
+  <File name="tsconfig.json" />
+  <File name="tsconfig.build.json" />
+  <File name="tsdown.config.ts" />
+  <File name="package.json" />
+  <File name="pnpm-workspace.yaml" />
+</Files>
 
 ### Design Philosophy
 
-1. **Minimal but complete**: Only essential files are included, but all necessary configurations are present
-2. **Modern by default**: Uses latest versions of all tools with sensible defaults
-3. **Zero-configuration**: Works out of the box with opinionated but customizable settings
-4. **Production-ready**: Includes testing, linting, changelog generation, and publishing
+<Callout type="check" title="Core Principles">
+  The template is built on four key principles:
+</Callout>
+
+<Steps>
+  <Step>
+    #### Minimal but Complete
+    Only essential files are included, but all necessary configurations are present for a production-ready package.
+  </Step>
+
+  <Step>
+    #### Modern by Default
+    Uses latest versions of all tools with sensible, opinionated defaults.
+  </Step>
+
+  <Step>
+    #### Zero-Configuration
+    Works out of the box with opinionated but customizable settings.
+  </Step>
+
+  <Step>
+    #### Production-Ready
+    Includes testing, linting, changelog generation, and publishing workflows.
+  </Step>
+</Steps>
 
 ---
 
 ## Core Technologies
 
-### Language & Runtime
-- **TypeScript 6**: Latest TypeScript with modern features (decorators, multiple configuration files, etc.)
-- **ES Modules**: Native ESM support with `"type": "module"` in package.json
-- **Node.js**: Compatible with modern Node.js versions
+<Tabs items={['Language & Runtime', 'Bundling', 'Code Quality', 'Testing', 'Publishing']}>
+  <Tab value="Language & Runtime">
+    ### Language & Runtime
+    
+    <TypeTable type={{
+      typescript: {
+        description: 'Latest TypeScript with modern features',
+        type: 'string',
+        default: '6.x',
+      },
+      esm: {
+        description: 'Native ES Modules support',
+        type: 'boolean',
+        default: true,
+      },
+      nodejs: {
+        description: 'Compatible with modern Node.js',
+        type: 'string',
+        default: '18+',
+      },
+    }} />
+  </Tab>
 
-### Bundling
-- **Rolldown**: Next-generation JavaScript bundler written in Rust, Rollup-compatible
-- **tsdown**: TypeScript plugin for Rolldown with seamless TypeScript integration
+  <Tab value="Bundling">
+    ### Bundling
+    
+    <TypeTable type={{
+      rolldown: {
+        description: 'Next-generation JavaScript bundler (Rust-based)',
+        type: 'string',
+        default: '0.x',
+      },
+      tsdown: {
+        description: 'TypeScript plugin for Rolldown',
+        type: 'string',
+        default: '0.x',
+      },
+    }} />
+    
+    <Callout type="info" title="Why Rolldown?">
+      Rolldown is a Rollup-compatible bundler written in Rust, offering:
+      ✅ Excellent performance (Rust-based)
+      ✅ Rollup compatibility (familiar configuration)
+      ✅ Modern ESM support
+      ✅ Growing ecosystem
+    </Callout>
+  </Tab>
 
-### Code Quality
-- **Biome**: All-in-one code linter and formatter (replaces ESLint + Prettier)
-- **Ultracite**: Wrapper for Biome with additional features and integrations
+  <Tab value="Code Quality">
+    ### Code Quality
+    
+    <TypeTable type={{
+      biome: {
+        description: 'All-in-one code linter and formatter',
+        type: 'string',
+        default: '2.x',
+      },
+      ultracite: {
+        description: 'Wrapper for Biome with additional features',
+        type: 'string',
+        default: '7.x',
+      },
+    }} />
+    
+    <Callout type="check" title="Biome Benefits">
+      Biome replaces ESLint + Prettier with a single, faster tool:
+      ✅ Faster linting and formatting
+      ✅ Simpler configuration
+      ✅ Consistent code style
+      ✅ Built-in formatter
+    </Callout>
+  </Tab>
 
-### Testing
-- **Vitest**: Blazing fast unit test framework with native ESM support
+  <Tab value="Testing">
+    ### Testing
+    
+    <TypeTable type={{
+      vitest: {
+        description: 'Blazing fast unit test framework',
+        type: 'string',
+        default: '4.x',
+      },
+    }} />
+    
+    <Callout type="info" title="Vitest Features">
+      ✅ Native ESM support
+      ✅ Fast test execution
+      ✅ TypeScript support out of the box
+      ✅ Watch mode for development
+    </Callout>
+  </Tab>
 
-### Publishing & Versioning
-- **np**: Better npm publish experience with interactive prompts and safety checks
-- **git-cliff**: Conventional commits-based changelog generator
-- **pnpm**: Recommended package manager with efficient dependency management
+  <Tab value="Publishing">
+    ### Publishing & Versioning
+    
+    <TypeTable type={{
+      np: {
+        description: 'Better npm publish experience',
+        type: 'string',
+        default: '11.x',
+      },
+      gitCliff: {
+        description: 'Conventional commits-based changelog generator',
+        type: 'string',
+        default: '2.x',
+      },
+      pnpm: {
+        description: 'Recommended package manager',
+        type: 'string',
+        default: '11.x',
+      },
+    }} />
+  </Tab>
+</Tabs>
 
 ---
 
@@ -73,50 +194,118 @@ The template follows a **minimal but complete** structure that balances simplici
 
 ### Build System: Rolldown + tsdown
 
-The template uses **Rolldown** as the bundler with **tsdown** for TypeScript integration. This combination provides:
+The template uses **Rolldown** as the bundler with **tsdown** for TypeScript integration:
 
-- **Fast builds**: Rust-based bundler with excellent performance
-- **Rollup compatibility**: Familiar configuration and plugin ecosystem
-- **Seamless TypeScript**: tsdown handles TypeScript compilation and declaration generation
-- **ESM-first**: Optimized for modern ES Modules
+<Callout type="check" title="Build Features">
+  ✅ Fast builds with Rust-based bundler
+  ✅ Rollup compatibility for familiar configuration
+  ✅ Seamless TypeScript integration with tsdown
+  ✅ ESM-first optimization
+</Callout>
 
-#### Configuration
-
-```typescript
-// tsdown.config.ts
-import { defineConfig } from "tsdown";
+<Tabs items={['Configuration', 'Build Process', 'Outputs']}>
+  <Tab value="Configuration">
+    #### Configuration
+    
+    <CodeBlock language="typescript" title="tsdown.config.ts">
+    <Pre>
+{`import { defineConfig } from "tsdown";
 
 export default defineConfig({
   entry: {
-    index: "src/index.ts",  // Entry point mapping
+    index: "src/index.ts",
   },
-  dts: true,                // Generate .d.ts declaration files
-  tsconfig: "tsconfig.build.json",  // Use build-specific TypeScript config
-  format: "esm",            // Output format: ES Modules
-  sourcemap: false,        // Disable sourcemaps for production
-});
-```
+  dts: true,
+  tsconfig: "tsconfig.build.json",
+  format: "esm",
+  sourcemap: false,
+});`}
+    </Pre>
+    </CodeBlock>
+    
+    <TypeTable type={{
+      entry: {
+        description: 'Entry point mapping (src to dist)',
+        type: 'object',
+        required: true,
+      },
+      dts: {
+        description: 'Generate .d.ts declaration files',
+        type: 'boolean',
+        default: true,
+      },
+      tsconfig: {
+        description: 'TypeScript configuration file to use',
+        type: 'string',
+        default: 'tsconfig.build.json',
+      },
+      format: {
+        description: 'Output format',
+        type: 'string',
+        default: 'esm',
+      },
+      sourcemap: {
+        description: 'Generate sourcemaps',
+        type: 'boolean',
+        default: false,
+      },
+    }} />
+  </Tab>
 
-#### Build Process
+  <Tab value="Build Process">
+    #### Build Process
+    
+    <Steps>
+      <Step>
+        **TypeScript Compilation**
+        
+        `tsc` runs first with `tsconfig.build.json` to check types.
+      </Step>
 
-1. **TypeScript Compilation**: `tsc` runs first with `tsconfig.build.json`
-2. **Bundling**: Rolldown processes the compiled output with tsdown
-3. **Declaration Generation**: tsdown generates `.d.ts` and `.d.mts` files
+      <Step>
+        **Bundling**
+        
+        Rolldown processes the compiled output with tsdown plugin.
+      </Step>
 
-#### Build Outputs
+      <Step>
+        **Declaration Generation**
+        
+        tsdown generates `.d.ts` and `.d.mts` type declaration files.
+      </Step>
+    </Steps>
+  </Tab>
 
-| File | Purpose | Usage |
-|------|---------|-------|
-| `dist/index.mjs` | ESM bundle | Imported by consumers using ESM |
-| `dist/index.d.mts` | ESM declarations | TypeScript types for ESM imports |
-| `dist/index.d.ts` | CommonJS declarations | TypeScript types for CJS requires |
+  <Tab value="Outputs">
+    #### Build Outputs
+    
+    <TypeTable type={{
+      indexMjs: {
+        description: 'ESM bundle for consumers',
+        type: 'string',
+        default: 'dist/index.mjs',
+      },
+      indexDmts: {
+        description: 'ESM TypeScript declarations',
+        type: 'string',
+        default: 'dist/index.d.mts',
+      },
+      indexDts: {
+        description: 'CommonJS TypeScript declarations',
+        type: 'string',
+        default: 'dist/index.d.ts',
+      },
+    }} />
+  </Tab>
+</Tabs>
 
 ### Package Configuration
 
 The `package.json` is optimized for modern package publishing:
 
-```json
-{
+<CodeBlock language="json" title="package.json">
+<Pre>
+{`{
   "type": "module",
   "exports": {
     ".": {
@@ -125,24 +314,38 @@ The `package.json` is optimized for modern package publishing:
     }
   },
   "files": ["dist", "LICENSE", "README.md", "CHANGELOG.md"],
-  "types": "dist/index.d.ts"
-}
-```
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "dev": "tsdown --watch ./src",
+    "build": "tsc && tsdown",
+    "check": "ultracite check",
+    "test": "vitest run",
+    "changelog": "git-cliff --config ./cliff.toml --output CHANGELOG.md",
+    "publish": "np --package-manager npm",
+    "publish:all": "pnpm run build && pnpm run publish"
+  }
+}`}
+</Pre>
+</CodeBlock>
 
-#### Key Features:
-
-- **ESM-first**: `"type": "module"` declares the package as ESM
-- **Conditional Exports**: Different entry points for different module systems
-- **Type Exports**: Separate type files for ESM and CommonJS consumers
-- **Selective Publishing**: Only `dist/`, `LICENSE`, `README.md`, and `CHANGELOG.md` are published
+<Callout type="info" title="Key Configuration Features">
+  ✅ **ESM-first**: `"type": "module"` declares the package as ESM
+  ✅ **Conditional Exports**: Different entry points for ESM and CJS consumers
+  ✅ **Type Exports**: Separate type files for ESM and CommonJS
+  ✅ **Selective Publishing**: Only essential files are published
+</Callout>
 
 ### TypeScript Configuration
 
-The template uses **two TypeScript configuration files**:
+The template uses **two TypeScript configuration files** for different purposes:
 
-#### Development Configuration (`tsconfig.json`)
-```json
-{
+<Tabs items={['Development', 'Build']}>
+  <Tab value="Development">
+    #### Development Configuration
+    
+    <CodeBlock language="json" title="tsconfig.json">
+    <Pre>
+{`{
   "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext",
@@ -159,12 +362,22 @@ The template uses **two TypeScript configuration files**:
   },
   "include": ["src", "test"],
   "exclude": ["dist", "node_modules"]
-}
-```
+}`}
+    </Pre>
+    </CodeBlock>
+    
+    <Callout type="info">
+      Development config has `noEmit: true` to prevent accidental emission during development.
+      Includes Vitest globals for type-safe testing.
+    </Callout>
+  </Tab>
 
-#### Build Configuration (`tsconfig.build.json`)
-```json
-{
+  <Tab value="Build">
+    #### Build Configuration
+    
+    <CodeBlock language="json" title="tsconfig.build.json">
+    <Pre>
+{`{
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "noEmit": false,
@@ -172,72 +385,87 @@ The template uses **two TypeScript configuration files**:
     "outDir": "./dist"
   },
   "include": ["src"]
-}
-```
+}`}
+    </Pre>
+    </CodeBlock>
+    
+    <Callout type="info">
+      Build config extends development config and enables declaration emission.
+      Only processes `src/` directory (not tests).
+    </Callout>
+  </Tab>
+</Tabs>
 
 ### Changelog Generation with git-cliff
 
 The template uses **git-cliff** for automatic changelog generation based on conventional commits:
 
-```toml
-# cliff.toml
-[changelog]
-# Changelog header
-body = """
+<CodeBlock language="toml" title="cliff.toml">
+<Pre>
+{`[changelog]
+body = '''
 # Changelog
 
 All notable changes to this project will be documented in this file.
-"""
+'''
 
 [git]
-# Use conventional commits for parsing
 conventional_commits = true
-# Sort commits by date (newest first)
 topological_order = true
-# Group commits by type
-commit_parsers = [
-  { message = "^feat", group = "Features" },
-  { message = "^fix", group = "Bug Fixes" },
-  { message = "^doc", group = "Documentation" },
-  { message = "^perf", group = "Performance" },
-  { message = "^refactor", group = "Refactor" },
-  { message = "^style", group = "Styling" },
-  { message = "^test", group = "Testing" },
-  { message = "^chore", group = "Miscellaneous Chores" },
-  { message = "^revert", group = "Reverts" },
-]
-```
 
-#### Conventional Commits
+[commit_parsers]
+feat = { message = "^feat", group = "Features" }
+fix = { message = "^fix", group = "Bug Fixes" }
+doc = { message = "^doc", group = "Documentation" }
+perf = { message = "^perf", group = "Performance" }
+refactor = { message = "^refactor", group = "Refactor" }
+style = { message = "^style", group = "Styling" }
+test = { message = "^test", group = "Testing" }
+chore = { message = "^chore", group = "Miscellaneous Chores" }
+revert = { message = "^revert", group = "Reverts" }`}
+</Pre>
+</CodeBlock>
 
-The template follows [Conventional Commits](https://www.conventionalcommits.org/) specification:
-
-- `feat:` - A new feature
-- `fix:` - A bug fix
-- `docs:` - Documentation only changes
-- `style:` - Changes that do not affect the meaning of the code (white-space, formatting, etc)
-- `refactor:` - A code change that neither fixes a bug nor adds a feature
-- `perf:` - A code change that improves performance
-- `test:` - Adding missing tests
-- `chore:` - Changes to the build process or auxiliary tools
-- `revert:` - Reverts a previous commit
+<Callout type="check" title="Conventional Commits">
+  The template follows Conventional Commits specification:
+  ✅ `feat:` - A new feature
+  ✅ `fix:` - A bug fix
+  ✅ `docs:` - Documentation only changes
+  ✅ `style:` - Changes that do not affect code meaning
+  ✅ `refactor:` - Code change that neither fixes a bug nor adds a feature
+  ✅ `perf:` - A code change that improves performance
+  ✅ `test:` - Adding missing tests
+  ✅ `chore:` - Changes to the build process
+  ✅ `revert:` - Reverts a previous commit
+</Callout>
 
 ### Publishing with np
 
 The template uses **[np](https://github.com/sindresorhus/np)** for a better npm publish experience:
 
-- **Interactive prompts**: Guides through version bump, publish confirmation, etc.
-- **Safety checks**: Validates package before publishing
-- **Automatic version bump**: Based on commit messages
-- **Git tag creation**: Automatically creates annotated git tags
-- **Package manager support**: Works with npm, yarn, and pnpm
+<Callout type="check" title="np Features">
+  ✅ Interactive prompts for version bump and confirmation
+  ✅ Safety checks before publishing
+  ✅ Automatic version bump based on commit messages
+  ✅ Git tag creation (annotated tags)
+  ✅ Package manager support (npm, yarn, pnpm)
+</Callout>
 
-```bash
-# Publish command
-pnpm run publish
+<CodeBlock language="bash" title="Publishing Commands">
+<Pre>
+# Check code quality first
+pnpm check
 
-# This runs: np --package-manager npm
-```
+# Generate changelog
+pnpm changelog
+
+# Publish to npm
+pnpm publish
+
+# Build and publish (all-in-one)
+pnpm publish:all
+</Pre>
+</CodeBlock>
 
 ---
 
@@ -245,100 +473,190 @@ pnpm run publish
 
 This template is ideal for:
 
-1. **Library development**: Creating reusable TypeScript packages for npm
-2. **Modern ESM packages**: Building packages with native ES Modules support
-3. **Type-safe libraries**: Full TypeScript declaration support for consumers
-4. **Production publishing**: Complete CI/CD ready configuration
-5. **Maintainable projects**: Built-in changelog generation and code quality tools
-6. **Developer tools**: Building CLI tools, utilities, and frameworks
+<Callout type="info" title="Perfect For">
+  ✅ Library development (reusable TypeScript packages for npm)
+  ✅ Modern ESM packages with native ES Modules support
+  ✅ Type-safe libraries with full TypeScript declaration support
+  ✅ Production publishing with complete CI/CD ready configuration
+  ✅ Maintainable projects with built-in changelog generation
+  ✅ Developer tools, CLI utilities, and frameworks
+</Callout>
 
 ---
 
 ## Development Workflow
 
-### Getting Started
+<Tabs items={['Setup', 'Development', 'Build', 'Quality', 'Testing', 'Publishing']}>
+  <Tab value="Setup">
+    ### Setup
+    
+    <Steps>
+      <Step>
+        #### Clone the repository
+        <CodeBlock language="bash">
+        <Pre>git clone https://github.com/LuanRoger/ts-package-template.git</Pre>
+        </CodeBlock>
+      </Step>
 
-```bash
-# Clone the repository
-git clone https://github.com/LuanRoger/ts-package-template.git
-cd ts-package-template
+      <Step>
+        #### Install dependencies
+        <CodeBlock language="bash">
+        <Pre>cd ts-package-template && pnpm install</Pre>
+        </CodeBlock>
+      </Step>
 
-# Install dependencies (pnpm recommended)
-pnpm install
+      <Step>
+        #### Modify package.json
+        <CodeBlock language="bash">
+        <Pre># Set your package name, version, description, author, etc.</Pre>
+        </CodeBlock>
+      </Step>
+    </Steps>
+  </Tab>
 
-# Modify package.json
-# Set your package name, version, description, author, etc.
-```
+  <Tab value="Development">
+    ### Development
+    
+    <Steps>
+      <Step>
+        #### Start watch mode
+        <CodeBlock language="bash">
+        <Pre>pnpm dev</Pre>
+        </CodeBlock>
+        
+        <Callout type="info">
+          Runs: `tsdown --watch ./src`
+          Watches for changes in src/ and rebuilds automatically.
+        </Callout>
+      </Step>
 
-### Development Commands
+      <Step>
+        #### Edit source files
+        Modify files in `src/` directory. Changes trigger automatic rebuilds.
+      </Step>
+    </Steps>
+  </Tab>
 
-```bash
-# Start development mode with watch
-pnpm dev
+  <Tab value="Build">
+    ### Build
+    
+    <Steps>
+      <Step>
+        #### Build the package
+        <CodeBlock language="bash">
+        <Pre>pnpm build</Pre>
+        </CodeBlock>
+        
+        <Callout type="info">
+          Runs: `tsc && tsdown`
+          1. TypeScript compilation check
+          2. Rolldown bundling with tsdown
+        </Callout>
+      </Step>
+    </Steps>
+  </Tab>
 
-# This runs: tsdown --watch ./src
-# Watches for changes in src/ and rebuilds automatically
-```
+  <Tab value="Quality">
+    ### Code Quality
+    
+    <Steps>
+      <Step>
+        #### Check code quality
+        <CodeBlock language="bash">
+        <Pre>pnpm check</Pre>
+        </CodeBlock>
+        
+        <Callout type="info">
+          Runs: `ultracite check`
+          Checks for linting and formatting issues.
+        </Callout>
+      </Step>
 
-### Build Commands
+      <Step>
+        #### Auto-fix issues
+        <CodeBlock language="bash">
+        <Pre>pnpm check:write</Pre>
+        </CodeBlock>
+        
+        <Callout type="info">
+          Runs: `ultracite fix`
+          Automatically fixes linting and formatting issues.
+        </Callout>
+      </Step>
+    </Steps>
+  </Tab>
 
-```bash
-# Build the package (TypeScript check + bundling)
-pnpm build
+  <Tab value="Testing">
+    ### Testing
+    
+    <Steps>
+      <Step>
+        #### Run tests once
+        <CodeBlock language="bash">
+        <Pre>pnpm test</Pre>
+        </CodeBlock>
+        
+        <Callout type="info">
+          Runs: `vitest run`
+        </Callout>
+      </Step>
 
-# This runs: tsc && tsdown
-# 1. TypeScript compilation check
-# 2. Rolldown bundling with tsdown
-```
+      <Step>
+        #### Run tests in watch mode
+        <CodeBlock language="bash">
+        <Pre>pnpm test:watch</Pre>
+        </CodeBlock>
+        
+        <Callout type="info">
+          Runs: `vitest` (watch mode)
+          Automatically re-runs tests on file changes.
+        </Callout>
+      </Step>
+    </Steps>
+  </Tab>
 
-### Code Quality Commands
+  <Tab value="Publishing">
+    ### Publishing
+    
+    <Steps>
+      <Step>
+        #### Generate changelog
+        <CodeBlock language="bash">
+        <Pre>pnpm changelog</Pre>
+        </CodeBlock>
+        
+        <Callout type="info">
+          Runs: `git-cliff --config ./cliff.toml --output CHANGELOG.md`
+          Generates or updates CHANGELOG.md based on conventional commits.
+        </Callout>
+      </Step>
 
-```bash
-# Check code quality (linting and formatting)
-pnpm check
+      <Step>
+        #### Publish to npm
+        <CodeBlock language="bash">
+        <Pre>pnpm publish</Pre>
+        </CodeBlock>
+        
+        <Callout type="info">
+          Runs: `np --package-manager npm`
+          Interactive publishing with safety checks.
+        </Callout>
+      </Step>
 
-# This runs: ultracite check
-# Checks for linting and formatting issues
-
-# Auto-fix code quality issues
-pnpm check:write
-
-# This runs: ultracite fix
-# Automatically fixes linting and formatting issues
-```
-
-### Testing Commands
-
-```bash
-# Run tests once
-pnpm test
-
-# This runs: vitest run
-
-# Run tests in watch mode
-pnpm test:watch
-
-# This runs: vitest (watch mode)
-```
-
-### Changelog & Publishing Commands
-
-```bash
-# Generate or update CHANGELOG.md
-pnpm changelog
-
-# This runs: git-cliff --config ./cliff.toml --output CHANGELOG.md
-
-# Publish to npm
-pnpm publish
-
-# This runs: np --package-manager npm
-
-# Build and publish (all-in-one)
-pnpm publish:all
-
-# This runs: pnpm run build && pnpm run publish
-```
+      <Step>
+        #### Build and publish
+        <CodeBlock language="bash">
+        <Pre>pnpm publish:all</Pre>
+        </CodeBlock>
+        
+        <Callout type="info">
+          Runs: `pnpm run build && pnpm run publish`
+          Complete workflow in one command.
+        </Callout>
+      </Step>
+    </Steps>
+  </Tab>
+</Tabs>
 
 ---
 
@@ -346,31 +664,43 @@ pnpm publish:all
 
 ### Source Code (`src/`)
 
-The `src/` directory contains your package's source code. By default, it includes:
+The `src/` directory contains your package's source code:
 
-```typescript
-// src/index.ts
-// Example export - replace with your package's API
+<CodeBlock language="typescript" title="src/index.ts">
+<Pre>
+{`// Example export - replace with your package's API
 export function hello(name: string): string {
   return `Hello, ${name}!`;
 }
 
 export default hello;
-```
 
-**Best practices:**
-- Export your public API from `index.ts`
-- Use named exports for better tree-shaking
-- Keep internal modules in separate files
-- Use TypeScript types for better developer experience
+// Better: Use named exports for tree-shaking
+export function greet(name: string): string {
+  return `Hello, ${name}!`;
+}
+
+export function farewell(name: string): string {
+  return `Goodbye, ${name}!`;
+}`}
+</Pre>
+</CodeBlock>
+
+<Callout type="check" title="Best Practices">
+  ✅ Export your public API from `index.ts`
+  ✅ Use named exports for better tree-shaking
+  ✅ Keep internal modules in separate files
+  ✅ Use TypeScript types for better developer experience
+  ✅ Document all public APIs with JSDoc comments
+</Callout>
 
 ### Tests (`test/`)
 
-The `test/` directory contains your test files. By default, it includes:
+The `test/` directory contains your test files:
 
-```typescript
-// test/index.test.ts
-import { describe, expect, it } from "vitest";
+<CodeBlock language="typescript" title="test/index.test.ts">
+<Pre>
+{`import { describe, expect, it } from "vitest";
 import { hello } from "../src";
 
 describe("hello", () => {
@@ -378,61 +708,95 @@ describe("hello", () => {
     expect(hello("World")).toBe("Hello, World!");
   });
 });
-```
 
-**Testing features:**
-- **Vitest**: Fast, modern test runner
-- **ESM support**: Native ES Modules
-- **TypeScript**: Full type support
-- **Watch mode**: Automatic test re-running
+// Test async functions
+import { greetAsync } from "../src";
+
+describe("greetAsync", () => {
+  it("should return a greeting asynchronously", async () => {
+    const result = await greetAsync("World");
+    expect(result).toBe("Hello, World!");
+  });
+});`}
+</Pre>
+</CodeBlock>
+
+<Callout type="info" title="Testing Features">
+  ✅ Vitest: Fast, modern test runner
+  ✅ Native ES Modules support
+  ✅ Full TypeScript support
+  ✅ Watch mode for development
+  ✅ Concurrent test execution
+</Callout>
 
 ### Configuration Files
 
-| File | Purpose | Customization |
-|------|---------|---------------|
-| `tsdown.config.ts` | Bundler configuration | Add entry points, change format, enable sourcemaps |
-| `tsconfig.json` | TypeScript (dev) | Adjust compiler options, add type definitions |
-| `tsconfig.build.json` | TypeScript (build) | Modify build output, declaration settings |
-| `biome.json` | Linting & formatting | Add rules, configure formatting |
-| `cliff.toml` | Changelog generation | Customize commit parsing, changelog format |
-| `package.json` | Package metadata | Set name, version, dependencies, exports |
+<Tabs items={['All Files', 'Key Files']}>
+  <Tab value="All Files">
+    <TypeTable type={{
+      tsdownConfig: {
+        description: 'Bundler configuration',
+        type: 'string',
+        default: 'tsdown.config.ts',
+      },
+      tsconfig: {
+        description: 'TypeScript configuration (development)',
+        type: 'string',
+        default: 'tsconfig.json',
+      },
+      tsconfigBuild: {
+        description: 'TypeScript configuration (build)',
+        type: 'string',
+        default: 'tsconfig.build.json',
+      },
+      biomeJson: {
+        description: 'Linting and formatting configuration',
+        type: 'string',
+        default: 'biome.json',
+      },
+      cliffToml: {
+        description: 'Changelog generation configuration',
+        type: 'string',
+        default: 'cliff.toml',
+      },
+      packageJson: {
+        description: 'Package metadata and scripts',
+        type: 'string',
+        default: 'package.json',
+      },
+      pnpmWorkspace: {
+        description: 'pnpm workspace configuration',
+        type: 'string',
+        default: 'pnpm-workspace.yaml',
+      },
+    }} />
+  </Tab>
 
----
-
-## Real-World Usage
-
-This template is designed for any TypeScript library author who wants:
-
-- **Zero-configuration**: Start coding immediately with sensible defaults
-- **Modern tooling**: Latest versions of TypeScript, Rolldown, Biome, etc.
-- **Fast builds**: Rust-based bundler with excellent performance
-- **Excellent DX**: Great developer experience with watch modes and hot reloading
-- **Production-ready**: Complete setup for testing, linting, and publishing
-- **Maintainable**: Built-in changelog generation and code quality checks
-
-### Example Use Cases
-
-1. **Utility libraries**: String manipulation, date handling, etc.
-2. **API clients**: Type-safe wrappers for REST/GraphQL APIs
-3. **Developer tools**: CLI utilities, build plugins, etc.
-4. **React hooks**: Custom React hooks with TypeScript
-5. **TypeScript utilities**: Type helpers, validation schemas, etc.
-
----
-
-## Comparison with Other Templates
-
-| Feature | ts-package-template | Traditional Templates |
-|---------|---------------------|----------------------|
-| Bundler | Rolldown (Rust) | Rollup / esbuild |
-| TypeScript | v6 (latest) | v4 / v5 |
-| Linting | Biome (all-in-one) | ESLint + Prettier |
-| Testing | Vitest | Jest / Mocha |
-| Changelog | git-cliff | Manual / release-it |
-| Publishing | np | npm publish |
-| Package Manager | pnpm | npm / yarn |
-| ESM Support | Native | Often requires config |
-| Configuration | Minimal | Often verbose |
+  <Tab value="Key Files">
+    <TypeTable type={{
+      essential: {
+        description: 'src/index.ts (entry point)',
+        type: 'string',
+        required: true,
+      },
+      tests: {
+        description: 'test/index.test.ts (example test)',
+        type: 'string',
+        required: true,
+      },
+      packageJson: {
+        description: 'Package configuration',
+        type: 'string',
+        required: true,
+      },
+      tsdownConfig: {
+        description: 'Build configuration',
+        type: 'string',
+        required: true,
+      },
+    }} />
+  </Tab>
+</Tabs>
 
 ---
 
@@ -440,87 +804,261 @@ This template is designed for any TypeScript library author who wants:
 
 ### Package Naming
 
-- Use **scoped packages** for organization: `@yourname/package-name`
-- Use **kebab-case** for package names: `my-awesome-package`
-- Keep names **short and descriptive**
-- Avoid generic names that might conflict
+<Callout type="info" title="Naming Guidelines">
+  Follow these conventions for package naming:
+</Callout>
+
+- **Scoped packages**: Use `@yourname/package-name` for organization
+- **Naming**: Use kebab-case: `my-awesome-package`
+- **Length**: Keep names short and descriptive
+- **Uniqueness**: Avoid generic names that might conflict
 
 ### Versioning
 
-- Follow **Semantic Versioning** (SemVer)
-- Use **conventional commits** for automatic version bumps
-- Start with `1.0.0` for stable APIs
-- Use `0.x.x` for pre-release/unstable APIs
+<Callout type="check" title="Semantic Versioning">
+  Follow SemVer principles:
+</Callout>
+
+- **Major**: Breaking changes
+- **Minor**: New features (backwards-compatible)
+- **Patch**: Bug fixes (backwards-compatible)
+
+<Callout type="info">
+  Use conventional commits for automatic version bumps with np.
+</Callout>
 
 ### Exports
 
-- Use **named exports** for better tree-shaking
-- Provide **TypeScript declarations** for all exports
-- Consider **conditional exports** for ESM/CJS compatibility
-- Document all public APIs
+<Callout type="check" title="Export Guidelines">
+  ✅ Use named exports for better tree-shaking
+  ✅ Provide TypeScript declarations for all exports
+  ✅ Consider conditional exports for ESM/CJS compatibility
+  ✅ Document all public APIs
+</Callout>
 
-```typescript
-// Good: Named exports with types
+<CodeBlock language="typescript" title="Good vs Bad Exports">
+<Pre>
+{`// ✅ Good: Named exports with types
 export interface Options {
   timeout?: number;
+  retries?: number;
 }
 
 export function fetchData(url: string, options?: Options): Promise<Response> {
-  // ...
+  // Implementation
 }
 
-// Bad: Default export only
-export default function(url: string) {
-  // ...
+export function postData(url: string, data: unknown): Promise<Response> {
+  // Implementation
 }
-```
+
+// ❌ Bad: Default export only
+export default function(url: string) {
+  // Harder to tree-shake
+  // Less clear API
+}
+
+// ❌ Bad: No types
+export function fetch(url: any) {
+  // No type safety for consumers
+}`}
+</Pre>
+</CodeBlock>
 
 ### Dependencies
 
-- **Minimize dependencies**: Only include what's necessary
-- **Use peerDependencies** for optional dependencies
-- **Specify exact versions** in devDependencies
-- **Test with latest versions** of dependencies
+<Callout type="info" title="Dependency Management">
+  ✅ Minimize dependencies (only include what's necessary)
+  ✅ Use peerDependencies for optional dependencies
+  ✅ Specify exact versions in devDependencies
+  ✅ Test with latest versions of dependencies
+</Callout>
 
 ### TypeScript
 
-- **Enable strict mode**: All strict type-checking options
-- **Use explicit types**: Avoid `any` and `unknown` where possible
-- **Document types**: Use JSDoc comments for complex types
-- **Export types**: Make types available to consumers
+<Callout type="check" title="TypeScript Best Practices">
+  ✅ Enable strict mode (all strict type-checking options)
+  ✅ Use explicit types (avoid `any` and `unknown` where possible)
+  ✅ Document types with JSDoc comments
+  ✅ Export types to make them available to consumers
+</Callout>
+
+---
+
+## Comparison with Other Templates
+
+<Callout type="info" title="Why Choose ts-package-template?">
+  Comparison with traditional templates:
+</Callout>
+
+<TypeTable type={{
+  bundler: {
+    description: 'Rolldown (Rust-based) vs Rollup/esbuild',
+    type: 'string',
+    default: 'Faster, Rollup-compatible',
+  },
+  typescript: {
+    description: 'TypeScript 6 vs TypeScript 4/5',
+    type: 'string',
+    default: 'Latest features',
+  },
+  linting: {
+    description: 'Biome vs ESLint + Prettier',
+    type: 'string',
+    default: 'Faster, simpler, all-in-one',
+  },
+  testing: {
+    description: 'Vitest vs Jest/Mocha',
+    type: 'string',
+    default: 'Faster, ESM-native',
+  },
+  changelog: {
+    description: 'git-cliff vs manual/release-it',
+    type: 'string',
+    default: 'Automatic, conventional commits',
+  },
+  publishing: {
+    description: 'np vs npm publish',
+    type: 'string',
+    default: 'Interactive, safer',
+  },
+  packageManager: {
+    description: 'pnpm vs npm/yarn',
+    type: 'string',
+    default: 'Efficient, faster',
+  },
+  esmSupport: {
+    description: 'Native ESM vs requires configuration',
+    type: 'string',
+    default: 'Built-in, zero-config',
+  },
+  configuration: {
+    description: 'Minimal vs verbose',
+    type: 'string',
+    default: 'Opinionated defaults',
+  },
+}} />
 
 ---
 
 ## Troubleshooting
 
-### Common Issues
+<Callout type="danger" title="Common Issues & Solutions">
+  Find quick solutions to common problems:
+</Callout>
 
-1. **Build fails with TypeScript errors**:
-   - Run `pnpm check` to identify issues
-   - Ensure `tsconfig.json` is properly configured
-   - Check for missing type definitions
+<Tabs items={['Build Issues', 'Test Issues', 'Changelog Issues', 'Publish Issues']}>
+  <Tab value="Build Issues">
+    ### Build Issues
+    
+    <Steps>
+      <Step>
+        **TypeScript errors during build**
+        
+        <CodeBlock language="bash">
+        <Pre>pnpm check</Pre>
+        </CodeBlock>
+        
+        Check for linting and formatting issues first.
+      </Step>
 
-2. **Tests not running**:
-   - Ensure test files have `.test.ts` or `.spec.ts` extension
-   - Check that `types` in `tsconfig.json` includes `"vitest/globals"`
-   - Verify Vitest is installed
+      <Step>
+        **Missing type definitions**
+        
+        Install required types:
+        <CodeBlock language="bash">
+        <Pre>pnpm add -D @types/node</Pre>
+        </CodeBlock>
+      </Step>
 
-3. **Changelog not updating**:
-   - Ensure commits follow conventional commits format
-   - Check `cliff.toml` configuration
-   - Verify git history is available
+      <Step>
+        **Configuration issues**
+        
+        Verify `tsconfig.json` and `tsdown.config.ts` are properly configured.
+      </Step>
+    </Steps>
+  </Tab>
 
-4. **Publish fails**:
-   - Ensure you're logged in to npm (`npm login`)
-   - Check package name is unique
-   - Verify `files` in package.json includes necessary files
+  <Tab value="Test Issues">
+    ### Test Issues
+    
+    <Steps>
+      <Step>
+        **Tests not running**
+        
+        Ensure test files have `.test.ts` or `.spec.ts` extension.
+      </Step>
 
-### Debugging
+      <Step>
+        **Type errors in tests**
+        
+        Add Vitest globals to `tsconfig.json`:
+        <CodeBlock language="json">
+        <Pre>{`{ "types": ["vitest/globals"] }`}</Pre>
+        </CodeBlock>
+      </Step>
 
-- Use `pnpm dev` to test changes in watch mode
-- Use `pnpm build` to verify production build
-- Use `pnpm check` to identify code quality issues
-- Use `pnpm test` to run tests
+      <Step>
+        **Vitest not installed**
+        
+        <CodeBlock language="bash">
+        <Pre>pnpm add -D vitest</Pre>
+        </CodeBlock>
+      </Step>
+    </Steps>
+  </Tab>
+
+  <Tab value="Changelog Issues">
+    ### Changelog Issues
+    
+    <Steps>
+      <Step>
+        **Changelog not updating**
+        
+        Ensure commits follow conventional commits format.
+      </Step>
+
+      <Step>
+        **Configuration issues**
+        
+        Check `cliff.toml` configuration.
+      </Step>
+
+      <Step>
+        **Git history missing**
+        
+        Verify git history is available in the repository.
+      </Step>
+    </Steps>
+  </Tab>
+
+  <Tab value="Publish Issues">
+    ### Publish Issues
+    
+    <Steps>
+      <Step>
+        **Publish fails**
+        
+        Ensure you're logged in to npm:
+        <CodeBlock language="bash">
+        <Pre>npm login</Pre>
+        </CodeBlock>
+      </Step>
+
+      <Step>
+        **Package name conflict**
+        
+        Check package name is unique on npm.
+      </Step>
+
+      <Step>
+        **Missing files**
+        
+        Verify `files` in package.json includes necessary files.
+      </Step>
+    </Steps>
+  </Tab>
+</Tabs>
 
 ---
 
@@ -538,6 +1076,4 @@ export default function(url: string) {
 
 ---
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/LuanRoger/ts-package-template/blob/main/LICENSE) file for details.
+*Last updated: {new Date().toISOString()}*
