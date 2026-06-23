@@ -1,3 +1,9 @@
 {
-  "pages": ["getting-started", "customization", "components", "..."]
+  "pages": [
+    "overview",
+    "getting-started",
+    "customization",
+    "components",
+    "..."
+  ]
 }
