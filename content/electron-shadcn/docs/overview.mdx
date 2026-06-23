@@ -3,9 +3,10 @@ title: Overview
 description: Comprehensive technical overview of the electron-shadcn template architecture, core technologies, and implementation details
 ---
 
-import { Callout, Tab, Tabs, Step, Steps, File, Folder, Files, TypeTable, CodeBlock, Pre } from "fumadocs-ui/components";
-
-# Overview
+import { Pre, CodeBlock } from 'fumadocs-ui/components/codeblock';
+import { File, Folder, Files } from "fumadocs-ui/components/files";
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { TypeTable } from 'fumadocs-ui/components/type-table';
 
 electron-shadcn is a production-ready Electron application template that combines the power of Electron with modern React development practices, specifically integrating the shadcn/ui component system. It's designed to help developers quickly bootstrap beautiful, functional desktop applications with minimal setup.
 
@@ -434,54 +435,6 @@ export const setThemeMode = os
   Auto-update uses GitHub Releases as the update source. This only works for public GitHub repositories.
   For private repositories, you need to setup a custom update server.
 </Callout>
-
-<Steps>
-  <Step>
-    #### Update Configuration
-    
-    Uses `update-electron-app` library with GitHub as the update source.
-    
-    <CodeBlock language="typescript" title="main.ts">
-    <Pre>
-{`import { UpdateSourceType, updateElectronApp } from "update-electron-app";
-
-function checkForUpdates() {
-  updateElectronApp({
-    updateSource: {
-      type: UpdateSourceType.ElectronPublicUpdateService,
-      repo: "LuanRoger/electron-shadcn",
-    },
-  });
-}`}
-    </Pre>
-    </CodeBlock>
-  </Step>
-
-  <Step>
-    #### Publishing
-    
-    Electron Forge Publisher automatically creates GitHub releases.
-    
-    <CodeBlock language="yaml" title=".github/workflows/publish.yml">
-    <Pre>
-{`name: Publish
-on:
-  workflow_dispatch:
-
-jobs:
-  publish:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-      - run: npm ci
-      - run: npm run publish
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}`}
-    </Pre>
-    </CodeBlock>
-  </Step>
-</Steps>
 
 ### React Compiler
 

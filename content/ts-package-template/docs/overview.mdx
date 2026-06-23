@@ -3,9 +3,10 @@ title: Overview
 description: Comprehensive technical overview of the ts-package-template architecture, build system, and publishing workflow
 ---
 
-import { Callout, Tab, Tabs, Step, Steps, File, Folder, Files, TypeTable, CodeBlock, Pre } from "fumadocs-ui/components";
-
-# Overview
+import { Pre, CodeBlock } from 'fumadocs-ui/components/codeblock';
+import { File, Folder, Files } from "fumadocs-ui/components/files";
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { TypeTable } from 'fumadocs-ui/components/type-table';
 
 ts-package-template is a future-proof TypeScript package template designed for library authors. It focuses on modern tooling, developer experience, and production-ready configuration for publishing npm packages. The template provides everything needed to quickly start developing TypeScript libraries with minimal setup.
 
@@ -666,25 +667,7 @@ This template is ideal for:
 
 The `src/` directory contains your package's source code:
 
-<CodeBlock language="typescript" title="src/index.ts">
-<Pre>
-{`// Example export - replace with your package's API
-export function hello(name: string): string {
-  return `Hello, ${name}!`;
-}
 
-export default hello;
-
-// Better: Use named exports for tree-shaking
-export function greet(name: string): string {
-  return `Hello, ${name}!`;
-}
-
-export function farewell(name: string): string {
-  return `Goodbye, ${name}!`;
-}`}
-</Pre>
-</CodeBlock>
 
 <Callout type="check" title="Best Practices">
   ✅ Export your public API from `index.ts`
