@@ -1,5 +1,6 @@
 import { metaSchema, pageSchema } from "fumadocs-core/source/schema";
 import { defineConfig, defineDocs } from "fumadocs-mdx/config";
+import remarkDirective from 'remark-directive';
 
 export const electronShadcnDocs = defineDocs({
   dir: "content/electron-shadcn/docs",
@@ -28,5 +29,7 @@ export const tsPackageTemplateDocs = defineDocs({
 });
 
 export default defineConfig({
-  mdxOptions: {},
+  mdxOptions: {
+    remarkPlugins: [remarkDirective],
+  },
 });
