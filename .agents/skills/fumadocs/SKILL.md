@@ -1,3 +1,9 @@
+---
+name: Fumadocs Documentation Skill
+description: Comprehensive guidance on writing documentation using Fumadocs framework and its component ecosystem
+argument-hint: "Fumadocs, documentation, MDX, content organization, writing style, component usage"
+---
+
 # Fumadocs Documentation Skill
 
 ## Mission
