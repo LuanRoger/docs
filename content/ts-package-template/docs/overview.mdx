@@ -3,17 +3,13 @@ title: Overview
 description: Comprehensive technical overview of the ts-package-template architecture, build system, and publishing workflow
 ---
 
-import { Pre, CodeBlock } from 'fumadocs-ui/components/codeblock';
 import { File, Folder, Files } from "fumadocs-ui/components/files";
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 import { TypeTable } from 'fumadocs-ui/components/type-table';
 
 ts-package-template is a future-proof TypeScript package template designed for library authors. It focuses on modern tooling, developer experience, and production-ready configuration for publishing npm packages. The template provides everything needed to quickly start developing TypeScript libraries with minimal setup.
 
-<Callout type="info" title="Perfect For Library Authors">
-  Zero-configuration modern tooling for TypeScript packages.
-  Includes Rolldown bundler, Biome linting, Vitest testing, and np publishing.
-</Callout>
+This template is perfect for library authors, offering zero-configuration modern tooling for TypeScript packages. It includes Rolldown bundler, Biome linting, Vitest testing, and np publishing - everything you need to quickly start developing TypeScript libraries with minimal setup.
 
 ---
 
@@ -44,9 +40,7 @@ The template follows a **minimal but complete** structure that balances simplici
 
 ### Design Philosophy
 
-<Callout type="check" title="Core Principles">
-  The template is built on four key principles:
-</Callout>
+The template is built on four key principles:
 
 <Steps>
   <Step>
@@ -197,32 +191,30 @@ The template follows a **minimal but complete** structure that balances simplici
 
 The template uses **Rolldown** as the bundler with **tsdown** for TypeScript integration:
 
-<Callout type="check" title="Build Features">
-  ✅ Fast builds with Rust-based bundler
-  ✅ Rollup compatibility for familiar configuration
-  ✅ Seamless TypeScript integration with tsdown
-  ✅ ESM-first optimization
-</Callout>
+Key build features include:
+
+- Fast builds with Rust-based bundler
+- Rollup compatibility for familiar configuration
+- Seamless TypeScript integration with tsdown
+- ESM-first optimization
 
 <Tabs items={['Configuration', 'Build Process', 'Outputs']}>
   <Tab value="Configuration">
     #### Configuration
     
-    <CodeBlock language="typescript" title="tsdown.config.ts">
-    <Pre>
-{`import { defineConfig } from "tsdown";
+    ```typescript title="tsdown.config.ts"
+    import { defineConfig } from "tsdown";
 
-export default defineConfig({
-  entry: {
-    index: "src/index.ts",
-  },
-  dts: true,
-  tsconfig: "tsconfig.build.json",
-  format: "esm",
-  sourcemap: false,
-});`}
-    </Pre>
-    </CodeBlock>
+    export default defineConfig({
+      entry: {
+        index: "src/index.ts",
+      },
+      dts: true,
+      tsconfig: "tsconfig.build.json",
+      format: "esm",
+      sourcemap: false,
+    });
+    ```
     
     <TypeTable type={{
       entry: {
@@ -304,9 +296,8 @@ export default defineConfig({
 
 The `package.json` is optimized for modern package publishing:
 
-<CodeBlock language="json" title="package.json">
-<Pre>
-{`{
+```json title="package.json"
+{
   "type": "module",
   "exports": {
     ".": {
@@ -325,16 +316,15 @@ The `package.json` is optimized for modern package publishing:
     "publish": "np --package-manager npm",
     "publish:all": "pnpm run build && pnpm run publish"
   }
-}`}
-</Pre>
-</CodeBlock>
+}
+```
 
-<Callout type="info" title="Key Configuration Features">
-  ✅ **ESM-first**: `"type": "module"` declares the package as ESM
-  ✅ **Conditional Exports**: Different entry points for ESM and CJS consumers
-  ✅ **Type Exports**: Separate type files for ESM and CommonJS
-  ✅ **Selective Publishing**: Only essential files are published
-</Callout>
+Key configuration features:
+
+- **ESM-first**: `"type": "module"` declares the package as ESM
+- **Conditional Exports**: Different entry points for ESM and CJS consumers
+- **Type Exports**: Separate type files for ESM and CommonJS
+- **Selective Publishing**: Only essential files are published
 
 ### TypeScript Configuration
 
@@ -344,28 +334,26 @@ The template uses **two TypeScript configuration files** for different purposes:
   <Tab value="Development">
     #### Development Configuration
     
-    <CodeBlock language="json" title="tsconfig.json">
-    <Pre>
-{`{
-  "compilerOptions": {
-    "target": "ES2022",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "strict": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "types": ["vitest/globals"]
-  },
-  "include": ["src", "test"],
-  "exclude": ["dist", "node_modules"]
-}`}
-    </Pre>
-    </CodeBlock>
+    ```json title="tsconfig.json"
+    {
+      "compilerOptions": {
+        "target": "ES2022",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "strict": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        "types": ["vitest/globals"]
+      },
+      "include": ["src", "test"],
+      "exclude": ["dist", "node_modules"]
+    }
+    ```
     
     <Callout type="info">
       Development config has `noEmit: true` to prevent accidental emission during development.
@@ -376,19 +364,17 @@ The template uses **two TypeScript configuration files** for different purposes:
   <Tab value="Build">
     #### Build Configuration
     
-    <CodeBlock language="json" title="tsconfig.build.json">
-    <Pre>
-{`{
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "noEmit": false,
-    "emitDeclarationOnly": true,
-    "outDir": "./dist"
-  },
-  "include": ["src"]
-}`}
-    </Pre>
-    </CodeBlock>
+    ```json title="tsconfig.build.json"
+    {
+      "extends": "./tsconfig.json",
+      "compilerOptions": {
+        "noEmit": false,
+        "emitDeclarationOnly": true,
+        "outDir": "./dist"
+      },
+      "include": ["src"]
+    }
+    ```
     
     <Callout type="info">
       Build config extends development config and enables declaration emission.
@@ -401,9 +387,8 @@ The template uses **two TypeScript configuration files** for different purposes:
 
 The template uses **git-cliff** for automatic changelog generation based on conventional commits:
 
-<CodeBlock language="toml" title="cliff.toml">
-<Pre>
-{`[changelog]
+```toml title="cliff.toml"
+[changelog]
 body = '''
 # Changelog
 
@@ -423,9 +408,8 @@ refactor = { message = "^refactor", group = "Refactor" }
 style = { message = "^style", group = "Styling" }
 test = { message = "^test", group = "Testing" }
 chore = { message = "^chore", group = "Miscellaneous Chores" }
-revert = { message = "^revert", group = "Reverts" }`}
-</Pre>
-</CodeBlock>
+revert = { message = "^revert", group = "Reverts" }
+```
 
 <Callout type="check" title="Conventional Commits">
   The template follows Conventional Commits specification:
@@ -452,8 +436,7 @@ The template uses **[np](https://github.com/sindresorhus/np)** for a better npm 
   ✅ Package manager support (npm, yarn, pnpm)
 </Callout>
 
-<CodeBlock language="bash" title="Publishing Commands">
-<Pre>
+```bash title="Publishing Commands"
 # Check code quality first
 pnpm check
 
@@ -465,8 +448,7 @@ pnpm publish
 
 # Build and publish (all-in-one)
 pnpm publish:all
-</Pre>
-</CodeBlock>
+```
 
 ---
 
@@ -494,23 +476,23 @@ This template is ideal for:
     <Steps>
       <Step>
         #### Clone the repository
-        <CodeBlock language="bash">
-        <Pre>git clone https://github.com/LuanRoger/ts-package-template.git</Pre>
-        </CodeBlock>
+        ```bash
+git clone https://github.com/LuanRoger/ts-package-template.git
+        ```
       </Step>
 
       <Step>
         #### Install dependencies
-        <CodeBlock language="bash">
-        <Pre>cd ts-package-template && pnpm install</Pre>
-        </CodeBlock>
+        ```bash
+cd ts-package-template && pnpm install
+        ```
       </Step>
 
       <Step>
         #### Modify package.json
-        <CodeBlock language="bash">
-        <Pre># Set your package name, version, description, author, etc.</Pre>
-        </CodeBlock>
+        ```bash
+# Set your package name, version, description, author, etc.
+        ```
       </Step>
     </Steps>
   </Tab>
@@ -521,9 +503,9 @@ This template is ideal for:
     <Steps>
       <Step>
         #### Start watch mode
-        <CodeBlock language="bash">
-        <Pre>pnpm dev</Pre>
-        </CodeBlock>
+        ```bash
+pnpm dev
+        ```
         
         <Callout type="info">
           Runs: `tsdown --watch ./src`
@@ -544,9 +526,9 @@ This template is ideal for:
     <Steps>
       <Step>
         #### Build the package
-        <CodeBlock language="bash">
-        <Pre>pnpm build</Pre>
-        </CodeBlock>
+        ```bash
+pnpm build
+        ```
         
         <Callout type="info">
           Runs: `tsc && tsdown`
@@ -563,9 +545,9 @@ This template is ideal for:
     <Steps>
       <Step>
         #### Check code quality
-        <CodeBlock language="bash">
-        <Pre>pnpm check</Pre>
-        </CodeBlock>
+        ```bash
+pnpm check
+        ```
         
         <Callout type="info">
           Runs: `ultracite check`
@@ -575,9 +557,9 @@ This template is ideal for:
 
       <Step>
         #### Auto-fix issues
-        <CodeBlock language="bash">
-        <Pre>pnpm check:write</Pre>
-        </CodeBlock>
+        ```bash
+pnpm check:write
+        ```
         
         <Callout type="info">
           Runs: `ultracite fix`
@@ -593,9 +575,9 @@ This template is ideal for:
     <Steps>
       <Step>
         #### Run tests once
-        <CodeBlock language="bash">
-        <Pre>pnpm test</Pre>
-        </CodeBlock>
+        ```bash
+pnpm test
+        ```
         
         <Callout type="info">
           Runs: `vitest run`
@@ -604,9 +586,9 @@ This template is ideal for:
 
       <Step>
         #### Run tests in watch mode
-        <CodeBlock language="bash">
-        <Pre>pnpm test:watch</Pre>
-        </CodeBlock>
+        ```bash
+pnpm test:watch
+        ```
         
         <Callout type="info">
           Runs: `vitest` (watch mode)
@@ -622,9 +604,9 @@ This template is ideal for:
     <Steps>
       <Step>
         #### Generate changelog
-        <CodeBlock language="bash">
-        <Pre>pnpm changelog</Pre>
-        </CodeBlock>
+        ```bash
+pnpm changelog
+        ```
         
         <Callout type="info">
           Runs: `git-cliff --config ./cliff.toml --output CHANGELOG.md`
@@ -634,9 +616,9 @@ This template is ideal for:
 
       <Step>
         #### Publish to npm
-        <CodeBlock language="bash">
-        <Pre>pnpm publish</Pre>
-        </CodeBlock>
+        ```bash
+pnpm publish
+        ```
         
         <Callout type="info">
           Runs: `np --package-manager npm`
@@ -646,9 +628,9 @@ This template is ideal for:
 
       <Step>
         #### Build and publish
-        <CodeBlock language="bash">
-        <Pre>pnpm publish:all</Pre>
-        </CodeBlock>
+        ```bash
+pnpm publish:all
+        ```
         
         <Callout type="info">
           Runs: `pnpm run build && pnpm run publish`
@@ -681,9 +663,8 @@ The `src/` directory contains your package's source code:
 
 The `test/` directory contains your test files:
 
-<CodeBlock language="typescript" title="test/index.test.ts">
-<Pre>
-{`import { describe, expect, it } from "vitest";
+```typescript title="test/index.test.ts"
+import { describe, expect, it } from "vitest";
 import { hello } from "../src";
 
 describe("hello", () => {
@@ -700,9 +681,8 @@ describe("greetAsync", () => {
     const result = await greetAsync("World");
     expect(result).toBe("Hello, World!");
   });
-});`}
-</Pre>
-</CodeBlock>
+});
+```
 
 <Callout type="info" title="Testing Features">
   ✅ Vitest: Fast, modern test runner
@@ -819,9 +799,8 @@ describe("greetAsync", () => {
   ✅ Document all public APIs
 </Callout>
 
-<CodeBlock language="typescript" title="Good vs Bad Exports">
-<Pre>
-{`// ✅ Good: Named exports with types
+```typescript title="Good vs Bad Exports"
+// ✅ Good: Named exports with types
 export interface Options {
   timeout?: number;
   retries?: number;
@@ -844,9 +823,8 @@ export default function(url: string) {
 // ❌ Bad: No types
 export function fetch(url: any) {
   // No type safety for consumers
-}`}
-</Pre>
-</CodeBlock>
+}
+```
 
 ### Dependencies
 
@@ -938,9 +916,9 @@ export function fetch(url: any) {
       <Step>
         **TypeScript errors during build**
         
-        <CodeBlock language="bash">
-        <Pre>pnpm check</Pre>
-        </CodeBlock>
+        ```bash
+pnpm check
+        ```
         
         Check for linting and formatting issues first.
       </Step>
@@ -949,9 +927,9 @@ export function fetch(url: any) {
         **Missing type definitions**
         
         Install required types:
-        <CodeBlock language="bash">
-        <Pre>pnpm add -D @types/node</Pre>
-        </CodeBlock>
+        ```bash
+pnpm add -D @types/node
+        ```
       </Step>
 
       <Step>
@@ -976,17 +954,17 @@ export function fetch(url: any) {
         **Type errors in tests**
         
         Add Vitest globals to `tsconfig.json`:
-        <CodeBlock language="json">
-        <Pre>{`{ "types": ["vitest/globals"] }`}</Pre>
-        </CodeBlock>
+        ```json
+{ "types": ["vitest/globals"] }
+        ```
       </Step>
 
       <Step>
         **Vitest not installed**
         
-        <CodeBlock language="bash">
-        <Pre>pnpm add -D vitest</Pre>
-        </CodeBlock>
+        ```bash
+pnpm add -D vitest
+        ```
       </Step>
     </Steps>
   </Tab>
@@ -1023,9 +1001,9 @@ export function fetch(url: any) {
         **Publish fails**
         
         Ensure you're logged in to npm:
-        <CodeBlock language="bash">
-        <Pre>npm login</Pre>
-        </CodeBlock>
+        ```bash
+npm login
+        ```
       </Step>
 
       <Step>

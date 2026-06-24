@@ -3,17 +3,13 @@ title: Overview
 description: Comprehensive technical overview of the electron-shadcn template architecture, core technologies, and implementation details
 ---
 
-import { Pre, CodeBlock } from 'fumadocs-ui/components/codeblock';
 import { File, Folder, Files } from "fumadocs-ui/components/files";
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 import { TypeTable } from 'fumadocs-ui/components/type-table';
 
 electron-shadcn is a production-ready Electron application template that combines the power of Electron with modern React development practices, specifically integrating the shadcn/ui component system. It's designed to help developers quickly bootstrap beautiful, functional desktop applications with minimal setup.
 
-<Callout type="info" title="Quick Start">
-  Get started in minutes with pre-configured Electron, React, TypeScript, and shadcn/ui.
-  Perfect for building cross-platform desktop applications with a modern tech stack.
-</Callout>
+Get started in minutes with pre-configured Electron, React, TypeScript, and shadcn/ui. This template is perfect for building cross-platform desktop applications with a modern tech stack.
 
 ---
 
@@ -100,35 +96,33 @@ The template follows a **modular, type-safe architecture** with clear separation
     
     Manages Electron app lifecycle, creates BrowserWindow instances, and sets up IPC handlers.
     
-    <CodeBlock language="typescript" title="main.ts">
-      <Pre>
-{`import { app, BrowserWindow } from "electron";
-import { ipcMain } from "electron/main";
-import { ipcContext } from "./ipc/context";
+    ```typescript title="main.ts"
+    import { app, BrowserWindow } from "electron";
+    import { ipcMain } from "electron/main";
+    import { ipcContext } from "./ipc/context";
 
-function createWindow() {
-  const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: {
-      devTools: inDevelopment,
-      contextIsolation: true,
-      nodeIntegration: true,
-    },
-    titleBarStyle: process.platform === "darwin" ? "hiddenInset" : "hidden",
-  });
-  ipcContext.setMainWindow(mainWindow);
-  // ...
-}
+    function createWindow() {
+      const mainWindow = new BrowserWindow({
+        width: 800,
+        height: 600,
+        webPreferences: {
+          devTools: inDevelopment,
+          contextIsolation: true,
+          nodeIntegration: true,
+        },
+        titleBarStyle: process.platform === "darwin" ? "hiddenInset" : "hidden",
+      });
+      ipcContext.setMainWindow(mainWindow);
+      // ...
+    }
 
-app.whenReady().then(async () => {
-  createWindow();
-  await installExtensions();
-  checkForUpdates();
-  await setupORPC();
-});`}
-      </Pre>
-    </CodeBlock>
+    app.whenReady().then(async () => {
+      createWindow();
+      await installExtensions();
+      checkForUpdates();
+      await setupORPC();
+    });
+    ```
   </Step>
 
   <Step>
@@ -136,19 +130,17 @@ app.whenReady().then(async () => {
     
     Bridge between main and renderer processes, exposes limited Electron APIs to renderer.
     
-    <CodeBlock language="typescript" title="preload.ts">
-      <Pre>
-{`import { ipcRenderer } from "electron";
-import { IPC_CHANNELS } from "./constants";
+    ```typescript title="preload.ts"
+    import { ipcRenderer } from "electron";
+    import { IPC_CHANNELS } from "./constants";
 
-window.addEventListener("message", (event) => {
-  if (event.data === IPC_CHANNELS.START_ORPC_SERVER) {
-    const [serverPort] = event.ports;
-    ipcRenderer.postMessage(IPC_CHANNELS.START_ORPC_SERVER, null, [serverPort]);
-  }
-});`}
-      </Pre>
-    </CodeBlock>
+    window.addEventListener("message", (event) => {
+      if (event.data === IPC_CHANNELS.START_ORPC_SERVER) {
+        const [serverPort] = event.ports;
+        ipcRenderer.postMessage(IPC_CHANNELS.START_ORPC_SERVER, null, [serverPort]);
+      }
+    });
+    ```
   </Step>
 
   <Step>
@@ -156,27 +148,25 @@ window.addEventListener("message", (event) => {
     
     React application running in the browser context with TanStack Router.
     
-    <CodeBlock language="tsx" title="app.tsx">
-      <Pre>
-{`import { RouterProvider } from "@tanstack/react-router";
-import React from "react";
-import { createRoot } from "react-dom/client";
-import { router } from "./utils/routes";
-import "./localization/i18n";
+    ```tsx title="app.tsx"
+    import { RouterProvider } from "@tanstack/react-router";
+    import React from "react";
+    import { createRoot } from "react-dom/client";
+    import { router } from "./utils/routes";
+    import "./localization/i18n";
 
-export default function App() {
-  return <RouterProvider router={router} />;
-}
+    export default function App() {
+      return <RouterProvider router={router} />;
+    }
 
-const container = document.getElementById("app");
-const root = createRoot(container);
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);`}
-      </Pre>
-    </CodeBlock>
+    const container = document.getElementById("app");
+    const root = createRoot(container);
+    root.render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    );
+    ```
   </Step>
 </Steps>
 
@@ -334,12 +324,12 @@ root.render(
 
 The template implements a sophisticated IPC system using [oRPC](https://orpc.unnoq.com) that addresses Electron's traditional IPC challenges:
 
-<Callout type="check" title="Benefits">
-  - MessagePort-based communication for security
-  - Domain-specific routers for modular organization
-  - Zod validation for runtime type safety
-  - Context injection via oRPC middleware
-</Callout>
+Key benefits of this approach:
+
+- MessagePort-based communication for security
+- Domain-specific routers for modular organization
+- Zod validation for runtime type safety
+- Context injection via oRPC middleware
 
 <Steps>
   <Step>
@@ -359,19 +349,16 @@ The template implements a sophisticated IPC system using [oRPC](https://orpc.unn
     
     <Tabs items={['Schema', 'Handler', 'Router']}>
       <Tab value="Schema">
-<CodeBlock language="typescript" title="schemas.ts">
-<Pre>
-{`import { z } from "zod";
+```typescript title="schemas.ts"
+import { z } from "zod";
 
-export const setThemeModeInputSchema = z.enum(["light", "dark", "system"]);`}
-</Pre>
-</CodeBlock>
+export const setThemeModeInputSchema = z.enum(["light", "dark", "system"]);
+```
       </Tab>
 
       <Tab value="Handler">
-<CodeBlock language="typescript" title="handlers.ts">
-<Pre>
-{`import { os } from "@orpc/server";
+```typescript title="handlers.ts"
+import { os } from "@orpc/server";
 import { nativeTheme } from "electron";
 import { setThemeModeInputSchema } from "./schemas";
 
@@ -384,21 +371,18 @@ export const setThemeMode = os
   .handler(({ input: mode }) => {
     nativeTheme.themeSource = mode;
     return nativeTheme.themeSource;
-  });`}
-</Pre>
-</CodeBlock>
+  });
+```
       </Tab>
 
       <Tab value="Router">
-<CodeBlock language="typescript" title="index.ts">
-<Pre>
-{`export const theme = {
+```typescript title="index.ts"
+export const theme = {
   getCurrentThemeMode,
   setThemeMode,
   toggleThemeMode,
-};`}
-</Pre>
-</CodeBlock>
+};
+```
       </Tab>
     </Tabs>
   </Step>
@@ -406,14 +390,10 @@ export const setThemeMode = os
 
 ### Window Management
 
-<Callout type="info" title="Custom Title Bar">
-  The template uses a custom title bar implementation with hidden native title bar.
-  Platform-specific styling is applied for macOS (`hiddenInset`) vs other platforms (`hidden`).
-</Callout>
+The template uses a custom title bar implementation with hidden native title bar. Platform-specific styling is applied for macOS (`hiddenInset`) vs other platforms (`hidden`).
 
-<CodeBlock language="typescript" title="Window Configuration">
-<Pre>
-{`const mainWindow = new BrowserWindow({
+```typescript title="Window Configuration"
+const mainWindow = new BrowserWindow({
   width: 800,
   height: 600,
   webPreferences: {
@@ -425,9 +405,8 @@ export const setThemeMode = os
   },
   titleBarStyle: process.platform === "darwin" ? "hiddenInset" : "hidden",
   trafficLightPosition: process.platform === "darwin" ? { x: 5, y: 5 } : undefined,
-});`}
-</Pre>
-</CodeBlock>
+});
+```
 
 ### Auto-Update System
 
@@ -438,10 +417,7 @@ export const setThemeMode = os
 
 ### React Compiler
 
-<Callout type="check" title="Automatic Memoization">
-  React Compiler is enabled by default, which automatically memoizes React components.
-  This provides better performance without manual `useMemo`, `useCallback`, or `React.memo` usage.
-</Callout>
+React Compiler is enabled by default, which automatically memoizes React components. This provides better performance without manual `useMemo`, `useCallback`, or `React.memo` usage.
 
 ---
 
@@ -449,14 +425,14 @@ export const setThemeMode = os
 
 This template is ideal for:
 
-<Callout type="info" title="Perfect For">
-  ✅ Desktop application development (Windows, macOS, Linux)
-  ✅ Rapid prototyping with modern tooling
-  ✅ Production-ready applications with testing and CI/CD
-  ✅ Type-safe development across all layers
-  ✅ International applications with i18n support
-  ✅ Accessible applications following WAI-ARIA standards
-</Callout>
+This template is perfect for:
+
+- Desktop application development (Windows, macOS, Linux)
+- Rapid prototyping with modern tooling
+- Production-ready applications with testing and CI/CD
+- Type-safe development across all layers
+- International applications with i18n support
+- Accessible applications following WAI-ARIA standards
 
 ---
 
@@ -470,17 +446,17 @@ This template is ideal for:
       <Step>
         #### Clone the repository
         
-        <CodeBlock language="bash">
-        <Pre>git clone https://github.com/LuanRoger/electron-shadcn.git</Pre>
-        </CodeBlock>
+        ```bash
+git clone https://github.com/LuanRoger/electron-shadcn.git
+        ```
       </Step>
 
       <Step>
         #### Install dependencies
         
-        <CodeBlock language="bash">
-        <Pre>cd electron-shadcn && npm install</Pre>
-        </CodeBlock>
+        ```bash
+cd electron-shadcn && npm install
+        ```
       </Step>
     </Steps>
   </Tab>
@@ -492,9 +468,9 @@ This template is ideal for:
       <Step>
         #### Start the application
         
-        <CodeBlock language="bash">
-        <Pre>npm run start</Pre>
-        </CodeBlock>
+        ```bash
+npm run start
+        ```
         
         Starts Vite dev server with HMR and Electron main process.
       </Step>
@@ -515,33 +491,33 @@ This template is ideal for:
       <Step>
         #### Run all tests
         
-        <CodeBlock language="bash">
-        <Pre>npm run test:all</Pre>
-        </CodeBlock>
+        ```bash
+npm run test:all
+        ```
       </Step>
 
       <Step>
         #### Run unit tests
         
-        <CodeBlock language="bash">
-        <Pre>npm run test:unit</Pre>
-        </CodeBlock>
+        ```bash
+npm run test:unit
+        ```
       </Step>
 
       <Step>
         #### Run E2E tests
         
-        <CodeBlock language="bash">
-        <Pre>npm run test:e2e</Pre>
-        </CodeBlock>
+        ```bash
+npm run test:e2e
+        ```
       </Step>
 
       <Step>
         #### Watch mode
         
-        <CodeBlock language="bash">
-        <Pre>npm run test:watch</Pre>
-        </CodeBlock>
+        ```bash
+npm run test:watch
+        ```
       </Step>
     </Steps>
   </Tab>
@@ -553,17 +529,17 @@ This template is ideal for:
       <Step>
         #### Package for current platform
         
-        <CodeBlock language="bash">
-        <Pre>npm run package</Pre>
-        </CodeBlock>
+        ```bash
+npm run package
+        ```
       </Step>
 
       <Step>
         #### Build for all platforms
         
-        <CodeBlock language="bash">
-        <Pre>npm run make</Pre>
-        </CodeBlock>
+        ```bash
+npm run make
+        ```
         
         <Callout type="info">
           Supported platforms: Windows (Squirrel/MSI), macOS (ZIP/DMG), Linux (Deb/RPM/ZIP)
@@ -579,9 +555,9 @@ This template is ideal for:
       <Step>
         #### Create GitHub release
         
-        <CodeBlock language="bash">
-        <Pre>npm run publish</Pre>
-        </CodeBlock>
+        ```bash
+npm run publish
+        ```
         
         <Callout type="warning">
           Requires GITHUB_TOKEN environment variable with repo permissions.
@@ -624,9 +600,7 @@ The template is used in production by several projects:
 
 ## Best Practices
 
-<Callout type="info" title="Adding New Features">
-  Follow these patterns when extending the template:
-</Callout>
+Follow these patterns when extending the template:
 
 <Tabs items={['IPC Methods', 'Components', 'Pages']}>
   <Tab value="IPC Methods">
@@ -647,9 +621,9 @@ The template is used in production by several projects:
     <Steps>
       <Step>
         Use shadcn/ui CLI:
-        <CodeBlock language="bash">
-        <Pre>npx shadcn@latest add [component-name]</Pre>
-        </CodeBlock>
+        ```bash
+npx shadcn@latest add [component-name]
+        ```
       </Step>
       <Step>Component is automatically added to `src/components/ui/`</Step>
       <Step>`components.json` is updated automatically</Step>
@@ -672,9 +646,7 @@ The template is used in production by several projects:
 
 ## Security Considerations
 
-<Callout type="danger" title="Security Best Practices">
-  The template follows these security measures by default:
-</Callout>
+The template follows these security measures by default:
 
 - **Context Isolation**: Enabled to prevent direct Node.js API access from renderer
 - **Preload Script**: Only exposes necessary Electron APIs to renderer
@@ -685,9 +657,7 @@ The template is used in production by several projects:
 
 ## Performance Optimizations
 
-<Callout type="check" title="Built-in Optimizations">
-  The template includes several performance improvements:
-</Callout>
+The template includes several performance improvements:
 
 - **React Compiler**: Automatic memoization of React components
 - **Vite**: Fast HMR and optimized builds
