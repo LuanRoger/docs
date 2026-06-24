@@ -4,7 +4,7 @@ import { useTranslations } from "@fuma-translate/react";
 import type { TOCItemType } from "fumadocs-core/toc";
 import { ChevronDown } from "lucide-react";
 import type { ComponentProps } from "react";
-import { cn } from "@/lib/cn";
+import { cn } from "@/lib/utils/styles";
 import {
   Collapsible,
   CollapsibleContent,

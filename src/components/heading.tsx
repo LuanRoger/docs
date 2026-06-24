@@ -3,7 +3,7 @@ import { useTranslations } from "@fuma-translate/react";
 import { useCopyButton } from "fumadocs-ui/utils/use-copy-button";
 import { CopyCheckIcon, LinkIcon } from "lucide-react";
 import type { ComponentPropsWithoutRef } from "react";
-import { cn } from "@/lib/cn";
+import { cn } from "@/lib/utils/styles";
 import { buttonVariants } from "./ui/button";
 
 type Types = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";

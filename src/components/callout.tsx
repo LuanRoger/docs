@@ -6,7 +6,7 @@ import {
   TriangleAlert,
 } from "lucide-react";
 import type { ComponentProps, CSSProperties, ReactNode } from "react";
-import { cn } from "@/lib/cn";
+import { cn } from "@/lib/utils/styles";
 
 export type CalloutType =
   | "info"

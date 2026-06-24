@@ -13,7 +13,7 @@ import {
   useMemo,
   useRef,
 } from "react";
-import { cn } from "@/lib/";
+import { cn } from "@/lib/utils/styles";
 import { mergeRefs } from "../lib/merge-refs";
 import { buttonVariants } from "./ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
