@@ -10,12 +10,12 @@ const config = {
   redirects: async () => [
     {
       source: "/electron-shadcn/docs",
-      destination: "/electron-shadcn/docs/getting-started/installation",
+      destination: "/electron-shadcn/docs/overview",
       permanent: true,
     },
     {
       source: "/ts-package-template/docs",
-      destination: "/ts-package-template/docs/getting-started/installation",
+      destination: "/ts-package-template/docs/overview",
       permanent: true,
     },
   ],
