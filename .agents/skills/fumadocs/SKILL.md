@@ -1,5 +1,5 @@
 ---
-name: Fumadocs Documentation Skill
+name: fumadocs-documentation-skill
 description: Comprehensive guidance on writing documentation using Fumadocs framework and its component ecosystem
 argument-hint: "Fumadocs, documentation, MDX, content organization, writing style, component usage"
 ---
@@ -407,6 +407,13 @@ import { Callout } from "fumadocs-ui/components/callout";
 - `icon`: Custom icon
 - `children`: Content
 
+**Usage Recommendations**:
+- Use Callouts sparingly for truly important information that needs visual emphasis
+- Reserve for warnings, critical notes, and key insights
+- Avoid using Callouts for regular explanatory text or feature lists
+- Consider converting to regular paragraphs or bullet points when appropriate
+- Types should match content importance: `warning` for limitations, `info` for helpful tips, `danger` for critical issues
+
 ##### Tabs
 Organize content into tabbed sections.
 
@@ -556,27 +563,6 @@ import { TypeTable } from "fumadocs-ui/components/type-table";
 - `deprecated`: Is field deprecated
 - `parameters`: Function parameters
 - `returns`: Function return type
-
-##### CodeBlock
-Enhanced code display with syntax highlighting.
-
-```mdx
-import { CodeBlock, Pre } from "fumadocs-ui/components/codeblock";
-
-<CodeBlock language="typescript" title="config.ts">
-  <Pre>
-    {`export const config = {
-  name: 'my-app',
-};`}
-  </Pre>
-</CodeBlock>
-```
-
-**Props**:
-- `language`: Code language
-- `title`: Optional title
-- `icon`: Custom icon
-- `keepBackground`: Preserve Shiki background
 
 ##### InlineTOC
 Add table of contents within page content.

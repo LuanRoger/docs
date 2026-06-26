@@ -1,3 +1,10 @@
 {
-  "pages": ["getting-started", "configuration", "tools", "development", "..."]
+  "pages": [
+    "overview",
+    "getting-started",
+    "configuration",
+    "tools",
+    "development",
+    "..."
+  ]
 }
