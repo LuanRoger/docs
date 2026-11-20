@@ -6,7 +6,14 @@ export default function Layout({
   children,
 }: LayoutProps<"/electron-shadcn/docs">) {
   return (
-    <DocsLayout tree={source.pageTree} {...baseLayoutProps()}>
+    <DocsLayout
+      sidebar={{
+        enabled: true,
+        
+      }}
+      tree={source.pageTree}
+      {...baseLayoutProps()}
+    >
       {children}
     </DocsLayout>
   );
