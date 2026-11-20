@@ -1,7 +1,9 @@
 "use client";
 
-import { type AnimationOptions, motion } from "motion/react";
-import { type ComponentProps, useCallback, useMemo } from "react";
+import type { AnimationOptions } from "motion/react";
+import { motion } from "motion/react";
+import type { ComponentProps } from "react";
+import { useCallback, useMemo } from "react";
 
 import { cn } from "@/lib/utils/styles";
 

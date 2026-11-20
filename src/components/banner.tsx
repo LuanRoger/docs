@@ -4,12 +4,8 @@
 
 import { useTranslations } from "@fuma-translate/react";
 import { X } from "lucide-react";
-import {
-  type CSSProperties,
-  type HTMLAttributes,
-  useEffect,
-  useState,
-} from "react";
+import type { CSSProperties, HTMLAttributes } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils/styles";
 import { buttonVariants } from "./ui/button";
 
@@ -76,7 +72,7 @@ export function Banner({
       id={id}
       {...props}
       className={cn(
-        "sticky top-0 z-40 flex flex-row items-center justify-center px-4 text-center font-medium text-sm",
+        "sticky top-0 z-40 flex flex-row items-center justify-center px-4 text-center text-sm font-medium",
         variant === "normal" && "bg-fd-secondary",
         variant === "rainbow" && "bg-fd-background",
         !open && "hidden",

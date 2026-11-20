@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "motion/react";
-import { type ReactNode, useEffect, useState } from "react";
+import type { ReactNode } from "react";
+import { useEffect, useState } from "react";
 
 type RevealProps = {
   children: ReactNode;

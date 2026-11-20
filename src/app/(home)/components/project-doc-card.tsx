@@ -42,7 +42,7 @@ export default function ProjectDocCard({
     <motion.div
       animate={{ opacity: 1, y: 0 }}
       className={cn(
-        "relative flex h-72 w-full flex-col gap-2 overflow-clip border border-border lg:size-72"
+        "border-border relative flex h-72 w-full flex-col gap-2 overflow-clip border lg:size-72"
       )}
       initial={{ opacity: 0, y: 25 }}
       transition={{
@@ -52,7 +52,7 @@ export default function ProjectDocCard({
     >
       <motion.h3
         className={cn(
-          "absolute right-0 bottom-0 z-30 select-none font-pixel text-9xl"
+          "font-pixel absolute right-0 bottom-0 z-30 text-9xl select-none"
         )}
         variants={abreviationVariants}
       >
@@ -65,9 +65,9 @@ export default function ProjectDocCard({
         style={{ backgroundColor: `var(--${accentColor})` }}
         variants={bgVariantsLayer2}
       />
-      <div className="absolute inset-0 z-10 size-full bg-card" />
+      <div className="bg-card absolute inset-0 z-10 size-full" />
       <div className="z-40 flex flex-col gap-2 p-4">
-        <h2 className="font-bold text-2xl">{name}</h2>
+        <h2 className="text-2xl font-bold">{name}</h2>
         <p className="text-sm">{description}</p>
         <div className="flex gap-2">
           <Link href={documentationLink}>
