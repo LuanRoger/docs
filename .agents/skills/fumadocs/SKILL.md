@@ -186,10 +186,12 @@ description: Get started with electron-shadcn in minutes
 ```
 
 Required fields:
+
 - `title`: Page title (used in navigation and SEO)
 - `description`: Brief summary (used in meta tags and previews)
 
 Optional fields:
+
 - `icon`: Icon identifier for navigation
 - `hidden`: Boolean to exclude from navigation
 - `order`: Custom sorting order
@@ -201,24 +203,28 @@ Optional fields:
 ### Page Types
 
 #### 1. Overview Pages
+
 - Provide high-level project introduction
 - Explain the "what" and "why"
 - Include feature lists and use cases
 - Link to detailed guides
 
 #### 2. Tutorial Pages
+
 - Step-by-step instructions
 - Beginner-friendly language
 - Practical examples
 - Clear outcomes
 
 #### 3. Reference Pages
+
 - API documentation
 - Configuration options
 - Technical specifications
 - Structured data
 
 #### 4. Concept Pages
+
 - Explain architectural decisions
 - Describe patterns and principles
 - Provide context and reasoning
@@ -233,6 +239,7 @@ Group related content using:
 3. **Cross-references**: Internal links between related pages
 
 Example grouping for electron-shadcn:
+
 ```text
 getting-started/    # New users
 ├── installation.mdx
@@ -264,6 +271,7 @@ components/        # Component reference
 ### Formatting Rules
 
 #### Headings
+
 - Use **sentence case** for headings: "Install dependencies", not "Install Dependencies"
 - **H1**: Page title (from frontmatter)
 - **H2**: Major sections
@@ -273,16 +281,17 @@ components/        # Component reference
 
 #### Code Formatting
 
-```mdx
+````mdx
 // Good: Language specified, proper formatting
 ```typescript
 const config = {
   name: 'my-app',
   version: '1.0.0',
 };
-```
+````
 
 // Bad: Missing language, poor formatting
+
 ```
 const config = {name: 'my-app', version: '1.0.0'}
 ```
@@ -335,22 +344,23 @@ Fumadocs uses a tree-based navigation system. Pages are automatically organized 
 ```
 electron-shadcn
 ├── Getting Started
-│   ├── Introduction
-│   ├── Installation
-│   └── Quick Start
+│ ├── Introduction
+│ ├── Installation
+│ └── Quick Start
 ├── Customization
-│   ├── Theming
-│   ├── Icons
-│   └── Components
+│ ├── Theming
+│ ├── Icons
+│ └── Components
 ├── Components
-│   ├── Drag Window Region
-│   ├── External Link
-│   └── Language Toggle
+│ ├── Drag Window Region
+│ ├── External Link
+│ └── Language Toggle
 └── Advanced
-    ├── IPC Communication
-    ├── Testing
-    └── CI/CD
-```
+├── IPC Communication
+├── Testing
+└── CI/CD
+
+````
 
 ### URL Structure
 
@@ -397,17 +407,19 @@ import { Callout } from "fumadocs-ui/components/callout";
 <Callout type="check">
   This is a success message.
 </Callout>
-```
+````
 
 **Types**: `info`, `warning`, `danger`, `check`, `default`
 
 **Props**:
+
 - `type`: Message type (required)
 - `title`: Optional title
 - `icon`: Custom icon
 - `children`: Content
 
 **Usage Recommendations**:
+
 - Use Callouts sparingly for truly important information that needs visual emphasis
 - Reserve for warnings, critical notes, and key insights
 - Avoid using Callouts for regular explanatory text or feature lists
@@ -415,9 +427,10 @@ import { Callout } from "fumadocs-ui/components/callout";
 - Types should match content importance: `warning` for limitations, `info` for helpful tips, `danger` for critical issues
 
 ##### Tabs
+
 Organize content into tabbed sections.
 
-```mdx
+````mdx
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 
 <Tabs items={['npm', 'yarn', 'pnpm']}>
@@ -437,9 +450,10 @@ import { Tab, Tabs } from "fumadocs-ui/components/tabs";
     ```
   </Tab>
 </Tabs>
-```
+````
 
 **Props**:
+
 - `items`: Array of tab labels (required)
 - `defaultIndex`: Default active tab index
 - `groupId`: Share state across tabs
@@ -447,9 +461,10 @@ import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 - `updateAnchor`: Update URL hash on change
 
 ##### Steps
+
 Create step-by-step guides.
 
-```mdx
+````mdx
 import { Step, Steps } from "fumadocs-ui/components/steps";
 
 <Steps>
@@ -475,12 +490,14 @@ import { Step, Steps } from "fumadocs-ui/components/steps";
     ```
   </Step>
 </Steps>
-```
+````
 
 **Props**:
+
 - `children`: Step elements
 
 ##### Accordion
+
 Create collapsible sections for FAQs or detailed information.
 
 ```mdx
@@ -497,6 +514,7 @@ import { Accordion, Accordions } from "fumadocs-ui/components/accordion";
 ```
 
 **Props**:
+
 - `type`: `single` (one open at a time) or `multiple` (multiple open)
 - `title`: Accordion title (required)
 - `id`: Unique identifier for linking
@@ -504,6 +522,7 @@ import { Accordion, Accordions } from "fumadocs-ui/components/accordion";
 - `defaultOpen`: Open by default
 
 ##### Files
+
 Display file structure visually.
 
 ```mdx
@@ -522,12 +541,14 @@ import { File, Folder, Files } from "fumadocs-ui/components/files";
 ```
 
 **Props**:
+
 - `name`: File or folder name (required)
 - `defaultOpen`: Open folder by default
 - `disabled`: Disable interaction
 - `icon`: Custom icon
 
 ##### TypeTable
+
 Document type definitions and props.
 
 ```mdx
@@ -555,6 +576,7 @@ import { TypeTable } from "fumadocs-ui/components/type-table";
 ```
 
 **Object Type Props**:
+
 - `description`: Field description
 - `type`: Type annotation
 - `typeDescription`: Additional type info
@@ -565,6 +587,7 @@ import { TypeTable } from "fumadocs-ui/components/type-table";
 - `returns`: Function return type
 
 ##### InlineTOC
+
 Add table of contents within page content.
 
 ```mdx
@@ -574,11 +597,13 @@ import { InlineTOC } from "fumadocs-ui/components/inline-toc";
 ```
 
 **Props**:
+
 - `items`: Table of contents data
 - `defaultOpen`: Open by default
 - `disabled`: Disable interaction
 
 ##### Banner
+
 Display site-wide announcements.
 
 ```mdx
@@ -590,12 +615,14 @@ import { Banner } from "fumadocs-ui/components/banner";
 ```
 
 **Props**:
+
 - `variant`: `default` or `rainbow`
 - `id`: Unique identifier for persistence
 - `changeLayout`: Adjust layout spacing
 - `rainbowColors`: Custom rainbow colors
 
 ##### GitHubInfo
+
 Display GitHub repository information.
 
 ```mdx
@@ -605,11 +632,13 @@ import { GithubInfo } from "fumadocs-ui/components/github-info";
 ```
 
 **Props**:
+
 - `owner`: Repository owner (required)
 - `repo`: Repository name (required)
 - `token`: GitHub access token (optional)
 
 ##### AutoTypeTable
+
 Auto-generate type tables from TypeScript types.
 
 ```mdx
@@ -619,6 +648,7 @@ import { AutoTypeTable } from "fumadocs-ui/components/auto-type-table";
 ```
 
 ##### ImageZoom
+
 Allow users to zoom into images.
 
 ```mdx
@@ -628,6 +658,7 @@ import { ImageZoom } from "fumadocs-ui/components/image-zoom";
 ```
 
 ##### GraphView
+
 Display a graph of all documentation pages.
 
 ```mdx
@@ -741,7 +772,7 @@ import { Step } from "fumadocs-ui/components/steps";
 3. **Keep examples concise**
 4. **Include comments** when helpful
 
-```mdx
+````mdx
 // Good
 ```typescript
 // Initialize the configuration
@@ -754,13 +785,14 @@ const config = {
     search: true,
   },
 };
-```
+````
 
 // Bad
+
 ```
 const config = {name: 'my-app', version: '1.0.0', features: {darkMode: true, search: true}};
 ```
-```
+````
 
 ### Links
 
@@ -776,7 +808,7 @@ const config = {name: 'my-app', version: '1.0.0', features: {darkMode: true, sea
 // Bad
 [Click here](./installation.mdx)
 [Here](#components)
-```
+````
 
 ### Images
 
@@ -930,6 +962,7 @@ import { Step, Steps } from "fumadocs-ui/components/steps";
 ### Update Strategy
 
 When code changes:
+
 1. **Identify affected documentation**
 2. **Update examples** to match new API
 3. **Add migration notes** for breaking changes
@@ -955,18 +988,18 @@ import * as TabsComponents from "fumadocs-ui/components/tabs";
 
 ### Component Cheat Sheet
 
-| Component | Purpose | Key Props |
-|-----------|---------|-----------|
-| Callout | Info boxes | type, title, icon |
-| Tabs | Tabbed content | items, defaultIndex, groupId, persist |
-| Steps | Step-by-step guides | - |
-| Accordion | Collapsible sections | type, title, id, defaultOpen |
-| Files | File structure | name, defaultOpen, disabled |
-| TypeTable | Type documentation | type |
-| CodeBlock | Code display | language, title, icon |
-| InlineTOC | Table of contents | items, defaultOpen |
-| Banner | Site announcements | variant, id, changeLayout |
-| GitHubInfo | Repo info | owner, repo, token |
+| Component  | Purpose              | Key Props                             |
+| ---------- | -------------------- | ------------------------------------- |
+| Callout    | Info boxes           | type, title, icon                     |
+| Tabs       | Tabbed content       | items, defaultIndex, groupId, persist |
+| Steps      | Step-by-step guides  | -                                     |
+| Accordion  | Collapsible sections | type, title, id, defaultOpen          |
+| Files      | File structure       | name, defaultOpen, disabled           |
+| TypeTable  | Type documentation   | type                                  |
+| CodeBlock  | Code display         | language, title, icon                 |
+| InlineTOC  | Table of contents    | items, defaultOpen                    |
+| Banner     | Site announcements   | variant, id, changeLayout             |
+| GitHubInfo | Repo info            | owner, repo, token                    |
 
 ### Fumadocs CLI Commands
 
@@ -1023,4 +1056,4 @@ A well-written Fumadocs documentation page should:
 
 ---
 
-*Last updated: {new Date().toISOString()}*
+_Last updated: {new Date().toISOString()}_

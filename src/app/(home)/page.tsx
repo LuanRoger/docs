@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <div className="relative size-full flex-1 overflow-clip border-border p-4 md:border">
+    <div className="border-border relative size-full flex-1 overflow-clip p-4 md:border">
       <div className="flex flex-col items-center gap-4">
         <HeaderText />
         <div className="flex w-full flex-col gap-2 lg:grid lg:grid-cols-3 xl:grid-cols-4">

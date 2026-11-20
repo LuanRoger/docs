@@ -9,7 +9,6 @@ export default function Layout({
     <DocsLayout
       sidebar={{
         enabled: true,
-        
       }}
       tree={source.pageTree}
       {...baseLayoutProps()}

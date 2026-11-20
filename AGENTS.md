@@ -34,10 +34,10 @@ Each project owns its own documentation directory.
 
 You will receive information about:
 
-* Source repository
-* Pull request metadata
-* Changed files
-* Source code checkout location
+- Source repository
+- Pull request metadata
+- Changed files
+- Source code checkout location
 
 You must determine which project documentation should be updated.
 
@@ -49,24 +49,24 @@ You must determine which project documentation should be updated.
 
 You may:
 
-* Edit existing MDX files
-* Create missing standard documentation files
-* Update navigation metadata when required
-* Update changelog entries
-* Update code examples
-* Update architecture diagrams expressed as Markdown or Mermaid
+- Edit existing MDX files
+- Create missing standard documentation files
+- Update navigation metadata when required
+- Update changelog entries
+- Update code examples
+- Update architecture diagrams expressed as Markdown or Mermaid
 
 ## Forbidden
 
 You must not:
 
-* Delete project directories
-* Rename files
-* Move files
-* Modify unrelated projects
-* Rewrite entire documentation sections unnecessarily
-* Generate placeholder content
-* Invent features not present in the source code
+- Delete project directories
+- Rename files
+- Move files
+- Modify unrelated projects
+- Rewrite entire documentation sections unnecessarily
+- Generate placeholder content
+- Invent features not present in the source code
 
 ---
 
@@ -78,20 +78,20 @@ Favor clarity over completeness.
 
 Document:
 
-* Public APIs
-* Public interfaces
-* Configuration
-* Deployment requirements
-* Architectural decisions
-* Integration points
-* User-facing behavior
-* Contributor-facing workflows
+- Public APIs
+- Public interfaces
+- Configuration
+- Deployment requirements
+- Architectural decisions
+- Integration points
+- User-facing behavior
+- Contributor-facing workflows
 
 Avoid documenting:
 
-* Private helper functions
-* Internal implementation details
-* Temporary experiments
+- Private helper functions
+- Internal implementation details
+- Temporary experiments
 
 ---
 
@@ -99,11 +99,11 @@ Avoid documenting:
 
 Analyze:
 
-* Pull request title
-* Pull request description
-* Changed files
-* Git diff
-* Source code
+- Pull request title
+- Pull request description
+- Changed files
+- Git diff
+- Source code
 
 Determine:
 
@@ -121,16 +121,16 @@ Always preserve existing content whenever possible.
 
 Prefer:
 
-* Updating sections
-* Extending sections
-* Adding examples
-* Adding notes
+- Updating sections
+- Extending sections
+- Adding examples
+- Adding notes
 
 Avoid:
 
-* Rewriting entire files
-* Reorganizing documents
-* Changing writing style
+- Rewriting entire files
+- Reorganizing documents
+- Changing writing style
 
 Existing documentation style takes precedence.
 
@@ -142,11 +142,11 @@ All generated content must be valid MDX.
 
 Preserve:
 
-* Frontmatter
-* Imports
-* Exports
-* Component usage
-* Heading hierarchy
+- Frontmatter
+- Imports
+- Exports
+- Component usage
+- Heading hierarchy
 
 Never remove frontmatter unless explicitly required.
 
@@ -162,10 +162,10 @@ Preserve repository conventions.
 
 When editing pages:
 
-* Keep page metadata intact
-* Preserve navigation structure
-* Preserve slugs
-* Preserve file locations
+- Keep page metadata intact
+- Preserve navigation structure
+- Preserve slugs
+- Preserve file locations
 
 Do not create custom navigation structures unless necessary.
 
@@ -201,18 +201,18 @@ When architecture changes:
 
 Update:
 
-* architecture.mdx
-* system-overview.mdx
+- architecture.mdx
+- system-overview.mdx
 
 if they exist.
 
 Document:
 
-* New services
-* New integrations
-* New dependencies
-* New communication flows
-* Important design decisions
+- New services
+- New integrations
+- New dependencies
+- New communication flows
+- Important design decisions
 
 Keep architecture descriptions high-level.
 
@@ -224,16 +224,16 @@ When configuration changes:
 
 Document:
 
-* Environment variables
-* Secrets requirements
-* Feature flags
-* Runtime requirements
+- Environment variables
+- Secrets requirements
+- Feature flags
+- Runtime requirements
 
 Always explain:
 
-* Purpose
-* Default behavior
-* Impact
+- Purpose
+- Default behavior
+- Impact
 
 ---
 
@@ -245,11 +245,11 @@ Update deployment documentation.
 
 Examples:
 
-* Docker changes
-* Infrastructure changes
-* CI/CD changes
-* Build process changes
-* Runtime dependencies
+- Docker changes
+- Infrastructure changes
+- CI/CD changes
+- Build process changes
+- Runtime dependencies
 
 ---
 
@@ -261,9 +261,9 @@ Prefer examples from the source code.
 
 Examples must:
 
-* Compile logically
-* Match current APIs
-* Use current naming
+- Compile logically
+- Match current APIs
+- Use current naming
 
 Never generate fictional APIs.
 
@@ -275,17 +275,17 @@ Before finishing:
 
 Verify:
 
-* Documentation matches source code
-* Examples are consistent
-* Terminology is consistent
-* Links are still valid
-* MDX remains valid
+- Documentation matches source code
+- Examples are consistent
+- Terminology is consistent
+- Links are still valid
+- MDX remains valid
 
 Remove:
 
-* Contradictory statements
-* Outdated examples
-* Obsolete configuration references
+- Contradictory statements
+- Outdated examples
+- Obsolete configuration references
 
 ---
 
@@ -307,9 +307,9 @@ The source code is always the source of truth.
 
 A maintainer reviewing the documentation pull request should:
 
-* Understand what changed
-* Understand why it changed
-* Understand how to use the new functionality
+- Understand what changed
+- Understand why it changed
+- Understand how to use the new functionality
 
 without needing to inspect the source code.
 

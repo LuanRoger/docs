@@ -29,20 +29,20 @@ export function Card({ icon, title, description, ...props }: CardProps) {
     <E
       {...props}
       className={cn(
-        "@max-lg:col-span-full block rounded-xl border bg-fd-card p-4 text-fd-card-foreground transition-colors",
+        "bg-fd-card text-fd-card-foreground block rounded-xl border p-4 transition-colors @max-lg:col-span-full",
         props.href && "hover:bg-fd-accent/80",
         props.className
       )}
       data-card
     >
       {icon ? (
-        <div className="not-prose mb-2 w-fit rounded-lg border bg-fd-muted p-1.5 text-fd-muted-foreground shadow-md [&_svg]:size-4">
+        <div className="not-prose bg-fd-muted text-fd-muted-foreground mb-2 w-fit rounded-lg border p-1.5 shadow-md [&_svg]:size-4">
           {icon}
         </div>
       ) : null}
-      <h3 className="not-prose mb-1 font-medium text-sm">{title}</h3>
+      <h3 className="not-prose mb-1 text-sm font-medium">{title}</h3>
       {description ? (
-        <p className="my-0! text-fd-muted-foreground text-sm">{description}</p>
+        <p className="text-fd-muted-foreground my-0! text-sm">{description}</p>
       ) : null}
       <div className="prose-no-margin text-fd-muted-foreground text-sm empty:hidden">
         {props.children}

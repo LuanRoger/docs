@@ -4,13 +4,13 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "dev": "next dev",
-    "start": "next start",
-    "types:check": "fumadocs-mdx && tsc --noEmit",
-    "postinstall": "fumadocs-mdx",
     "check": "ultracite check",
+    "dev": "next dev",
+    "env:load": "varlock load",
     "fix": "ultracite fix",
-    "env:load": "varlock load"
+    "postinstall": "fumadocs-mdx",
+    "start": "next start",
+    "types:check": "fumadocs-mdx && tsc --noEmit"
   },
   "dependencies": {
     "@fuma-translate/react": "^1.0.2",

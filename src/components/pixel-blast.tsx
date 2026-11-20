@@ -1,7 +1,8 @@
 "use client";
 
 import { Effect, EffectComposer, EffectPass, RenderPass } from "postprocessing";
-import { type CSSProperties, type FC, useEffect, useRef } from "react";
+import type { CSSProperties, FC } from "react";
+import { useEffect, useRef } from "react";
 import {
   Clock,
   Color,
@@ -522,7 +523,7 @@ const resolveCssColors = (varNames: string[]): Color[] => {
     document.body.appendChild(el);
     const computed = getComputedStyle(el).backgroundColor;
     document.body.removeChild(el);
-    const match = computed.match(/[\d.]+/g);
+    const match = computed.match(/[\d.]+/gu);
     if (match && match.length >= 3) {
       return new Color(
         Number.parseFloat(match[0]) / 255,

@@ -8,7 +8,7 @@ export function HeaderText() {
         docs.
       </HighlightedText>
       <SlideUpText
-        className="font-mono text-muted-foreground text-sm"
+        className="text-muted-foreground font-mono text-sm"
         delay={1}
       >
         Documentation of Luan Roger's open-source projects.

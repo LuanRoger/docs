@@ -9,7 +9,7 @@ export function LinksSection() {
       animate={{
         y: 0,
       }}
-      className="absolute right-0 bottom-0 flex gap-2 border border-border bg-card p-2 font-mono text-card-foreground text-sm"
+      className="border-border bg-card text-card-foreground absolute right-0 bottom-0 flex gap-2 border p-2 font-mono text-sm"
       initial={{
         y: 40,
       }}
